@@ -133,6 +133,16 @@ Industri/
 ## 🛠️ Panduan Menjalankan Aplikasi
 
 ### 1. Menjalankan Backend (Laravel API)
+Database bawaan sudah disediakan dalam 2 format:
+- **`backend/database/database.sqlite`**: Sudah terisi data lengkap (*pre-seeded*), langsung bisa digunakan tanpa konfigurasi tambahan!
+- **`backend/database/database.sql`**: Dump SQL lengkap jika ingin di-import ke MySQL / phpMyAdmin / Laragon.
+- Jika ingin me-reset ulang database dari awal:
+  ```powershell
+  cd backend
+  php artisan migrate:fresh --seed
+  ```
+
+Jalankan server backend:
 ```powershell
 cd backend
 php artisan serve --host=127.0.0.1 --port=8000

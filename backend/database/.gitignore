@@ -1,1 +1,2 @@
-*.sqlite*
+# Database gitignore
+# database.sqlite is tracked so users have immediate access to demo data
