@@ -1,0 +1,39 @@
+# OS & System Files
+.DS_Store
+Thumbs.db
+*.log
+
+# Backend (Laravel)
+backend/vendor/
+backend/.env
+backend/.env.backup
+backend/.env.production
+backend/storage/*.key
+backend/storage/framework/cache/data/*
+!backend/storage/framework/cache/data/.gitignore
+backend/storage/framework/sessions/*
+!backend/storage/framework/sessions/.gitignore
+backend/storage/framework/views/*
+!backend/storage/framework/views/.gitignore
+backend/storage/logs/*.log
+backend/public/hot
+backend/public/storage
+
+# Frontend (Nuxt 3)
+frontend/node_modules/
+frontend/.nuxt/
+frontend/.output/
+frontend/.env
+frontend/dist/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# IDE & Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
