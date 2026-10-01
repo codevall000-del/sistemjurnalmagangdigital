@@ -5,15 +5,17 @@
       <!-- Stitch PKL Digital Brand -->
       <div class="p-space-md border-b border-outline-variant bg-surface-container-lowest">
         <div class="flex items-center gap-space-sm">
-          <div class="w-9 h-9 rounded bg-primary flex items-center justify-center text-on-primary font-headline font-bold text-sm tracking-wider">
-            PKL
-          </div>
+          <img
+            src="/images/logo-smkn71.png"
+            alt="Logo SMKN 71"
+            class="w-9 h-9 object-contain shrink-0"
+          />
           <div class="flex flex-col min-w-0">
             <span class="font-headline text-[15px] font-bold text-on-surface tracking-tight truncate">
               LogPKL Digital
             </span>
             <span class="font-label-sm text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-primary font-semibold mt-0.5 inline-block w-fit truncate">
-              SMK / Vokasi &amp; Merdeka
+              SMKN 71 Jakarta
             </span>
           </div>
         </div>
@@ -61,16 +63,20 @@
 
       <!-- Navigation Menu with Stitch Styling -->
       <nav class="flex flex-col gap-1 p-space-sm mt-1 overflow-y-auto max-h-[calc(100vh-270px)]">
-        <!-- 1. MODUL SISWA -->
+        <!-- 1. MODUL SISWA (STITCH DESIGN SYSTEM) -->
         <template v-if="currentRole === 'siswa'">
+          <div class="px-space-sm py-1">
+            <span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Menu Portal</span>
+          </div>
+
           <a
             href="#"
             @click.prevent="activeMenu = 'dashboard'"
             :class="activeMenu === 'dashboard' ? 'bg-primary-container text-on-primary font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md'"
             class="flex items-center gap-space-sm px-3 py-2 rounded-lg transition-colors text-xs"
           >
-            <span class="material-symbols-outlined text-[18px]">dashboard</span>
-            <span>Dashboard Ringkasan</span>
+            <span class="material-symbols-outlined text-[20px]">space_dashboard</span>
+            <span>Ringkasan &amp; Dashboard</span>
           </a>
 
           <a
@@ -79,8 +85,8 @@
             :class="activeMenu === 'logbook' ? 'bg-primary-container text-on-primary font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md'"
             class="flex items-center gap-space-sm px-3 py-2 rounded-lg transition-colors text-xs"
           >
-            <span class="material-symbols-outlined text-[18px]">menu_book</span>
-            <span>Logbook Harian</span>
+            <span class="material-symbols-outlined text-[20px]">edit_note</span>
+            <span>Catatan Harian</span>
           </a>
 
           <a
@@ -89,8 +95,8 @@
             :class="activeMenu === 'presensi' ? 'bg-primary-container text-on-primary font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md'"
             class="flex items-center gap-space-sm px-3 py-2 rounded-lg transition-colors text-xs"
           >
-            <span class="material-symbols-outlined text-[18px]">event_available</span>
-            <span>Presensi &amp; Kehadiran</span>
+            <span class="material-symbols-outlined text-[20px]">event_available</span>
+            <span>Lembar Kehadiran</span>
           </a>
 
           <a
@@ -99,8 +105,8 @@
             :class="activeMenu === 'penempatan' ? 'bg-primary-container text-on-primary font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md'"
             class="flex items-center gap-space-sm px-3 py-2 rounded-lg transition-colors text-xs"
           >
-            <span class="material-symbols-outlined text-[18px]">domain</span>
-            <span>Info Tempat PKL</span>
+            <span class="material-symbols-outlined text-[20px]">supervised_user_circle</span>
+            <span>Bimbingan &amp; Catatan Mentor</span>
           </a>
         </template>
 
@@ -228,66 +234,87 @@
       </nav>
     </div>
 
-    <!-- Stitch Bottom Static Section (Profile, Network, Settings, Logout) -->
-    <div class="flex flex-col p-space-sm border-t border-outline-variant bg-surface-container-lowest gap-space-sm">
-      <!-- Mini Profile Card -->
-      <div class="p-2.5 rounded-lg bg-surface border border-outline-variant flex items-center justify-between">
+    <!-- Stitch Bottom Section (Company Info & Actions) -->
+    <div class="flex flex-col p-space-sm border-t border-outline-variant bg-surface-container-lowest gap-space-xs">
+      <!-- Stitch Affiliation Card for Siswa -->
+      <div v-if="currentRole === 'siswa'" class="bg-surface-container-low rounded-lg p-2.5 border border-outline-variant/60">
+        <div class="flex items-center gap-1.5 text-primary mb-1">
+          <span class="material-symbols-outlined text-[16px]">domain</span>
+          <span class="font-label-md text-label-md font-semibold truncate">PT Solusi Digital Pratama</span>
+        </div>
+        <p class="font-label-sm text-[11px] text-on-surface-variant leading-tight">Tech Intern • Div. Frontend RPL</p>
+      </div>
+
+      <!-- Mini Profile Card for Other Roles -->
+      <div v-else class="p-2 rounded-lg bg-surface border border-outline-variant flex items-center justify-between">
         <div class="flex items-center gap-2 min-w-0">
-          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 text-on-primary">
-            <span class="material-symbols-outlined text-[18px]">person</span>
+          <div class="w-7 h-7 rounded-full bg-primary flex items-center justify-center shrink-0 text-on-primary">
+            <span class="material-symbols-outlined text-[16px]">person</span>
           </div>
           <div class="flex flex-col min-w-0">
             <span class="font-label-md text-label-md font-bold text-on-surface truncate">
               {{ currentUser.name }}
             </span>
             <span class="font-code-sm text-[10px] text-on-surface-variant truncate font-mono">
-              {{ currentRole === 'siswa' ? 'NISN. 0061234567' : (currentRole === 'dudi' ? 'ID. TELKOM-8821' : 'NIP. 19800512001') }}
+              {{ currentRole === 'dudi' ? 'ID. TELKOM-8821' : (currentRole === 'guru' ? 'NIP. 19800512001' : 'Admin Kaprog') }}
             </span>
           </div>
         </div>
-        <span class="font-label-sm text-[10px] px-1.5 py-0.5 rounded bg-tertiary-fixed text-tertiary font-bold shrink-0">
-          {{ currentRole === 'siswa' ? 'Magang Aktif' : (currentRole === 'dudi' ? 'Mentor DUDI' : (currentRole === 'guru' ? 'Guru Pembimbing' : 'Kaprog RPL')) }}
-        </span>
       </div>
 
-      <!-- Desktop Network Indicator & Sync -->
-      <div class="flex items-center justify-between px-1">
+      <!-- Stitch Bottom Links: Bantuan & FAQ, Pengaturan -->
+      <div class="flex flex-col space-y-0.5 pt-1">
+        <button
+          @click="openHelp"
+          class="flex items-center gap-space-sm px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors text-left"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-[18px]">help_outline</span>
+          <span class="font-body-sm text-xs font-medium">Bantuan &amp; FAQ</span>
+        </button>
+
+        <button
+          @click="openSettings"
+          class="flex items-center gap-space-sm px-2.5 py-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors text-left"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-[18px]">settings</span>
+          <span class="font-body-sm text-xs font-medium">Pengaturan</span>
+        </button>
+      </div>
+
+      <!-- Desktop Network Indicator, Sync & Logout -->
+      <div class="flex items-center justify-between pt-1.5 border-t border-outline-variant/60">
         <div class="flex items-center gap-1.5">
           <span
             class="w-2 h-2 rounded-full"
-            :class="isOnline ? 'bg-tertiary-container animate-pulse' : 'bg-secondary'"
+            :class="isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-secondary'"
           ></span>
-          <span class="font-label-sm text-[11px] text-on-surface-variant">
-            {{ isOnline ? 'Sistem Online' : 'Mode Offline (Lokal)' }}
+          <span class="font-label-sm text-[10px] text-on-surface-variant">
+            {{ isOnline ? 'Online' : 'Offline' }}
           </span>
         </div>
-        <button
-          @click="handleSyncNow"
-          :disabled="isSyncing"
-          class="font-label-sm text-[11px] px-2 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-medium border border-outline-variant flex items-center gap-1 active:scale-95 disabled:opacity-50"
-          type="button"
-        >
-          <span class="material-symbols-outlined text-[14px]" :class="isSyncing ? 'animate-spin' : ''">sync</span>
-          <span>Sync</span>
-        </button>
-      </div>
-
-      <!-- Action Buttons: Settings & Logout -->
-      <div class="flex items-center gap-1.5 pt-1 border-t border-outline-variant">
-        <button
-          @click="openSettings"
-          class="flex-1 py-1.5 px-2 rounded-lg text-center font-label-sm text-[11px] text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors border border-outline-variant font-medium"
-        >
-          Pengaturan
-        </button>
-        <button
-          @click="handleLogout"
-          aria-label="Keluar"
-          class="py-1.5 px-3 rounded-lg text-center font-label-sm text-label-sm bg-error-container text-error hover:opacity-90 transition-opacity font-semibold flex items-center justify-center active:scale-95"
-          title="Keluar / Logout"
-        >
-          <span class="material-symbols-outlined text-[16px]">logout</span>
-        </button>
+        <div class="flex items-center gap-1">
+          <button
+            @click="handleSyncNow"
+            :disabled="isSyncing"
+            class="font-label-sm text-[10px] px-2 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-medium border border-outline-variant flex items-center gap-1 active:scale-95 disabled:opacity-50"
+            type="button"
+            title="Sinkronisasi Data"
+          >
+            <span class="material-symbols-outlined text-[13px]" :class="isSyncing ? 'animate-spin' : ''">sync</span>
+            <span>Sync</span>
+          </button>
+          <button
+            @click="handleLogout"
+            aria-label="Keluar"
+            class="p-1 rounded-lg text-center bg-error-container text-error hover:opacity-90 transition-opacity font-semibold flex items-center justify-center active:scale-95"
+            title="Keluar / Logout"
+            type="button"
+          >
+            <span class="material-symbols-outlined text-[16px]">logout</span>
+          </button>
+        </div>
       </div>
     </div>
   </aside>
@@ -312,6 +339,10 @@ const isSyncing = ref(false)
 
 const openSettings = () => {
   isSettingsModalOpen.value = true
+}
+
+const openHelp = () => {
+  showToast('Pusat Bantuan PKL: Hubungi Tim Pengembang Vokasi SMKN 71 di ext. 104', 'info')
 }
 
 const handleSyncNow = () => {

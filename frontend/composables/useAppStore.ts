@@ -14,13 +14,13 @@ export interface UserProfile {
 const defaultProfiles: Record<string, UserProfile> = {
   siswa: {
     id: 6,
-    name: 'Budi Santoso',
+    name: 'Reza Pratama',
     email: 'siswa@magang.id',
     role: 'siswa',
     nisn_nip: '0061234567',
     phone: '085712345678',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    roleLabel: 'Budi - Siswa'
+    avatar: '/images/avatar-student.png',
+    roleLabel: 'Reza - Siswa (SMKN 71)'
   },
   dudi: {
     id: 4,

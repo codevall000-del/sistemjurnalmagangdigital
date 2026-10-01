@@ -37,16 +37,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f8f9ff;
+  background: #f8fafc;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c4c5d7;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #747686;
+  background: #94a3b8;
 }
 
 /* Print styles for Laporan & Arsip PDF */

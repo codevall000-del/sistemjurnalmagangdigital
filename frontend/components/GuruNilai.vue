@@ -14,7 +14,7 @@
       <div class="flex items-center gap-2">
         <button
           @click="saveAllScores"
-          class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
+          class="px-4 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
         >
           <span>💾</span> Simpan Semua Nilai Sekolah
         </button>
@@ -24,13 +24,13 @@
     <!-- Formula Rumus Banner -->
     <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg font-bold">
+        <div class="w-10 h-10 rounded-xl bg-[#eef4fa] text-[#1e3a5f] border border-[#d0e1f3] flex items-center justify-center text-lg font-bold">
           🧮
         </div>
         <div>
           <span class="text-xs font-bold text-slate-900">Standar Bobot Penilaian PKL Kurikulum Merdeka</span>
           <p class="text-[11px] text-slate-500">
-            Nilai Akhir = <strong class="text-emerald-700">(60% × Nilai DUDI)</strong> + <strong class="text-amber-700">(40% × Nilai Laporan Sekolah)</strong>
+            Nilai Akhir = <strong class="text-emerald-700">(60% × Nilai DUDI)</strong> + <strong class="text-[#1e3a5f]">(40% × Nilai Laporan Sekolah)</strong>
           </p>
         </div>
       </div>
@@ -56,7 +56,7 @@
               <th class="py-3.5 px-4">Perusahaan (DUDI)</th>
               <th class="py-3.5 px-4 text-center">Nilai DUDI (60%)</th>
               <th class="py-3.5 px-4 text-center">Nilai Laporan Sekolah (40%)</th>
-              <th class="py-3.5 px-4 text-center font-bold text-amber-700">Nilai Akhir PKL</th>
+              <th class="py-3.5 px-4 text-center font-bold text-slate-900">Nilai Akhir PKL</th>
               <th class="py-3.5 px-4 text-center">Predikat</th>
               <th class="py-3.5 px-4 text-center">Aksi</th>
             </tr>
@@ -102,7 +102,7 @@
                     max="100"
                     placeholder="0-100"
                     @input="recalculateFinalScore(student)"
-                    class="w-24 px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-center font-mono font-bold text-amber-700 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm"
+                    class="w-24 px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-center font-mono font-bold text-[#1e3a5f] text-xs focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm"
                   />
                   <span class="text-[11px] text-slate-500 font-mono">/ 100</span>
                 </div>
@@ -125,7 +125,7 @@
               <td class="py-3.5 px-4 text-center whitespace-nowrap">
                 <span
                   v-if="student.predicate"
-                  :class="student.predicate.startsWith('A') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-blue-50 text-blue-700 border-blue-200'"
+                  :class="student.predicate.startsWith('A') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-[#eef4fa] text-[#1e3a5f] border-[#d0e1f3]'"
                   class="px-2 py-0.5 rounded-full text-[10px] font-bold border"
                 >
                   {{ student.predicate }}

@@ -12,31 +12,31 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#eef4fa] text-[#1e3a5f] border border-[#d0e1f3]">
           Pembimbing: Dra. Nurul Hidayah, M.Pd • 4 Siswa Binaan
         </span>
       </div>
     </div>
 
-    <!-- PERINGATAN SISTEM (RED ALERT DETEKSI DINI TIDAK AKTIF > 3 HARI) -->
-    <div class="p-5 rounded-2xl bg-rose-50 border-2 border-rose-300 shadow-sm relative overflow-hidden">
+    <!-- PERINGATAN SISTEM (DETEKSI DINI TIDAK AKTIF > 3 HARI) -->
+    <div class="p-5 rounded-2xl bg-white border border-rose-200 border-l-4 border-l-rose-500 shadow-xs relative overflow-hidden">
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-rose-600 text-white flex items-center justify-center text-2xl shrink-0 shadow-sm">
-            🚨
+        <div class="flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 flex items-center justify-center text-lg shrink-0">
+            ⚠️
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white">
-                PERINGATAN SISTEM KRITIS
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-50 text-rose-800 border border-rose-200">
+                Peringatan Sistem
               </span>
-              <span class="text-xs font-mono text-rose-700 font-semibold">Deteksi Absensi > 3 Hari</span>
+              <span class="text-xs font-mono text-slate-500 font-semibold">Deteksi Absensi > 3 Hari</span>
             </div>
-            <h3 class="text-base font-bold text-rose-950 mt-1">
-              Siswa <span class="text-rose-700 underline font-extrabold">Rizky Pratama</span> Tidak Mengisi Jurnal &amp; Absen Selama 4 Hari Berturut-turut!
+            <h3 class="text-sm font-bold text-slate-900 mt-1">
+              Siswa <span class="text-rose-700 font-bold underline">Rizky Pratama</span> tidak mengisi jurnal &amp; absen selama 4 hari berturut-turut
             </h3>
-            <p class="text-xs text-rose-800 mt-0.5">
-              Penempatan: <strong>PT Inovasi Media Kreatif (Bandung)</strong> • Terakhir aktif tercatat pada 21 September 2026.
+            <p class="text-xs text-slate-600 mt-0.5">
+              Penempatan: <strong class="text-slate-800">PT Inovasi Media Kreatif (Bandung)</strong> • Terakhir aktif tercatat pada 21 September 2026.
             </p>
           </div>
         </div>
@@ -46,13 +46,13 @@
           <a
             href="https://wa.me/6285734567890"
             target="_blank"
-            class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
+            class="px-4 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-xs active:scale-95"
           >
-            <span>📞</span> Hubungi Siswa Segera
+            <span>📞</span> Hubungi Siswa
           </a>
           <button
             @click="openContactCompany"
-            class="px-4 py-2 bg-white hover:bg-rose-100 text-rose-800 rounded-xl text-xs font-semibold border border-rose-300 transition active:scale-95"
+            class="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 transition active:scale-95"
           >
             Hubungi Mentor DUDI
           </button>
@@ -74,7 +74,7 @@
               <span class="w-3 h-3 rounded-full bg-emerald-600"></span> Presensi Hadir
             </span>
             <span class="flex items-center gap-1.5 text-slate-700">
-              <span class="w-3 h-3 rounded-full bg-indigo-600"></span> Jurnal Terisi
+              <span class="w-3 h-3 rounded-full bg-[#1e3a5f]"></span> Jurnal Terisi
             </span>
           </div>
         </div>
@@ -92,7 +92,7 @@
                 <div class="bg-emerald-600 h-2.5 rounded-full transition-all duration-500" :style="{ width: day.att + '%' }"></div>
               </div>
               <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" :style="{ width: day.log + '%' }"></div>
+                <div class="bg-[#1e3a5f] h-2.5 rounded-full transition-all duration-500" :style="{ width: day.log + '%' }"></div>
               </div>
             </div>
           </div>
@@ -142,7 +142,7 @@
         <div class="pt-4 border-t border-slate-200 mt-4">
           <button
             @click="goToMonitoring"
-            class="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition text-center shadow-sm"
+            class="w-full py-2.5 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold transition text-center shadow-sm"
           >
             Lihat Timeline Monitoring Lengkap &rarr;
           </button>

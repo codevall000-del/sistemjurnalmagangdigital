@@ -1,401 +1,668 @@
 <template>
-  <div class="space-y-6 max-w-7xl mx-auto">
-    <!-- Header -->
-    <div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+  <div class="flex flex-col w-full max-w-[1440px] mx-auto gap-space-xl">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
-        <h2 class="text-2xl font-bold font-headline text-on-surface tracking-tight flex items-center gap-2">
-          <span>Logbook Jurnal Harian</span>
-        </h2>
-        <p class="text-xs text-on-surface-variant mt-1 font-body">
-          Dokumentasikan aktivitas dan capaian kompetensi magang Anda setiap hari kerja.
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Logbook Siswa</span>
+          <span class="w-1 h-1 rounded-full bg-outline"></span>
+          <span class="font-label-sm text-label-sm text-on-surface-variant">Sesi Semester Ganjil 2024 • SMKN 71 Jakarta</span>
+        </div>
+        <h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">Catatan Jurnal Harian</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-1 max-w-2xl leading-relaxed">
+          Dokumentasikan aktivitas harian, pembelajaran, kendala, dan bukti hasil pengerjaan magang secara terstruktur untuk validasi berkala mentor.
         </p>
       </div>
 
-      <div class="flex items-center gap-2">
-        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-surface-container text-primary border border-outline-variant font-mono">
-          Minggu ke-9 • Periode Aktif
-        </span>
+      <div class="flex items-center gap-3 self-start md:self-auto shrink-0">
+        <button
+          @click="exportPdf"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-lowest text-primary hover:bg-surface-container-low border border-outline-variant transition-colors shadow-sm font-headline-sm text-headline-sm"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-[19px] text-secondary">picture_as_pdf</span>
+          <span class="font-body-sm text-body-sm font-semibold">Export Rekap PDF</span>
+        </button>
+        <button
+          @click="focusForm"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-colors shadow-sm font-headline-sm text-headline-sm active:scale-95"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-[19px]">add_circle</span>
+          <span class="font-body-sm text-body-sm font-semibold">+ Tulis Entri Jurnal Baru</span>
+        </button>
       </div>
     </div>
 
-    <!-- BAGIAN ATAS: FORM INPUT JURNAL BARU (STITCH FIELD VERIFIED ENTERPRISE) -->
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg shadow-sm relative">
-      <div class="flex items-center justify-between pb-3 mb-5 border-b border-outline-variant">
-        <div class="flex items-center gap-2.5">
-          <span class="w-8 h-8 rounded-lg bg-surface-container text-primary flex items-center justify-center font-bold text-sm border border-outline-variant">
-            <span class="material-symbols-outlined text-[18px]">add_circle</span>
-          </span>
-          <div>
-            <h3 class="text-sm font-bold font-headline text-on-surface">Form Input Jurnal Baru</h3>
-            <p class="text-[11px] text-on-surface-variant">Isi uraian kegiatan dan lampirkan bukti foto pekerjaan terkompresi</p>
-          </div>
+    <!-- 4 Stats Cards (Stitch Design) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+        <div class="flex flex-col">
+          <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Total Jam Tercatat</span>
+          <span class="font-headline-lg text-headline-lg text-primary font-bold mt-0.5">328 Jam</span>
+          <span class="font-label-sm text-label-sm text-secondary mt-1 font-medium">Target: 640 Jam (51.2%)</span>
         </div>
-
-        <span class="text-xs text-primary font-mono font-medium">Kompresi Otomatis: HTML5 Canvas (WebP/JPEG)</span>
+        <div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center text-primary border border-outline-variant">
+          <span class="material-symbols-outlined text-[24px]">schedule</span>
+        </div>
       </div>
 
-      <form @submit.prevent="handleSubmitLogbook" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Tanggal Kegiatan -->
-          <div>
-            <label class="block text-xs font-bold text-on-surface mb-1.5">Tanggal Jurnal *</label>
-            <input
-              v-model="form.date"
-              type="date"
-              required
-              class="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg text-xs text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container transition shadow-sm font-mono"
-            />
-          </div>
+      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+        <div class="flex flex-col">
+          <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Entri Disetujui</span>
+          <span class="font-headline-lg text-headline-lg text-primary font-bold mt-0.5">39 Hari</span>
+          <span class="font-label-sm text-label-sm text-secondary mt-1 font-medium">100% dari terverifikasi</span>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary border border-outline-variant">
+          <span class="material-symbols-outlined text-[24px]">verified</span>
+        </div>
+      </div>
 
-          <!-- Judul Kegiatan -->
-          <div class="md:col-span-2">
-            <label class="block text-xs font-bold text-on-surface mb-1.5">Judul Kegiatan / Topik Pekerjaan *</label>
-            <input
-              v-model="form.title"
-              type="text"
-              placeholder="Contoh: Implementasi Otentikasi Sanctum & Setup Docker Container"
-              required
-              class="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg text-xs text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary-container transition shadow-sm"
-            />
-          </div>
+      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+        <div class="flex flex-col">
+          <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Menunggu Evaluasi</span>
+          <span class="font-headline-lg text-headline-lg text-primary font-bold mt-0.5">2 Entri</span>
+          <span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Review: Sdr. Dimas (Mentor)</span>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center text-on-surface-variant border border-outline-variant">
+          <span class="material-symbols-outlined text-[24px]">pending_actions</span>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+        <div class="flex flex-col">
+          <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Status Draf Tersimpan</span>
+          <span class="font-headline-lg text-headline-lg text-primary font-bold mt-0.5">1 Draf</span>
+          <span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Update terakhir: Hari ini 11:20</span>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center text-outline border border-outline-variant">
+          <span class="material-symbols-outlined text-[24px]">draft</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar (Stitch Design) -->
+    <div class="bg-surface-container-lowest p-3.5 rounded-xl shadow-sm border border-outline-variant flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+      <div class="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px] text-outline">search</span>
+          <input
+            v-model="searchQuery"
+            class="w-full pl-10 pr-4 py-2 text-body-sm font-body-sm text-on-surface bg-surface-container-low rounded-lg placeholder-outline focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/25 outline-none transition-all border border-outline-variant/60"
+            placeholder="Cari aktivitas, modul fitur, tiket, atau kendala..."
+            type="text"
+          />
         </div>
 
-        <!-- Deskripsi Kegiatan -->
-        <div>
-          <label class="block text-xs font-bold text-on-surface mb-1.5">
-            Deskripsi Kegiatan &amp; Uraian Pekerjaan Detail *
-          </label>
-          <textarea
-            v-model="form.activity_description"
-            rows="4"
-            required
-            placeholder="Jelaskan secara terperinci apa yang Anda kerjakan, kendala yang dihadapi, dan solusi yang diterapkan bersama tim industri..."
-            class="w-full px-3.5 py-2.5 bg-surface-container-lowest border border-outline-variant rounded-lg text-xs text-on-surface placeholder-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary-container transition shadow-sm"
-          ></textarea>
-        </div>
+        <!-- Filter Dropdowns -->
+        <div class="flex items-center gap-2">
+          <div class="relative min-w-[170px]">
+            <select
+              v-model="statusFilter"
+              class="w-full appearance-none pl-3.5 pr-8 py-2 text-body-sm font-body-sm text-on-surface bg-surface-container-low rounded-lg focus:ring-2 focus:ring-secondary/25 outline-none cursor-pointer border border-outline-variant/60"
+            >
+              <option value="all">Semua Status</option>
+              <option value="approved">Disetujui Mentor</option>
+              <option value="pending">Menunggu Review</option>
+              <option value="draft">Draf Mandiri</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+          </div>
 
-        <!-- Upload Foto Kompresi (Client-side HTML5 Canvas Compression) -->
-        <div class="p-4 bg-surface-container-low border border-dashed border-outline-variant rounded-xl">
-          <label class="block text-xs font-bold text-on-surface mb-2 flex items-center justify-between">
-            <span class="flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px] text-primary">photo_camera</span>
-              Upload Foto Dokumentasi Pekerjaan
-            </span>
-            <span v-if="compressedInfo" class="text-tertiary font-mono text-[11px] font-bold">
-              Terkonversi: {{ compressedInfo }}
-            </span>
-          </label>
-
-          <div class="flex flex-col sm:flex-row items-center gap-4">
-            <input
-              type="file"
-              accept="image/*"
-              @change="handleImageUpload"
-              class="block w-full text-xs text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary-container file:text-on-primary hover:file:bg-primary cursor-pointer"
-            />
-
-            <!-- Preview Image -->
-            <div v-if="previewPhoto" class="relative shrink-0">
-              <img
-                :src="previewPhoto"
-                alt="Preview"
-                class="w-16 h-16 object-cover rounded-lg border border-outline-variant shadow-sm"
-              />
-              <button
-                @click="removePhoto"
-                type="button"
-                class="absolute -top-2 -right-2 w-5 h-5 bg-error text-on-error rounded-full flex items-center justify-center text-[10px] font-bold shadow"
-              >
-                ✕
-              </button>
+          <div class="relative min-w-[170px]">
+            <div class="w-full flex items-center justify-between px-3.5 py-2 text-body-sm font-body-sm text-on-surface bg-surface-container-low rounded-lg cursor-pointer border border-outline-variant/60">
+              <div class="flex items-center gap-2 truncate">
+                <span class="material-symbols-outlined text-[17px] text-secondary">date_range</span>
+                <span class="truncate">Oktober 2024</span>
+              </div>
+              <span class="material-symbols-outlined text-[18px] text-outline">calendar_today</span>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Tombol Simpan -->
-        <div class="flex items-center justify-end gap-3 pt-2">
+      <!-- View Switcher -->
+      <div class="flex items-center gap-2 pt-2 lg:pt-0 justify-end">
+        <span class="font-label-sm text-label-sm text-on-surface-variant hidden xl:inline">Tampilan:</span>
+        <div class="inline-flex p-1 bg-surface-container-low rounded-lg border border-outline-variant/60">
           <button
+            @click="currentView = 'split'"
+            :class="currentView === 'split' ? 'bg-surface-container-lowest text-primary shadow-xs font-semibold' : 'text-on-surface-variant hover:text-on-surface'"
+            class="px-2.5 py-1 rounded flex items-center gap-1 font-label-md text-label-md transition-all"
             type="button"
-            @click="resetForm"
-            class="px-4 py-2 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-lg text-xs font-semibold transition border border-outline-variant"
           >
-            Reset Form
+            <span class="material-symbols-outlined text-[16px]">view_agenda</span>
+            <span>Split Kerja</span>
           </button>
           <button
-            type="submit"
-            :disabled="isSubmitting"
-            class="px-6 py-2.5 bg-primary-container hover:bg-primary text-on-primary rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-2 active:scale-95 disabled:opacity-50"
+            @click="currentView = 'calendar'"
+            :class="currentView === 'calendar' ? 'bg-surface-container-lowest text-primary shadow-xs font-semibold' : 'text-on-surface-variant hover:text-on-surface'"
+            class="px-2.5 py-1 rounded flex items-center gap-1 font-label-md text-label-md transition-all"
+            type="button"
           >
-            <span v-if="isSubmitting" class="animate-spin inline-block">⏳</span>
-            <span class="material-symbols-outlined text-[16px]">save</span>
-            <span>Simpan Jurnal Harian</span>
+            <span class="material-symbols-outlined text-[16px]">calendar_view_week</span>
+            <span>Kalender</span>
           </button>
         </div>
-      </form>
-    </div>
-
-    <!-- BAGIAN BAWAH: TABEL RIWAYAT JURNAL MINGGU INI LENGKAP DENGAN BADGE STATUS -->
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-space-lg shadow-sm">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 mb-4 border-b border-outline-variant">
-        <div>
-          <h3 class="text-sm font-bold font-headline text-on-surface flex items-center gap-2">
-            <span class="material-symbols-outlined text-[20px] text-primary">calendar_month</span>
-            <span>Riwayat Jurnal Minggu Ini</span>
-          </h3>
-          <p class="text-[11px] text-on-surface-variant">Status evaluasi dan umpan balik dari Pembimbing Industri (DUDI)</p>
-        </div>
-
-        <!-- Filter / Legend Badge -->
-        <div class="flex items-center gap-2 text-[10px]">
-          <span class="px-2.5 py-0.5 rounded bg-tertiary-fixed text-tertiary font-bold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-            ✓ Di-ACC
-          </span>
-          <span class="px-2.5 py-0.5 rounded bg-secondary-container text-on-secondary-fixed font-bold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-            ⏳ Menunggu
-          </span>
-          <span class="px-2.5 py-0.5 rounded bg-error-container text-error font-bold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
-            ⚠️ Revisi
-          </span>
-        </div>
-      </div>
-
-      <!-- Tabel Riwayat Jurnal -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr class="bg-surface-container-low text-on-surface-variant uppercase text-[10px] tracking-wider border-b border-outline-variant font-bold">
-              <th class="py-3 px-4">Hari / Tanggal</th>
-              <th class="py-3 px-4">Judul &amp; Uraian Aktivitas</th>
-              <th class="py-3 px-4 text-center">Foto Bukti</th>
-              <th class="py-3 px-4 text-center">Status</th>
-              <th class="py-3 px-4">Catatan / Umpan Balik DUDI</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-outline-variant/60 font-body text-xs text-on-surface">
-            <tr v-for="item in logbooks" :key="item.id" class="hover:bg-surface-container-low/50 transition-colors">
-              <!-- Tanggal -->
-              <td class="py-3.5 px-4 font-mono whitespace-nowrap align-top">
-                <div class="font-bold text-on-surface">{{ item.dateFormatted }}</div>
-                <div class="text-[10px] text-on-surface-variant">{{ item.dayName }}</div>
-              </td>
-
-              <!-- Uraian -->
-              <td class="py-3.5 px-4 align-top max-w-md">
-                <div class="font-bold text-on-surface text-xs mb-1">{{ item.title }}</div>
-                <p class="text-on-surface-variant text-[11px] leading-relaxed line-clamp-3">
-                  {{ item.activity_description }}
-                </p>
-              </td>
-
-              <!-- Foto -->
-              <td class="py-3.5 px-4 text-center align-top whitespace-nowrap">
-                <div v-if="item.photo_url" class="inline-block relative group">
-                  <img
-                    :src="item.photo_url"
-                    alt="Foto Pekerjaan"
-                    class="w-12 h-12 object-cover rounded-lg border border-outline-variant cursor-pointer transition group-hover:scale-105 shadow-sm"
-                    @click="openImageModal(item.photo_url)"
-                  />
-                  <span class="block text-[9px] text-on-surface-variant mt-0.5 font-medium">Lihat</span>
-                </div>
-                <span v-else class="text-on-surface-variant/50 text-[11px]">-</span>
-              </td>
-
-              <!-- Badge Status (*Menunggu, Di-ACC, Revisi*) -->
-              <td class="py-3.5 px-4 text-center align-top whitespace-nowrap">
-                <span
-                  v-if="item.status === 'diacc'"
-                  class="px-2.5 py-1 rounded text-[10px] font-bold bg-tertiary-fixed text-tertiary inline-flex items-center gap-1"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-                  ✓ Di-ACC
-                </span>
-                <span
-                  v-else-if="item.status === 'menunggu'"
-                  class="px-2.5 py-1 rounded text-[10px] font-bold bg-secondary-container text-on-secondary-fixed inline-flex items-center gap-1"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                  ⏳ Menunggu
-                </span>
-                <span
-                  v-else-if="item.status === 'revisi'"
-                  class="px-2.5 py-1 rounded text-[10px] font-bold bg-error-container text-error inline-flex items-center gap-1"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
-                  ⚠️ Revisi
-                </span>
-              </td>
-
-              <!-- Catatan Umpan Balik -->
-              <td class="py-3.5 px-4 align-top max-w-xs">
-                <div v-if="item.feedback_note" class="p-2.5 rounded-lg bg-surface-container-low border border-outline-variant text-[11px]">
-                  <p class="text-on-surface italic font-medium">"{{ item.feedback_note }}"</p>
-                  <span class="block text-[9px] text-primary mt-1 font-bold">
-                    Oleh: {{ item.validator_name || 'Hendra Wijaya, S.Kom' }}
-                  </span>
-                </div>
-                <span v-else class="text-on-surface-variant/50 text-[11px] italic">Belum ada umpan balik</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
 
-    <!-- Image Preview Modal -->
-    <div v-if="modalPhoto" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/50 backdrop-blur-sm" @click="modalPhoto = null">
-      <div class="relative max-w-2xl bg-surface-container-lowest p-2.5 rounded-xl border border-outline-variant shadow-2xl" @click.stop>
-        <img :src="modalPhoto" alt="Full Preview" class="max-h-[80vh] w-auto rounded-lg object-contain" />
-        <button @click="modalPhoto = null" class="absolute top-4 right-4 bg-on-surface text-surface w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow">
-          ✕
-        </button>
-      </div>
+    <!-- Split Workspace (7:5 Desktop Grid) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- Left Column: Form Entri (7 cols) -->
+      <section
+        ref="formContainer"
+        class="lg:col-span-7 flex flex-col bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant p-6 lg:p-7 relative overflow-hidden"
+      >
+        <div class="flex items-start justify-between pb-5 border-b border-outline-variant/60">
+          <div class="flex flex-col">
+            <div class="inline-flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 rounded-full bg-secondary"></span>
+              <span class="font-label-sm text-label-sm uppercase tracking-wide text-secondary font-semibold">Entri Hari Kerja Terjadwal</span>
+            </div>
+            <h2 class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight">Tulis Catatan Harian</h2>
+            <p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Rabu, 23 Oktober 2024 • Pekan ke-8 Tahap Implementasi</p>
+          </div>
+          <div class="px-3 py-1 rounded-full bg-surface-container text-primary font-label-md text-label-md font-semibold border border-outline-variant">
+            Wajib Dilaporkan
+          </div>
+        </div>
+
+        <form @submit.prevent="handleSubmitEntry" class="flex flex-col gap-5 mt-5">
+          <!-- Row 1: Tanggal & Jam Kerja -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-secondary">event</span>
+                Tanggal Kegiatan
+              </label>
+              <input
+                v-model="form.date"
+                class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg outline-none cursor-default font-medium border border-outline-variant/60"
+                readonly
+                type="text"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-secondary">timelapse</span>
+                Jam Kerja Efektif
+              </label>
+              <div class="flex items-center gap-2">
+                <input
+                  v-model="form.startTime"
+                  class="w-full px-3 py-2.5 bg-surface-container-low text-on-surface text-center font-body-sm text-body-sm rounded-lg focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/25 outline-none font-medium border border-outline-variant/60"
+                  type="text"
+                />
+                <span class="text-on-surface-variant font-label-sm text-label-sm">s/d</span>
+                <input
+                  v-model="form.endTime"
+                  class="w-full px-3 py-2.5 bg-surface-container-low text-on-surface text-center font-body-sm text-body-sm rounded-lg focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/25 outline-none font-medium border border-outline-variant/60"
+                  type="text"
+                />
+                <span class="font-label-sm text-label-sm px-2.5 py-2 rounded-lg bg-surface-container text-primary font-semibold whitespace-nowrap border border-outline-variant">8 Jam</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Kategori & Lokasi -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-secondary">category</span>
+                Kategori Pekerjaan
+              </label>
+              <div class="relative">
+                <select
+                  v-model="form.category"
+                  class="w-full appearance-none px-3.5 py-2.5 bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/25 outline-none cursor-pointer border border-outline-variant/60"
+                >
+                  <option value="dev">Development &amp; Coding</option>
+                  <option value="research">Research &amp; Technical Discovery</option>
+                  <option value="meeting">Meeting &amp; Sprint Discussion</option>
+                  <option value="doc">Documentation &amp; Reporting</option>
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-secondary">share_location</span>
+                Lokasi / Moda Kerja
+              </label>
+              <div class="relative">
+                <select
+                  v-model="form.location"
+                  class="w-full appearance-none px-3.5 py-2.5 bg-surface-container-low text-on-surface font-body-sm text-body-sm rounded-lg focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/25 outline-none cursor-pointer border border-outline-variant/60"
+                >
+                  <option value="wfo">WFO (Head Office - Lantai 4)</option>
+                  <option value="wfh">WFH (Remote Mandiri)</option>
+                  <option value="field">Kunjungan Lapangan / Mitra</option>
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Judul Ringkas Pekerjaan -->
+          <div class="flex flex-col gap-1.5">
+            <label class="font-label-md text-label-md text-primary font-semibold flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-secondary">title</span>
+                Judul Ringkas Pekerjaan
+              </span>
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-normal">Maks. 80 karakter</span>
+            </label>
+            <input
+              ref="titleInput"
+              v-model="form.title"
+              maxlength="80"
+              class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface font-body-md text-body-md rounded-lg focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/25 outline-none transition-all font-medium border border-outline-variant/60"
+              placeholder="Contoh: Integrasi Payment Gateway Sandbox & Error Handling"
+              type="text"
+              required
+            />
+          </div>
+
+          <!-- Deskripsi Detail Aktivitas & Capaian (STAR Format) -->
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-secondary">subject</span>
+                Deskripsi Detail Aktivitas &amp; Capaian
+              </label>
+              <span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded font-semibold border border-outline-variant">
+                Format STAR Disarankan
+              </span>
+            </div>
+            <textarea
+              v-model="form.description"
+              rows="6"
+              required
+              class="w-full px-3.5 py-3 bg-surface-container-low text-on-surface font-body-sm text-body-sm leading-relaxed rounded-lg focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/25 outline-none transition-all resize-y border border-outline-variant/60 font-body"
+              placeholder="Jelaskan secara runtut:
+1. Apa yang dikerjakan hari ini?
+2. Progres dan capaian konkret yang diselesaikan?
+3. Kendala teknis yang dihadapi dan solusi penanganannya?"
+            ></textarea>
+            <div class="flex items-center justify-between pt-1">
+              <span class="font-label-sm text-label-sm text-on-surface-variant">Tips: Sertakan ID tiket Jira atau tautan merge request jika ada</span>
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-mono">{{ charCount }} Karakter • {{ wordCount }} Kata</span>
+            </div>
+          </div>
+
+          <!-- Bukti Pengerjaan / Lampiran Pendukung -->
+          <div class="flex flex-col gap-2">
+            <label class="font-label-md text-label-md text-primary font-semibold flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-secondary">attachment</span>
+                Bukti Pengerjaan / Lampiran Pendukung
+              </span>
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-normal">PNG, JPG, PDF (Maks. 5 MB)</span>
+            </label>
+
+            <!-- Dropzone -->
+            <div
+              @click="triggerFileInput"
+              class="p-4 bg-surface-container-low rounded-xl border border-dashed border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-4 cursor-pointer hover:bg-surface-container transition-colors"
+            >
+              <div class="flex items-center gap-3 w-full sm:w-auto">
+                <div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center text-secondary shadow-xs shrink-0 border border-outline-variant">
+                  <span class="material-symbols-outlined text-[24px]">cloud_upload</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-headline-sm text-body-sm text-on-surface font-semibold">Tarik &amp; letakkan file di sini</span>
+                  <span class="font-label-sm text-label-sm text-on-surface-variant">atau klik untuk menelusuri dari komputer</span>
+                </div>
+              </div>
+              <input
+                ref="fileInputRef"
+                type="file"
+                class="hidden"
+                accept="image/png,image/jpeg,application/pdf"
+                @change="handleFileUpload"
+              />
+              <button
+                type="button"
+                class="w-full sm:w-auto px-3.5 py-2 bg-surface-container-lowest text-primary hover:bg-surface-container text-body-sm font-body-sm font-semibold rounded-lg shadow-xs transition-colors shrink-0 border border-outline-variant"
+              >
+                Pilih File Dokumen
+              </button>
+            </div>
+
+            <!-- Uploaded Files List -->
+            <div v-if="attachments.length > 0" class="flex flex-col gap-2 mt-1">
+              <div
+                v-for="(file, idx) in attachments"
+                :key="idx"
+                class="flex items-center justify-between p-2.5 bg-surface-container-low rounded-lg border border-outline-variant/60"
+              >
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-8 h-8 rounded bg-surface-container-lowest text-secondary flex items-center justify-center shrink-0 border border-outline-variant">
+                    <span class="material-symbols-outlined text-[18px]">image</span>
+                  </div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="font-body-sm text-body-sm font-medium text-on-surface truncate">{{ file.name }}</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">{{ file.size }} • Berhasil diunggah</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1 shrink-0">
+                  <button
+                    @click="previewFile(file)"
+                    class="p-1.5 text-on-surface-variant hover:text-primary rounded transition-colors"
+                    title="Pratinjau File"
+                    type="button"
+                  >
+                    <span class="material-symbols-outlined text-[18px]">visibility</span>
+                  </button>
+                  <button
+                    @click="removeFile(idx)"
+                    class="p-1.5 text-error hover:bg-error-container/20 rounded transition-colors"
+                    title="Hapus File"
+                    type="button"
+                  >
+                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Bar -->
+          <div class="pt-4 mt-2 flex flex-col sm:flex-row items-center justify-between gap-3 bg-surface-container-low/50 -mx-6 -mb-6 p-6 rounded-b-2xl border-t border-outline-variant/60">
+            <div class="flex items-center gap-2 self-start sm:self-auto text-on-surface-variant">
+              <span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+              <span class="font-label-sm text-label-sm">Draf otomatis tersimpan pada {{ lastAutoSaveTime }} WIB</span>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+              <button
+                @click="saveAsDraft"
+                class="flex-1 sm:flex-initial px-4 py-2.5 rounded-lg bg-surface-container-lowest text-primary hover:bg-surface-container text-body-sm font-body-sm font-semibold transition-colors shadow-xs border border-outline-variant"
+                type="button"
+              >
+                Simpan sebagai Draf
+              </button>
+              <button
+                class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-body-sm font-body-sm font-semibold shadow-sm transition-colors active:scale-95"
+                type="submit"
+              >
+                <span class="material-symbols-outlined text-[18px]">send</span>
+                <span>Kirim untuk Review</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Right Column: Riwayat Logbook (5 cols) -->
+      <section class="lg:col-span-5 flex flex-col gap-4">
+        <div class="flex items-center justify-between pb-1">
+          <div class="flex items-center gap-2">
+            <h2 class="font-headline-md text-headline-md text-primary font-bold">Riwayat Logbook</h2>
+            <span class="px-2 py-0.5 rounded-full bg-surface-container text-secondary font-label-md text-label-md font-semibold border border-outline-variant">
+              Pekan 8
+            </span>
+          </div>
+          <span class="font-label-sm text-label-sm text-on-surface-variant">{{ filteredLogs.length }} entri pekan ini</span>
+        </div>
+
+        <div class="flex flex-col gap-3.5">
+          <article
+            v-for="log in filteredLogs"
+            :key="log.id"
+            @click="selectLog(log)"
+            class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-outline-variant hover:shadow-md transition-shadow cursor-pointer flex flex-col gap-3"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex flex-col">
+                <span class="font-label-sm text-label-sm text-on-surface-variant">{{ log.date }}</span>
+                <h3 class="font-headline-sm text-headline-sm text-primary font-semibold mt-0.5 line-clamp-1">
+                  {{ log.title }}
+                </h3>
+              </div>
+              <div
+                class="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold border"
+                :class="log.status === 'approved' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : (log.status === 'pending' ? 'bg-amber-50 text-amber-800 border-amber-200' : 'bg-surface-container text-on-surface-variant border-outline-variant')"
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full"
+                  :class="log.status === 'approved' ? 'bg-emerald-600' : (log.status === 'pending' ? 'bg-amber-600' : 'bg-outline')"
+                ></span>
+                <span>{{ log.statusLabel }}</span>
+              </div>
+            </div>
+
+            <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+              {{ log.desc }}
+            </p>
+
+            <div class="flex items-center justify-between pt-2 border-t border-outline-variant/50">
+              <div class="flex items-center gap-3">
+                <span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[15px] text-outline">timelapse</span>
+                  {{ log.hours }}
+                </span>
+                <span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[15px] text-outline">attach_file</span>
+                  {{ log.attachmentsCount }} Dokumen
+                </span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-primary border border-outline-variant">
+                  {{ log.mentorInitials }}
+                </div>
+                <span class="font-label-sm text-label-sm text-on-surface font-medium">{{ log.mentorName }}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant flex items-center justify-between mt-1">
+          <span class="font-label-sm text-label-sm text-on-surface-variant">Menampilkan {{ filteredLogs.length }} dari 32 entri bulan ini</span>
+          <div class="flex items-center gap-1.5">
+            <button
+              class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-outline hover:text-primary hover:bg-surface-container disabled:opacity-40 transition-colors border border-outline-variant/60"
+              disabled
+              type="button"
+            >
+              <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+            </button>
+            <span class="font-label-md text-label-md text-primary font-semibold px-2">Halaman 1 dari 8</span>
+            <button
+              class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-on-surface hover:text-primary hover:bg-surface-container transition-colors border border-outline-variant/60"
+              type="button"
+            >
+              <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Weekly Locked Note -->
+        <div class="p-4 rounded-xl bg-surface-container-low border border-outline-variant flex items-start gap-3">
+          <span class="material-symbols-outlined text-[20px] text-secondary shrink-0 mt-0.5">verified_user</span>
+          <div class="flex flex-col text-on-surface">
+            <span class="font-headline-sm text-body-sm font-semibold">Tanda Tangan &amp; Validasi Mingguan</span>
+            <p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5 leading-relaxed">
+              Seluruh catatan pada pekan berjalan akan dikunci otomatis pada hari Jumat pukul 23:59 WIB untuk ditinjau oleh Mentor Pembimbing Industri.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, computed } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
 const { showToast } = useAppStore()
 
-const isSubmitting = ref(false)
-const previewPhoto = ref<string | null>(null)
-const compressedInfo = ref<string | null>(null)
-const modalPhoto = ref<string | null>(null)
+const formContainer = ref<HTMLElement | null>(null)
+const titleInput = ref<HTMLInputElement | null>(null)
+const fileInputRef = ref<HTMLInputElement | null>(null)
 
-const todayStr = new Date().toISOString().split('T')[0]
+const searchQuery = ref('')
+const statusFilter = ref('all')
+const currentView = ref<'split' | 'calendar'>('split')
+const lastAutoSaveTime = ref('11:20:14')
 
-const form = reactive({
-  date: todayStr,
-  title: '',
-  activity_description: '',
-  photo_url: ''
+const form = ref({
+  date: '23 Oktober 2024',
+  startTime: '08:30',
+  endTime: '17:30',
+  category: 'dev',
+  location: 'wfo',
+  title: 'Integrasi Payment Gateway Sandbox & Error Handling',
+  description: `1. Mengimplementasikan webhook handler payment gateway (Midtrans Sandbox) untuk skema Virtual Account dan QRIS.
+2. Menyusun validasi payload signature key untuk mengantisipasi tampering response status transaksi.
+3. Kendala: Callback webhook lokal sempat tertahan firewall staging; berhasil diatasi menggunakan tunnel reversproxy internal sesuai panduan tim DevOps.`
 })
 
-// Sample weekly logbook data
-const logbooks = ref([
+const attachments = ref([
   {
-    id: 1,
-    dateFormatted: '26 Sep 2026',
-    dayName: 'Jumat',
-    title: 'Pembuatan Tampilan Split-Screen Validasi Jurnal DUDI',
-    activity_description: 'Merancang layout split view sesuai panduan UX desktop: daftar siswa di panel samping kiri dan detail jurnal interaktif beserta aksi validasi di panel kanan.',
-    photo_url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600',
-    status: 'menunggu',
-    feedback_note: null,
-    validator_name: null
-  },
-  {
-    id: 2,
-    dateFormatted: '25 Sep 2026',
-    dayName: 'Kamis',
-    title: 'Optimasi Upload Foto Jurnal dengan Kompresi Gambar Canvas',
-    activity_description: 'Menerapkan kompresi gambar berbasis HTML5 Canvas client-side sebelum upload ke server backend untuk menghemat bandwidth pengguna dan storage server.',
-    photo_url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600',
-    status: 'revisi',
-    feedback_note: 'Hasil kompresi terlalu kecil sehingga tulisan kode di layar agak blur. Tolong naikkan kualitas kompresi ke target minimal 70% dan upload ulang screenshot.',
-    validator_name: 'Hendra Wijaya, S.Kom'
-  },
-  {
-    id: 3,
-    dateFormatted: '24 Sep 2026',
-    dayName: 'Rabu',
-    title: 'Integrasi State Management Pinia pada Nuxt 3',
-    activity_description: 'Mengonfigurasi state global untuk token autentikasi, status koneksi offline/online dengan reactive indicator, dan persistence data profil menggunakan pinia-plugin-persistedstate.',
-    photo_url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600',
-    status: 'diacc',
-    feedback_note: 'Arsitektur store sangat rapi dan reusable.',
-    validator_name: 'Hendra Wijaya, S.Kom'
-  },
-  {
-    id: 4,
-    dateFormatted: '23 Sep 2026',
-    dayName: 'Selasa',
-    title: 'Implementasi Endpoint REST API Autentikasi Sanctum',
-    activity_description: 'Melakukan setup Laravel Sanctum untuk authentication token bearer, membuat middleware verifikasi peran aktor (siswa, dudi, guru, admin), dan menguji validasi request login.',
-    photo_url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600',
-    status: 'diacc',
-    feedback_note: 'Kerja bagus, struktur controller dan error handling sudah memenuhi standar code review tim backend.',
-    validator_name: 'Hendra Wijaya, S.Kom'
+    name: 'screenshot_sandbox_test.png',
+    size: '842 KB'
   }
 ])
 
-// HTML5 Canvas Client-side compression
-const handleImageUpload = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (!target.files || target.files.length === 0) return
+const charCount = computed(() => form.value.description.length)
+const wordCount = computed(() => {
+  const trimmed = form.value.description.trim()
+  return trimmed ? trimmed.split(/\s+/).length : 0
+})
 
-  const file = target.files[0]
-  const originalSizeKb = Math.round(file.size / 1024)
-
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    const img = new Image()
-    img.onload = () => {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-
-      const maxWidth = 1280
-      const scale = Math.min(1, maxWidth / img.width)
-      canvas.width = img.width * scale
-      canvas.height = img.height * scale
-
-      ctx?.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72)
-      previewPhoto.value = compressedDataUrl
-      form.photo_url = compressedDataUrl
-
-      const compressedSizeKb = Math.round((compressedDataUrl.length * 3) / 4 / 1024)
-      const ratio = Math.round((1 - (compressedSizeKb / originalSizeKb)) * 100)
-      compressedInfo.value = `${originalSizeKb} KB ➔ ${compressedSizeKb} KB (-${ratio}%)`
-      showToast(`Foto berhasil dikompresi: hemat ${ratio}% ukuran file`, 'info')
-    }
-    img.src = e.target?.result as string
+const initialLogs = [
+  {
+    id: 1,
+    date: 'Selasa, 22 Okt 2024',
+    title: 'Unit Testing & Optimasi Endpoint Checkout',
+    desc: 'Menulis skenario pengujian automated jest untuk memvalidasi alur kalkulasi diskon kupon, ongkir dinamis, dan verifikasi stok reservasi.',
+    hours: '8 Jam Kerja',
+    attachmentsCount: 2,
+    status: 'approved',
+    statusLabel: 'Disetujui',
+    mentorName: 'Bpk. Dimas Ardiansyah',
+    mentorInitials: 'DA'
+  },
+  {
+    id: 2,
+    date: 'Senin, 21 Okt 2024',
+    title: 'Sprint Planning & Review Backlog Q4',
+    desc: 'Mengikuti rapat mingguan bersama tim Product Management, melakukan estimasi story point untuk modul transaksi dan refund saldo pengguna.',
+    hours: '8 Jam Kerja',
+    attachmentsCount: 1,
+    status: 'approved',
+    statusLabel: 'Disetujui',
+    mentorName: 'Ibu Maya R.',
+    mentorInitials: 'MR'
+  },
+  {
+    id: 3,
+    date: 'Jumat, 18 Okt 2024',
+    title: 'Dokumentasi API Swagger & Deployment Staging',
+    desc: 'Menyinkronkan spesifikasi OpenAPI 3.0 dengan route backend terkini serta melakukan build container Docker untuk lingkungan testing.',
+    hours: '8 Jam Kerja',
+    attachmentsCount: 3,
+    status: 'approved',
+    statusLabel: 'Disetujui',
+    mentorName: 'Bpk. Dimas Ardiansyah',
+    mentorInitials: 'DA'
+  },
+  {
+    id: 4,
+    date: 'Kamis, 17 Okt 2024',
+    title: 'Penyelesaian Bug Validasi Form Pelanggan',
+    desc: 'Memperbaiki parsing regex nomor telepon internasional pada modul input checkout dan sinkronisasi mask otomatis pada form registrasi.',
+    hours: '8 Jam Kerja',
+    attachmentsCount: 1,
+    status: 'approved',
+    statusLabel: 'Disetujui',
+    mentorName: 'Bpk. Dimas Ardiansyah',
+    mentorInitials: 'DA'
   }
-  reader.readAsDataURL(file)
+]
+
+const logsList = ref(initialLogs)
+
+const filteredLogs = computed(() => {
+  return logsList.value.filter(log => {
+    const matchSearch = !searchQuery.value ||
+      log.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      log.desc.toLowerCase().includes(searchQuery.value.toLowerCase())
+    const matchStatus = statusFilter.value === 'all' || log.status === statusFilter.value
+    return matchSearch && matchStatus
+  })
+})
+
+const focusForm = () => {
+  if (formContainer.value) {
+    formContainer.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+  if (titleInput.value) {
+    titleInput.value.focus()
+  }
 }
 
-const removePhoto = () => {
-  previewPhoto.value = null
-  compressedInfo.value = null
-  form.photo_url = ''
+const triggerFileInput = () => {
+  if (fileInputRef.value) {
+    fileInputRef.value.click()
+  }
 }
 
-const resetForm = () => {
-  form.title = ''
-  form.activity_description = ''
-  removePhoto()
+const handleFileUpload = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    const f = target.files[0]
+    attachments.value.push({
+      name: f.name,
+      size: `${(f.size / 1024).toFixed(0)} KB`
+    })
+    showToast(`File ${f.name} berhasil diunggah!`, 'success')
+  }
 }
 
-const handleSubmitLogbook = () => {
-  isSubmitting.value = true
-  setTimeout(() => {
-    isSubmitting.value = false
-    const newEntry = {
-      id: Date.now(),
-      dateFormatted: '27 Sep 2026',
-      dayName: 'Sabtu',
-      title: form.title,
-      activity_description: form.activity_description,
-      photo_url: form.photo_url || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600',
-      status: 'menunggu',
-      feedback_note: null,
-      validator_name: null
-    }
-
-    logbooks.value.unshift(newEntry)
-    resetForm()
-    showToast('Jurnal harian berhasil disimpan! Status: Menunggu validasi DUDI.', 'success')
-  }, 700)
+const removeFile = (idx: number) => {
+  attachments.value.splice(idx, 1)
+  showToast('File lampiran dihapus.', 'info')
 }
 
-const openImageModal = (url: string) => {
-  modalPhoto.value = url
+const previewFile = (file: { name: string; size: string }) => {
+  showToast(`Membuka pratinjau dokumen: ${file.name}`, 'info')
+}
+
+const saveAsDraft = () => {
+  const now = new Date()
+  lastAutoSaveTime.value = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`
+  showToast('Draf jurnal harian berhasil disimpan di perangkat!', 'success')
+}
+
+const handleSubmitEntry = () => {
+  logsList.value.unshift({
+    id: Date.now(),
+    date: 'Rabu, 23 Okt 2024',
+    title: form.value.title,
+    desc: form.value.description,
+    hours: '8 Jam Kerja',
+    attachmentsCount: attachments.value.length,
+    status: 'pending',
+    statusLabel: 'Menunggu Review',
+    mentorName: 'Bpk. Dimas Ardiansyah',
+    mentorInitials: 'DA'
+  })
+
+  showToast('Catatan jurnal harian berhasil dikirim ke Pembimbing Industri!', 'success')
+}
+
+const selectLog = (log: typeof initialLogs[0]) => {
+  showToast(`Melihat riwayat: "${log.title}"`, 'info')
+}
+
+const exportPdf = () => {
+  showToast('Mempersiapkan berkas rekapitulasi PDF Jurnal Magang SMKN 71...', 'success')
 }
 </script>

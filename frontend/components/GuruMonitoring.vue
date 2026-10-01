@@ -17,7 +17,7 @@
           v-model="searchQuery"
           type="text"
           placeholder="Cari nama siswa atau NISN..."
-          class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm"
+          class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm"
         />
         <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
       </div>
@@ -29,7 +29,7 @@
         v-for="student in filteredStudents"
         :key="student.id"
         @click="selectedStudent = student"
-        :class="selectedStudent.id === student.id ? 'bg-amber-600 text-white border-amber-600 shadow-sm' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'"
+        :class="selectedStudent.id === student.id ? 'bg-[#1e3a5f] text-white border-[#1e3a5f] shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'"
         class="px-3.5 py-2 rounded-xl border text-xs font-semibold whitespace-nowrap transition flex items-center gap-2"
       >
         <img :src="student.avatar" class="w-5 h-5 rounded-full object-cover" />
@@ -41,11 +41,11 @@
     <!-- Active Student Profile Card -->
     <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="flex items-center gap-4">
-        <img :src="selectedStudent.avatar" class="w-14 h-14 rounded-2xl object-cover border-2 border-amber-500" />
+        <img :src="selectedStudent.avatar" class="w-14 h-14 rounded-2xl object-cover border border-slate-300 ring-2 ring-slate-100" />
         <div>
           <h3 class="text-base font-bold text-slate-900">{{ selectedStudent.name }}</h3>
           <p class="text-xs text-slate-500">NISN: {{ selectedStudent.nisn }} • Penempatan: {{ selectedStudent.company }}</p>
-          <p class="text-[11px] text-amber-700 font-medium mt-0.5">Mentor DUDI: {{ selectedStudent.mentorDudi }}</p>
+          <p class="text-[11px] text-slate-600 font-medium mt-0.5">Mentor DUDI: {{ selectedStudent.mentorDudi }}</p>
         </div>
       </div>
 
@@ -83,7 +83,7 @@
           <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div>
-                <span class="text-xs font-mono text-amber-700 font-semibold">{{ entry.dateFormatted }}</span>
+                <span class="text-xs font-mono text-[#1e3a5f] font-semibold">{{ entry.dateFormatted }}</span>
                 <h4 class="text-sm font-bold text-slate-900 mt-0.5">{{ entry.title }}</h4>
               </div>
 

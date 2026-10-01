@@ -22,7 +22,7 @@
 
         <button
           @click="openCreateModal"
-          class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
+          class="px-4 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
         >
           <span>➕</span> Tambah Data Manual
         </button>
@@ -34,21 +34,21 @@
       <div class="flex items-center p-1 bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold">
         <button
           @click="currentSubTab = 'siswa'"
-          :class="currentSubTab === 'siswa' ? 'bg-white text-rose-700 shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'"
+          :class="currentSubTab === 'siswa' ? 'bg-white text-[#1e3a5f] shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'"
           class="px-4 py-2 rounded-lg transition flex items-center gap-2"
         >
           <span>👨‍🎓</span> Data Siswa ({{ studentsList.length }})
         </button>
         <button
           @click="currentSubTab = 'dudi'"
-          :class="currentSubTab === 'dudi' ? 'bg-white text-rose-700 shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'"
+          :class="currentSubTab === 'dudi' ? 'bg-white text-[#1e3a5f] shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'"
           class="px-4 py-2 rounded-lg transition flex items-center gap-2"
         >
           <span>🏢</span> Pembimbing Industri / DUDI ({{ dudiList.length }})
         </button>
         <button
           @click="currentSubTab = 'guru'"
-          :class="currentSubTab === 'guru' ? 'bg-white text-rose-700 shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'"
+          :class="currentSubTab === 'guru' ? 'bg-white text-[#1e3a5f] shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'"
           class="px-4 py-2 rounded-lg transition flex items-center gap-2"
         >
           <span>👨‍🏫</span> Guru Pembimbing ({{ guruList.length }})
@@ -61,7 +61,7 @@
           v-model="searchQuery"
           type="text"
           :placeholder="`Pencarian real-time ${currentSubTab}...`"
-          class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm"
+          class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm"
         />
         <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
       </div>
@@ -118,7 +118,7 @@
                 <div class="flex items-center justify-center gap-2">
                   <button
                     @click="openEditModal(item)"
-                    class="px-2.5 py-1 bg-white hover:bg-indigo-50 text-indigo-700 rounded-lg text-[11px] font-semibold transition border border-slate-300 shadow-sm"
+                    class="px-2.5 py-1 bg-white hover:bg-[#eef4fa] text-[#1e3a5f] rounded-lg text-[11px] font-semibold transition border border-slate-300 shadow-sm"
                   >
                     Edit
                   </button>
@@ -149,28 +149,28 @@
         <form @submit.prevent="handleSaveManual" class="mt-4 space-y-4 text-xs">
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap *</label>
-            <input v-model="formData.name" type="text" required placeholder="Contoh: Muhammad Farhan" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm" />
+            <input v-model="formData.name" type="text" required placeholder="Contoh: Muhammad Farhan" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block font-semibold text-slate-700 mb-1">{{ currentSubTab === 'siswa' ? 'NISN *' : 'NIP / ID *' }}</label>
-              <input v-model="formData.idNumber" type="text" required class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm" />
+              <input v-model="formData.idNumber" type="text" required class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm" />
             </div>
             <div>
               <label class="block font-semibold text-slate-700 mb-1">Nomor WhatsApp *</label>
-              <input v-model="formData.phone" type="text" required placeholder="08..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm" />
+              <input v-model="formData.phone" type="text" required placeholder="08..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm" />
             </div>
           </div>
 
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Email Akun *</label>
-            <input v-model="formData.email" type="email" required placeholder="nama@magang.id" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm" />
+            <input v-model="formData.email" type="email" required placeholder="nama@magang.id" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm" />
           </div>
 
           <div class="pt-2 flex justify-end gap-2.5">
             <button type="button" @click="isFormModalOpen = false" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-300 font-semibold">Batal</button>
-            <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-bold shadow-sm">Simpan Data</button>
+            <button type="submit" class="px-4 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-lg font-bold shadow-sm">Simpan Data</button>
           </div>
         </form>
       </div>
@@ -198,14 +198,14 @@
           </div>
           <button
             @click="downloadTemplate"
-            class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-semibold transition"
+            class="px-3 py-1.5 bg-[#eef4fa] hover:bg-[#e2edf8] text-[#1e3a5f] border border-[#d0e1f3] rounded-lg text-xs font-semibold transition"
           >
             📥 Download Template
           </button>
         </div>
 
         <!-- File Upload Area -->
-        <div class="border-2 border-dashed border-slate-300 hover:border-rose-500 p-6 rounded-xl text-center bg-slate-50 cursor-pointer">
+        <div class="border-2 border-dashed border-slate-300 hover:border-[#1e3a5f] p-6 rounded-xl text-center bg-slate-50 cursor-pointer">
           <span class="text-3xl block mb-2">📁</span>
           <span class="text-xs font-semibold text-slate-800 block">Pilih file .xlsx atau .csv dari komputer</span>
           <span class="text-[10px] text-slate-500 mt-1 block">Maksimal ukuran file: 5 MB</span>
@@ -217,7 +217,7 @@
 
         <div class="flex justify-end gap-2.5 pt-2">
           <button @click="isImportModalOpen = false" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs border border-slate-300 font-semibold">Batal</button>
-          <button @click="executeImport" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-sm">
+          <button @click="executeImport" class="px-5 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-lg text-xs font-bold shadow-sm">
             Mulai Proses Impor &rarr;
           </button>
         </div>

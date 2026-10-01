@@ -7,12 +7,12 @@
           <span>🎛️ Dashboard Admin / Kaprog RPL</span>
         </h2>
         <p class="text-xs text-slate-500 mt-1">
-          Statistik makro tata kelola Praktik Kerja Lapangan (PKL) SMK Negeri 1 Industri.
+          Statistik makro tata kelola Praktik Kerja Lapangan (PKL) SMK Negeri 71 Jakarta.
         </p>
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#eef4fa] text-[#1e3a5f] border border-[#d0e1f3]">
           Tahun Ajaran: 2025/2026 • Semester Ganjil
         </span>
       </div>
@@ -35,7 +35,7 @@
           <span class="text-lg">🏢</span>
         </div>
         <div class="text-3xl font-extrabold text-slate-900 mt-2">24 <span class="text-sm font-normal text-slate-500">Perusahaan</span></div>
-        <span class="text-[11px] text-indigo-700 font-semibold block mt-1">Software &amp; Creative Agency</span>
+        <span class="text-[11px] text-slate-600 font-semibold block mt-1">Software &amp; Creative Agency</span>
       </div>
 
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
@@ -66,7 +66,7 @@
             <h3 class="text-sm font-bold text-slate-900">Grafik Penyebaran Siswa di Berbagai Industri</h3>
             <p class="text-[11px] text-slate-500">Distribusi kuota penempatan magang per mitra DUDI</p>
           </div>
-          <span class="text-xs font-mono font-semibold text-indigo-700">24 Perusahaan</span>
+          <span class="text-xs font-mono font-semibold text-[#1e3a5f]">24 Perusahaan</span>
         </div>
 
         <!-- Distribution Bars -->
@@ -124,7 +124,7 @@
             </div>
             <div class="flex items-center justify-between">
               <span class="text-slate-500">Basis Data Desktop:</span>
-              <span class="text-indigo-700 font-mono font-semibold">SQLite 3.42 (WAL Mode)</span>
+              <span class="text-[#1e3a5f] font-mono font-semibold">SQLite 3.42 (WAL Mode)</span>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-slate-500">Kapasitas Storage:</span>
@@ -184,7 +184,7 @@ const industryDistribution = ref([
     students: 7,
     quota: 8,
     mentor: 'Ahmad Fauzi (PIC DUDI)',
-    color: 'bg-indigo-600'
+    color: 'bg-[#1e3a5f]'
   },
   {
     name: 'CV Nusantara Studio Digital',

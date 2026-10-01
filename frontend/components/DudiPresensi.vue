@@ -100,7 +100,7 @@
               </td>
 
               <!-- Check-Out -->
-              <td class="py-3.5 px-4 font-mono font-bold text-indigo-700 whitespace-nowrap">
+              <td class="py-3.5 px-4 font-mono font-bold text-[#1e3a5f] whitespace-nowrap">
                 {{ att.out ? `${att.out} WIB` : 'Sedang Bekerja' }}
               </td>
 

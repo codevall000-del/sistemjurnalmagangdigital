@@ -12,7 +12,7 @@
       </div>
 
       <div class="text-xs text-slate-500 font-medium">
-        Menampilkan: <span class="font-bold text-emerald-700">{{ activeStudent.name }}</span>
+        Menampilkan: <span class="font-bold text-[#1e3a5f]">{{ activeStudent.name }}</span>
       </div>
     </div>
 
@@ -26,7 +26,7 @@
               v-model="searchQuery"
               type="text"
               placeholder="Cari siswa atau NISN..."
-              class="w-full pl-8 pr-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 transition"
+              class="w-full pl-8 pr-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] transition"
             />
             <span class="absolute left-2.5 top-2.5 text-slate-400 text-xs">🔍</span>
           </div>
@@ -38,7 +38,7 @@
             v-for="student in filteredStudents"
             :key="student.id"
             @click="selectStudent(student)"
-            :class="activeStudent.id === student.id ? 'bg-emerald-50 border-emerald-500 text-emerald-950 ring-1 ring-emerald-500' : 'hover:bg-slate-50 text-slate-700 border-transparent'"
+            :class="activeStudent.id === student.id ? 'bg-[#eef4fa] border-[#1e3a5f] text-slate-900 ring-1 ring-[#1e3a5f]' : 'hover:bg-slate-50 text-slate-700 border-transparent'"
             class="p-3 rounded-xl border cursor-pointer transition flex items-center justify-between gap-3"
           >
             <div class="flex items-center gap-3 min-w-0">
@@ -50,7 +50,7 @@
               <div class="min-w-0">
                 <h4 class="text-xs font-bold truncate text-slate-900">{{ student.name }}</h4>
                 <div class="text-[10px] text-slate-500 font-mono">NISN: {{ student.nisn }}</div>
-                <div class="text-[10px] text-indigo-700 font-medium truncate">RPL • Angkatan 32</div>
+                <div class="text-[10px] text-slate-600 font-medium truncate">RPL • Angkatan 32</div>
               </div>
             </div>
 
@@ -96,7 +96,7 @@
             <!-- Journal Top Info -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-slate-200">
               <div>
-                <span class="text-[10px] font-mono text-indigo-700 uppercase tracking-wider font-bold block">
+                <span class="text-[10px] font-mono text-[#1e3a5f] uppercase tracking-wider font-bold block">
                   Tanggal: {{ journal.date }}
                 </span>
                 <h4 class="text-sm font-bold text-slate-900 mt-0.5">{{ journal.title }}</h4>
@@ -144,7 +144,7 @@
                 <div class="text-[11px] text-slate-500 space-y-0.5">
                   <p>Resolusi: 1280x720 (Terkonversi)</p>
                   <p>Format: JPEG Kompresi Optimal</p>
-                  <button @click="previewImage = journal.photo_url" class="text-indigo-600 font-bold hover:underline mt-1 block">
+                  <button @click="previewImage = journal.photo_url" class="text-[#1e3a5f] font-bold hover:underline mt-1 block">
                     Perbesar Foto &rarr;
                   </button>
                 </div>

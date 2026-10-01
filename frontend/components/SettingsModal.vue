@@ -3,7 +3,7 @@
     <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 text-slate-800 relative">
       <div class="flex items-center justify-between pb-4 border-b border-slate-200">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center text-lg border border-indigo-200">
+          <div class="w-9 h-9 rounded-xl bg-[#eef4fa] text-[#1e3a5f] flex items-center justify-center text-lg border border-[#d0e1f3]">
             ⚙️
           </div>
           <div>
@@ -27,7 +27,7 @@
             type="password"
             placeholder="Masukkan kata sandi lama"
             required
-            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] focus:bg-white transition"
           />
         </div>
 
@@ -38,7 +38,7 @@
             type="password"
             placeholder="Minimal 6 karakter"
             required
-            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] focus:bg-white transition"
           />
         </div>
 
@@ -49,7 +49,7 @@
             type="password"
             placeholder="Ulangi password baru"
             required
-            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] focus:bg-white transition"
           />
         </div>
 
@@ -64,7 +64,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5"
+            class="px-5 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5"
           >
             <span v-if="isSubmitting" class="animate-spin inline-block">⏳</span>
             <span>Simpan Perubahan</span>

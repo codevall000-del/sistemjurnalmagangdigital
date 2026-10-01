@@ -1,545 +1,557 @@
 <template>
-  <div class="flex flex-col w-full gap-space-lg max-w-7xl mx-auto">
-    <!-- Top Operational Banner Card (Stitch Design) -->
-    <section class="w-full bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg border border-outline-variant">
-      <div class="flex flex-col gap-space-xs max-w-2xl">
-        <div class="flex items-center gap-space-sm flex-wrap">
-          <span class="font-label-sm text-label-sm uppercase px-2 py-0.5 rounded bg-surface-container text-primary font-bold tracking-wider">
-            Semester Ganjil 2025/2026
-          </span>
-          <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-tertiary-fixed text-tertiary font-bold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-            Status: Verifikasi Sinkron
-          </span>
+  <div class="flex flex-col w-full max-w-[1440px] mx-auto gap-space-xl">
+    <!-- Top Greeting & Notice Banner (Stitch Serene Academic Desk) -->
+    <section class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-lg bg-surface-container-lowest p-space-xl rounded-xl shadow-sm border border-outline-variant relative overflow-hidden">
+      <div class="flex flex-col gap-space-xs max-w-2xl z-10">
+        <div class="inline-flex items-center gap-space-xs text-secondary font-label-md text-label-md uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-secondary"></span>
+          Periode Ganjil 2024/2025 • SMKN 71 Jakarta
         </div>
-
-        <h1 class="font-headline text-2xl font-bold text-on-surface tracking-tight mt-1">
-          Halo, {{ currentUser.name }}! 👋
+        <h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">
+          Selamat Pagi, {{ currentUser.name }}! 👋
         </h1>
-        <p class="font-body text-xs text-on-surface-variant">
-          Minggu ke-9 dari 24 Minggu Magang di <strong class="text-on-surface">PT Telkom Digital Solusi</strong> • Konsentrasi Software &amp; Cloud Engineering
+        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Berikut adalah ikhtisar kegiatan magang Anda per <span class="font-semibold text-on-surface">{{ todayFormatted }}</span> di <span class="font-semibold text-primary">PT Solusi Digital Pratama</span>.
         </p>
+      </div>
 
-        <!-- Progress Track -->
-        <div class="mt-space-sm flex flex-col gap-1.5">
-          <div class="flex justify-between items-center text-xs">
-            <span class="text-on-surface-variant font-medium">
-              Target Durasi Kumulatif: <strong class="text-on-surface font-bold">680 Jam</strong>
-            </span>
-            <span class="font-code-sm text-xs font-semibold text-primary font-mono">
-              Tercapai: 364 Jam (53.5%)
-            </span>
+      <!-- Notice Alert Box -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-md z-10 bg-surface-container-low/70 p-space-md rounded-lg border border-outline-variant/60">
+        <div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary shrink-0">
+          <span class="material-symbols-outlined text-[22px]">notification_important</span>
+        </div>
+        <div class="flex flex-col pr-space-sm">
+          <span class="font-headline-sm text-headline-sm text-on-surface font-semibold">
+            {{ isTodayLogged ? 'Jurnal Hari Ini Sudah Dikirim' : 'Jurnal Hari Ini Belum Diisi' }}
+          </span>
+          <span class="font-body-sm text-body-sm text-on-surface-variant">
+            {{ isTodayLogged ? 'Tercatat pada 11:20 WIB • Menunggu review' : 'Batas submisi harian pukul 18:00 WIB' }}
+          </span>
+        </div>
+        <div class="flex items-center gap-space-xs w-full sm:w-auto pt-space-xs sm:pt-0">
+          <button
+            @click="goToLogbook"
+            class="flex-1 sm:flex-none inline-flex items-center justify-center gap-space-xs px-space-md py-2 bg-primary text-on-primary rounded-lg font-headline-sm text-headline-sm hover:bg-primary-container transition-colors shadow-sm active:scale-95"
+            type="button"
+          >
+            <span class="material-symbols-outlined text-[18px]">edit_calendar</span>
+            <span>{{ isTodayLogged ? 'Buka Logbook' : 'Isi Jurnal Hari Ini' }}</span>
+          </button>
+          <button
+            @click="showGuideline"
+            class="p-2 text-on-surface-variant hover:text-primary hover:bg-surface-container rounded-lg transition-colors"
+            title="Lihat Panduan Pengisian"
+            type="button"
+          >
+            <span class="material-symbols-outlined text-[20px]">help</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Subtle background ambient decor -->
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-surface-container-high/40 rounded-full blur-3xl pointer-events-none"></div>
+    </section>
+
+    <!-- 4 Key Metrics Cards (Stitch Design) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-lg">
+      <!-- Metric 1: Jam Magang -->
+      <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm border border-outline-variant flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between pb-space-md">
+          <span class="font-label-md text-label-md text-on-surface-variant font-semibold">Total Jam Magang</span>
+          <div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+            <span class="material-symbols-outlined text-[20px]">schedule</span>
           </div>
-          <div class="w-full h-3 bg-surface-container rounded-full overflow-hidden p-0.5 flex items-center border border-outline-variant/60">
-            <div class="h-full bg-primary-container rounded-full transition-all duration-500 ease-out" style="width: 53.5%;"></div>
+        </div>
+        <div class="flex flex-col gap-space-xs">
+          <div class="flex items-baseline gap-space-xs">
+            <span class="font-headline-xl text-headline-xl text-on-surface font-bold">328</span>
+            <span class="font-body-md text-body-md text-on-surface-variant">/ 640 Jam</span>
+          </div>
+          <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden mt-space-xs">
+            <div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 51.2%;"></div>
+          </div>
+          <div class="flex justify-between items-center pt-space-xs">
+            <span class="font-label-sm text-label-sm text-secondary font-semibold">51.2% Tercapai</span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">Sisa 312 Jam</span>
           </div>
         </div>
       </div>
 
-      <!-- Quick CTA Buttons -->
-      <div class="flex flex-wrap lg:flex-col sm:flex-row items-stretch gap-space-sm shrink-0">
-        <button
-          @click="goToLogbook"
-          class="flex items-center justify-center gap-space-sm bg-primary-container text-on-primary px-space-md py-2.5 rounded-lg text-xs font-semibold hover:bg-primary transition-colors shadow-sm active:scale-95"
-          type="button"
-        >
-          <span class="material-symbols-outlined text-[18px]">add_circle</span>
-          <span>+ Buat Logbook Hari Ini</span>
-        </button>
+      <!-- Metric 2: Jurnal Terverifikasi -->
+      <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm border border-outline-variant flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between pb-space-md">
+          <span class="font-label-md text-label-md text-on-surface-variant font-semibold">Jurnal Terverifikasi</span>
+          <div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-[20px]">fact_check</span>
+          </div>
+        </div>
+        <div class="flex flex-col gap-space-xs">
+          <div class="flex items-baseline gap-space-xs">
+            <span class="font-headline-xl text-headline-xl text-on-surface font-bold">39</span>
+            <span class="font-body-md text-body-md text-on-surface-variant">Logbook</span>
+          </div>
+          <div class="flex items-center gap-space-md pt-space-xs">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-secondary"></span>
+              <span class="font-label-sm text-label-sm text-on-surface font-medium">36 Disetujui</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+              <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">3 Review</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <button
-          @click="handleCheckIn"
-          :disabled="hasCheckedIn"
-          :class="hasCheckedIn ? 'bg-surface-container text-tertiary border-tertiary/40 cursor-default' : 'bg-surface-container-low text-on-surface hover:bg-surface-container active:scale-95 border-outline-variant'"
-          class="flex items-center justify-center gap-space-sm px-space-md py-2.5 rounded-lg text-xs font-medium transition-colors border"
-          type="button"
-        >
-          <span class="material-symbols-outlined text-[18px]" :class="hasCheckedIn ? 'text-tertiary' : 'text-primary'">
-            {{ hasCheckedIn ? 'verified' : 'location_on' }}
-          </span>
-          <span>{{ hasCheckedIn ? `Presensi Masuk (${checkInTime} WIB)` : 'Presensi Masuk (GPS Aktif)' }}</span>
-        </button>
+      <!-- Metric 3: Kehadiran -->
+      <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm border border-outline-variant flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between pb-space-md">
+          <span class="font-label-md text-label-md text-on-surface-variant font-semibold">Persentase Kehadiran</span>
+          <div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+            <span class="material-symbols-outlined text-[20px]">event_seat</span>
+          </div>
+        </div>
+        <div class="flex flex-col gap-space-xs">
+          <div class="flex items-baseline gap-space-xs">
+            <span class="font-headline-xl text-headline-xl text-on-surface font-bold">97.5%</span>
+          </div>
+          <div class="flex items-center gap-space-md pt-space-xs">
+            <span class="font-label-sm text-label-sm text-on-surface-variant">
+              <span class="font-semibold text-on-surface">39</span> Hadir Tepat Waktu
+            </span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">
+              <span class="font-semibold text-on-surface">1</span> Izin Sakit
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metric 4: Evaluasi Terakhir -->
+      <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm border border-outline-variant flex flex-col justify-between hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between pb-space-md">
+          <span class="font-label-md text-label-md text-on-surface-variant font-semibold">Evaluasi Terakhir Mentor</span>
+          <div class="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-[20px]">military_tech</span>
+          </div>
+        </div>
+        <div class="flex flex-col gap-space-xs">
+          <div class="flex items-baseline gap-space-xs">
+            <span class="font-headline-xl text-headline-xl text-on-surface font-bold">4.8</span>
+            <span class="font-body-md text-body-md text-on-surface-variant">/ 5.0</span>
+          </div>
+          <div class="inline-flex items-center gap-1.5 pt-space-xs">
+            <span class="material-symbols-outlined text-[16px] text-secondary">stars</span>
+            <span class="font-label-sm text-label-sm text-secondary font-semibold">Predikat Sangat Memuaskan</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- 4 Stat Metric Cards (Stitch Design) -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md w-full">
-      <!-- Stat 1 -->
-      <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant flex flex-col justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
-        <div class="flex items-start justify-between">
-          <div class="flex flex-col">
-            <span class="font-label-sm text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold">Total Kehadiran</span>
-            <span class="font-headline text-2xl font-bold text-on-surface mt-1">46 <span class="text-xs text-on-surface-variant font-normal">Hari</span></span>
-          </div>
-          <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
-            <span class="material-symbols-outlined text-[22px]">calendar_month</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="font-label-sm text-[10px] px-2 py-0.5 rounded bg-tertiary-fixed text-tertiary font-bold flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-            95.8% Kehadiran
-          </span>
-          <span class="text-[11px] text-on-surface-variant">Sesuai SOP DUDI</span>
-        </div>
-      </div>
-
-      <!-- Stat 2 -->
-      <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant flex flex-col justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
-        <div class="flex items-start justify-between">
-          <div class="flex flex-col">
-            <span class="font-label-sm text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold">Logbook Harian</span>
-            <span class="font-headline text-2xl font-bold text-on-surface mt-1">42 <span class="text-xs text-on-surface-variant font-normal">Terverifikasi</span></span>
-          </div>
-          <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
-            <span class="material-symbols-outlined text-[22px]">verified</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="font-label-sm text-[10px] px-2 py-0.5 rounded bg-secondary-container text-on-secondary-fixed font-bold">
-            2 Menunggu Review
-          </span>
-          <span class="text-[11px] text-on-surface-variant">Daftar Antrean</span>
-        </div>
-      </div>
-
-      <!-- Stat 3 -->
-      <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant flex flex-col justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
-        <div class="flex items-start justify-between">
-          <div class="flex flex-col">
-            <span class="font-label-sm text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold">Evaluasi Mingguan</span>
-            <span class="font-headline text-2xl font-bold text-on-surface mt-1">88.5 <span class="text-xs text-on-surface-variant font-normal">/ 100</span></span>
-          </div>
-          <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
-            <span class="material-symbols-outlined text-[22px]">stars</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="font-label-sm text-[10px] px-2 py-0.5 rounded bg-surface-container-high text-primary font-bold">
-            Sangat Baik (A)
-          </span>
-          <span class="text-[11px] text-on-surface-variant">Rata-rata mentor</span>
-        </div>
-      </div>
-
-      <!-- Stat 4 -->
-      <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant flex flex-col justify-between gap-space-md hover:bg-surface-container-low/40 transition-colors">
-        <div class="flex items-start justify-between">
-          <div class="flex flex-col">
-            <span class="font-label-sm text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold">Masa Praktik</span>
-            <span class="font-headline text-2xl font-bold text-on-surface mt-1">58 <span class="text-xs text-on-surface-variant font-normal">Hari Tersisa</span></span>
-          </div>
-          <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
-            <span class="material-symbols-outlined text-[22px]">timelapse</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="font-label-sm text-[10px] px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-semibold">
-            Hingga 27 Nov 2026
-          </span>
-          <span class="text-[11px] text-on-surface-variant">Fase Akhir</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Two Column Main Layout (12 cols: 8 cols left, 4 cols right) -->
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg w-full items-start">
-      <!-- Left Column (8 cols) -->
-      <div class="lg:col-span-8 flex flex-col gap-space-lg min-w-0">
-        <!-- 1. Aktivitas Logbook Terbaru (Stitch Data Table) -->
-        <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant flex flex-col overflow-hidden">
-          <div class="p-space-md bg-surface-container-low/50 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm border-b border-outline-variant">
-            <div class="flex items-center gap-space-sm">
-              <span class="material-symbols-outlined text-[20px] text-primary">history_edu</span>
-              <h2 class="font-headline text-sm font-bold text-on-surface">Aktivitas Logbook Terbaru</h2>
+    <!-- 2 Column Layout (8:4 Desktop Grid) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+      <!-- Main Content Column (8 cols) -->
+      <div class="lg:col-span-8 flex flex-col gap-space-xl">
+        <!-- Section: Aktivitas Jurnal Terbaru -->
+        <div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm border border-outline-variant flex flex-col gap-space-lg">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col gap-0.5">
+              <h2 class="font-headline-md text-headline-md text-primary font-bold">Aktivitas Jurnal Terbaru</h2>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Catatan teknis dan tugas kerja harian yang tersimpan</p>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="font-label-sm text-[11px] text-on-surface-variant">Menampilkan 4 entri terakhir</span>
-              <button @click="goToLogbook" class="font-label-sm text-[11px] text-primary font-bold hover:underline ml-1" type="button">
-                Lihat Semua
-              </button>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto w-full">
-            <table class="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-[11px] uppercase tracking-wider border-b border-outline-variant">
-                  <th class="py-space-sm px-space-md">Tanggal</th>
-                  <th class="py-space-sm px-space-md">Aktivitas Pekerjaan Lapangan</th>
-                  <th class="py-space-sm px-space-md">Pembimbing</th>
-                  <th class="py-space-sm px-space-md">Verifikasi</th>
-                  <th class="py-space-sm px-space-md text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-outline-variant/60 font-body text-xs text-on-surface">
-                <tr v-for="log in recentLogs" :key="log.id" class="hover:bg-surface-container-low/50 transition-colors">
-                  <!-- Tanggal -->
-                  <td class="py-3 px-space-md whitespace-nowrap">
-                    <div class="font-mono font-bold text-on-surface text-xs">{{ log.date }}</div>
-                    <div class="text-[11px] text-on-surface-variant">{{ log.time }}</div>
-                  </td>
-
-                  <!-- Aktivitas -->
-                  <td class="py-3 px-space-md min-w-[220px]">
-                    <div class="font-semibold text-on-surface line-clamp-1 text-xs">{{ log.title }}</div>
-                    <div class="text-[11px] text-on-surface-variant line-clamp-1">{{ log.desc }}</div>
-                  </td>
-
-                  <!-- Pembimbing -->
-                  <td class="py-3 px-space-md whitespace-nowrap text-on-surface">
-                    <div class="font-medium text-xs">{{ log.mentor }}</div>
-                    <div class="text-[10px] text-on-surface-variant">{{ log.company }}</div>
-                  </td>
-
-                  <!-- Verifikasi -->
-                  <td class="py-3 px-space-md whitespace-nowrap">
-                    <span
-                      v-if="log.status === 'diacc'"
-                      class="text-[10px] px-2 py-0.5 rounded bg-tertiary-fixed text-tertiary font-bold inline-flex items-center gap-1"
-                    >
-                      <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
-                      Disetujui
-                    </span>
-                    <span
-                      v-else-if="log.status === 'revisi'"
-                      class="text-[10px] px-2 py-0.5 rounded bg-error-container text-error font-bold inline-flex items-center gap-1"
-                    >
-                      <span class="w-1.5 h-1.5 rounded-full bg-error"></span>
-                      Revisi
-                    </span>
-                    <span
-                      v-else
-                      class="text-[10px] px-2 py-0.5 rounded bg-secondary-container text-on-secondary-fixed font-bold inline-flex items-center gap-1"
-                    >
-                      <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                      Menunggu Review
-                    </span>
-                  </td>
-
-                  <!-- Aksi -->
-                  <td class="py-3 px-space-md text-right whitespace-nowrap">
-                    <button
-                      @click="goToLogbook"
-                      class="text-[11px] px-2.5 py-1 rounded bg-surface-container text-primary font-bold hover:bg-surface-container-high transition-colors"
-                      type="button"
-                    >
-                      Lihat Detail
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- 2. Jadwal Bimbingan & Catatan Mentor Lapangan Card (Stitch Design) -->
-        <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-space-lg flex flex-col gap-space-md">
-          <div class="flex items-center justify-between pb-space-sm border-b border-outline-variant">
-            <div class="flex items-center gap-space-sm">
-              <span class="material-symbols-outlined text-[20px] text-tertiary">assignment_turned_in</span>
-              <h2 class="font-headline text-sm font-bold text-on-surface">Jadwal Bimbingan &amp; Catatan Mentor Lapangan</h2>
-            </div>
-            <span class="font-label-sm text-[11px] px-2 py-1 rounded bg-surface-container text-on-surface-variant font-semibold">
-              Sesi Evaluasi Pekan #8
-            </span>
-          </div>
-
-          <!-- Mentor Metadata Box -->
-          <div class="p-space-md rounded-lg bg-surface-container-low border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
-            <div class="flex items-center gap-space-md">
-              <div class="w-12 h-12 rounded-lg bg-primary-container text-on-primary font-headline text-base flex items-center justify-center font-bold">
-                HW
-              </div>
-              <div class="flex flex-col">
-                <span class="font-label-md text-xs font-bold text-on-surface">Hendra Wijaya, S.Kom</span>
-                <span class="text-[11px] text-on-surface-variant">Senior Cloud &amp; Software Lead / Pembimbing Industri DUDI</span>
-                <span class="font-code-sm text-[11px] text-primary font-mono">ID. TELKOM-8821</span>
-              </div>
-            </div>
-            <div class="flex flex-col items-start sm:items-end">
-              <span class="text-[11px] text-on-surface-variant">Sesi Bimbingan Berikutnya:</span>
-              <span class="text-xs font-bold text-on-surface">Jumat, 2 Okt 2026 • 14:00 WIB</span>
-              <span class="text-[11px] text-tertiary font-semibold">Ruang Rapat Dev Telkom Lt. 3</span>
-            </div>
-          </div>
-
-          <!-- Notes & Action Items -->
-          <div class="flex flex-col gap-space-sm pt-space-xs">
-            <h3 class="text-xs font-bold text-on-surface flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px] text-primary">rate_review</span>
-              Catatan Evaluasi Mingguan &amp; Rekomendasi Teknis:
-            </h3>
-            <ul class="space-y-2 text-xs text-on-surface-variant pl-space-sm">
-              <li class="flex items-start gap-2">
-                <span class="material-symbols-outlined text-[18px] text-tertiary shrink-0 mt-0.5">check_circle</span>
-                <span><strong class="text-on-surface">Kualitas Arsitektur Kode Sangat Rapi:</strong> Integrasi SPA state management Pinia dan komponen Vue 3 sudah sesuai standar production.</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <span class="material-symbols-outlined text-[18px] text-tertiary shrink-0 mt-0.5">check_circle</span>
-                <span><strong class="text-on-surface">Kedisiplinan Waktu:</strong> Presensi kehadiran selalu tepat waktu sebelum pukul 07:45 WIB dan jurnal diisi setiap hari kerja.</span>
-              </li>
-              <li class="flex items-start gap-2">
-                <span class="material-symbols-outlined text-[18px] text-primary shrink-0 mt-0.5">error</span>
-                <span><strong class="text-on-surface">Action Item Pekan Depan:</strong> Pelajari penanganan state offline SQLite synchronization dan kompresi foto sebelum upload ke server.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column (4 cols) -->
-      <div class="lg:col-span-4 flex flex-col gap-space-lg">
-        <!-- 1. Status Presensi Hari Ini Card (Stitch Design) -->
-        <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-space-md flex flex-col gap-space-md">
-          <div class="flex items-center justify-between pb-space-xs border-b border-outline-variant">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-[20px] text-primary">pin_drop</span>
-              <h2 class="font-headline text-sm font-bold text-on-surface">Presensi Hari Ini</h2>
-            </div>
-            <span
-              :class="hasCheckedIn ? 'bg-tertiary-fixed text-tertiary' : 'bg-surface-container text-on-surface-variant'"
-              class="font-label-sm text-[10px] px-2 py-0.5 rounded font-bold"
-            >
-              {{ hasCheckedIn ? 'Terverifikasi' : 'Belum Check-In' }}
-            </span>
-          </div>
-
-          <!-- Clock & Geolocation Box -->
-          <div class="p-space-md rounded-lg bg-surface-container-low border border-outline-variant flex flex-col items-center justify-center text-center gap-1">
-            <span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">
-              Waktu Presensi Real-Time
-            </span>
-            <div class="font-headline text-2xl font-bold text-primary tracking-wider">
-              {{ liveClock }} <span class="text-xs text-on-surface-variant font-normal">WIB</span>
-            </div>
-            <div class="text-xs text-tertiary font-semibold flex items-center gap-1 mt-1">
-              <span class="material-symbols-outlined text-[16px]">verified_user</span>
-              <span>{{ hasCheckedIn ? `Check-In Sukses (${checkInTime} WIB)` : 'Radius 12m dari Kantor DUDI' }}</span>
-            </div>
-            <span class="font-mono text-[10px] text-on-surface-variant mt-0.5">Lat: -6.917464, Long: 107.619123</span>
-          </div>
-
-          <!-- Action Buttons Check-In / Check-Out -->
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center justify-between text-xs p-2 rounded bg-surface-container">
-              <span class="text-on-surface-variant">Jadwal Kerja:</span>
-              <span class="font-bold text-on-surface font-mono">08:00 - 17:00 WIB</span>
-            </div>
-
-            <!-- Giant Action Trigger -->
             <button
-              v-if="!hasCheckedIn"
-              @click="handleCheckIn"
-              class="w-full py-3 px-space-md rounded-lg bg-primary-container text-on-primary text-xs font-bold hover:bg-primary transition-colors flex items-center justify-center gap-2 shadow-sm active:scale-95"
+              @click="goToLogbook"
+              class="inline-flex items-center gap-space-xs text-secondary hover:text-primary font-label-md text-label-md font-semibold transition-colors"
               type="button"
             >
-              <span class="material-symbols-outlined text-[18px]">login</span>
-              <span>Lakukan Check-In Pagi Sekarang</span>
+              <span>Semua Jurnal</span>
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </button>
+          </div>
 
-            <button
-              v-else
-              @click="handleCheckOut"
-              :disabled="hasCheckedOut"
-              :class="hasCheckedOut ? 'bg-surface-container text-on-surface-variant cursor-default' : 'bg-primary-container text-on-primary hover:bg-primary active:scale-95'"
-              class="w-full py-3 px-space-md rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-2 shadow-sm"
-              type="button"
-            >
-              <span class="material-symbols-outlined text-[18px]">logout</span>
-              <span>{{ hasCheckedOut ? `Check-Out Sukses (${checkOutTime} WIB)` : 'Check-Out Sore (Mulai 16:30)' }}</span>
-            </button>
+          <!-- Entries List -->
+          <div class="flex flex-col gap-space-md">
+            <!-- Entry 1 -->
+            <div class="bg-surface-container-low/50 hover:bg-surface-container-low p-space-lg rounded-xl border border-outline-variant/60 transition-all flex flex-col sm:flex-row sm:items-start justify-between gap-space-md">
+              <div class="flex flex-col gap-space-xs flex-1">
+                <div class="flex flex-wrap items-center gap-space-sm mb-1">
+                  <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Selasa, 22 Okt 2024 • 08:30 - 17:00</span>
+                  <span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Disetujui
+                  </span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm text-primary font-bold">
+                  Implementasi API Endpoint Auth &amp; Pengujian Unit
+                </h3>
+                <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 leading-relaxed">
+                  Menyelesaikan integrasi sistem otentikasi JWT pada modul pengguna dan menulis 14 unit test dengan Jest. Seluruh suite berhasil mencapai code coverage 88%.
+                </p>
+                <div class="flex items-center gap-space-xs pt-space-xs flex-wrap">
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">#Backend</span>
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">#Sprint3</span>
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">8 Jam Kerja</span>
+                </div>
+              </div>
+              <div class="shrink-0 self-end sm:self-center">
+                <button
+                  @click="goToLogbook"
+                  class="inline-flex items-center gap-1 px-space-md py-1.5 bg-surface-container-lowest hover:bg-surface-container text-primary font-label-md text-label-md rounded-lg shadow-sm border border-outline-variant transition-colors"
+                  type="button"
+                >
+                  <span>Detail</span>
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Entry 2 -->
+            <div class="bg-surface-container-low/50 hover:bg-surface-container-low p-space-lg rounded-xl border border-outline-variant/60 transition-all flex flex-col sm:flex-row sm:items-start justify-between gap-space-md">
+              <div class="flex flex-col gap-space-xs flex-1">
+                <div class="flex flex-wrap items-center gap-space-sm mb-1">
+                  <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Senin, 21 Okt 2024 • 09:00 - 17:30</span>
+                  <span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Disetujui
+                  </span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm text-primary font-bold">
+                  Sprint Planning &amp; Wireframing Modul Transaksi
+                </h3>
+                <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 leading-relaxed">
+                  Menghadiri sesi kickoff sprint bersama tim produk, menyusun breakdown user stories untuk alur checkout multi-metode pembayaran, serta sinkronisasi diagram alur sistem.
+                </p>
+                <div class="flex items-center gap-space-xs pt-space-xs flex-wrap">
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">#ProductSync</span>
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">#UIUX</span>
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">7.5 Jam Kerja</span>
+                </div>
+              </div>
+              <div class="shrink-0 self-end sm:self-center">
+                <button
+                  @click="goToLogbook"
+                  class="inline-flex items-center gap-1 px-space-md py-1.5 bg-surface-container-lowest hover:bg-surface-container text-primary font-label-md text-label-md rounded-lg shadow-sm border border-outline-variant transition-colors"
+                  type="button"
+                >
+                  <span>Detail</span>
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Entry 3 -->
+            <div class="bg-surface-container-low/50 hover:bg-surface-container-low p-space-lg rounded-xl border border-outline-variant/60 transition-all flex flex-col sm:flex-row sm:items-start justify-between gap-space-md">
+              <div class="flex flex-col gap-space-xs flex-1">
+                <div class="flex flex-wrap items-center gap-space-sm mb-1">
+                  <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Jumat, 18 Okt 2024 • 08:30 - 16:30</span>
+                  <span class="px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                    Menunggu Review
+                  </span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm text-primary font-bold">
+                  Refactoring Database Query &amp; Profiling Index
+                </h3>
+                <p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 leading-relaxed">
+                  Melakukan profiling kueri lambat pada database staging PostgreSQL. Mengoptimalkan relasi join log audit yang sebelumnya memakan waktu respon di atas 1.2 detik.
+                </p>
+                <div class="flex items-center gap-space-xs pt-space-xs flex-wrap">
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">#Postgres</span>
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">#Optimization</span>
+                  <span class="px-2 py-0.5 bg-surface-container-lowest text-on-surface-variant font-label-sm text-label-sm rounded font-medium border border-outline-variant">8 Jam Kerja</span>
+                </div>
+              </div>
+              <div class="shrink-0 self-end sm:self-center">
+                <button
+                  @click="goToLogbook"
+                  class="inline-flex items-center gap-1 px-space-md py-1.5 bg-surface-container-lowest hover:bg-surface-container text-primary font-label-md text-label-md rounded-lg shadow-sm border border-outline-variant transition-colors"
+                  type="button"
+                >
+                  <span>Detail</span>
+                  <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- 2. Info Instansi Cepat Card (Stitch Design) -->
-        <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-space-md flex flex-col gap-space-md">
-          <div class="flex items-center gap-2 pb-space-xs border-b border-outline-variant">
-            <span class="material-symbols-outlined text-[20px] text-primary">domain</span>
-            <h2 class="font-headline text-sm font-bold text-on-surface">Info Instansi Tempat PKL</h2>
+        <!-- Section: Grafik Distribusi Jam & Aktivitas Mingguan -->
+        <div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm border border-outline-variant flex flex-col gap-space-lg">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-space-xs">
+            <div class="flex flex-col gap-0.5">
+              <h2 class="font-headline-md text-headline-md text-primary font-bold">Distribusi Jam &amp; Aktivitas Mingguan</h2>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Pencatatan jam kerja reguler versus sesi bimbingan teknis (Minggu ke-8)</p>
+            </div>
+            <div class="flex items-center gap-space-md text-on-surface font-label-sm text-label-sm">
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-primary"></span>
+                <span>Jam Reguler</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-secondary-container border border-secondary/30"></span>
+                <span>Sesi Bimbingan</span>
+              </div>
+            </div>
           </div>
-          <div class="flex flex-col gap-space-sm text-xs">
-            <div>
-              <span class="text-[10px] text-on-surface-variant block uppercase tracking-wide font-semibold">Nama Industri / Perusahaan</span>
-              <span class="font-bold text-on-surface">PT Telkom Digital Solusi Bandung</span>
+
+          <!-- Structured Visual Bar Chart -->
+          <div class="w-full bg-surface-container-low/40 p-space-lg rounded-xl border border-outline-variant/60 flex flex-col gap-space-sm">
+            <div class="h-56 w-full flex items-end justify-between px-2 pt-6">
+              <!-- Monday -->
+              <div class="flex-1 flex flex-col items-center gap-space-xs h-full justify-end">
+                <div class="w-full max-w-[48px] flex flex-col items-center gap-1 h-full justify-end group cursor-pointer">
+                  <span class="font-label-sm text-label-sm text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">7.5h</span>
+                  <div class="w-full bg-secondary-container rounded-t-sm h-[18%]" title="Bimbingan: 1.5 Jam"></div>
+                  <div class="w-full bg-primary rounded-t-sm h-[72%]" title="Kerja Reguler: 6.0 Jam"></div>
+                </div>
+                <span class="font-label-md text-label-md text-on-surface-variant font-medium">Sen</span>
+              </div>
+
+              <!-- Tuesday -->
+              <div class="flex-1 flex flex-col items-center gap-space-xs h-full justify-end">
+                <div class="w-full max-w-[48px] flex flex-col items-center gap-1 h-full justify-end group cursor-pointer">
+                  <span class="font-label-sm text-label-sm text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">8.0h</span>
+                  <div class="w-full bg-secondary-container rounded-t-sm h-[12%]" title="Bimbingan: 1.0 Jam"></div>
+                  <div class="w-full bg-primary rounded-t-sm h-[84%]" title="Kerja Reguler: 7.0 Jam"></div>
+                </div>
+                <span class="font-label-md text-label-md text-on-surface-variant font-medium">Sel</span>
+              </div>
+
+              <!-- Wednesday (Today) -->
+              <div class="flex-1 flex flex-col items-center gap-space-xs h-full justify-end">
+                <div class="w-full max-w-[48px] flex flex-col items-center gap-1 h-full justify-end group cursor-pointer">
+                  <span class="font-label-sm text-label-sm text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">4.5h</span>
+                  <div class="w-full bg-secondary-container rounded-t-sm h-[10%]" title="Bimbingan: 0.5 Jam"></div>
+                  <div class="w-full bg-primary rounded-t-sm h-[42%]" title="Kerja Berjalan: 4.0 Jam"></div>
+                </div>
+                <span class="font-label-md text-label-md text-primary font-bold">Rab (Hari ini)</span>
+              </div>
+
+              <!-- Thursday -->
+              <div class="flex-1 flex flex-col items-center gap-space-xs h-full justify-end">
+                <div class="w-full max-w-[48px] flex flex-col items-center gap-1 h-full justify-end opacity-40">
+                  <div class="w-full bg-surface-container rounded-t-sm h-[60%] border-dashed border-t-2 border-outline"></div>
+                </div>
+                <span class="font-label-md text-label-md text-on-surface-variant">Kam</span>
+              </div>
+
+              <!-- Friday -->
+              <div class="flex-1 flex flex-col items-center gap-space-xs h-full justify-end">
+                <div class="w-full max-w-[48px] flex flex-col items-center gap-1 h-full justify-end opacity-40">
+                  <div class="w-full bg-surface-container rounded-t-sm h-[60%] border-dashed border-t-2 border-outline"></div>
+                </div>
+                <span class="font-label-md text-label-md text-on-surface-variant">Jum</span>
+              </div>
             </div>
-            <div>
-              <span class="text-[10px] text-on-surface-variant block uppercase tracking-wide font-semibold">Divisi / Unit Operasi</span>
-              <span class="text-on-surface">Cloud Platform &amp; Software Engineering</span>
+
+            <!-- Footer summary -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pt-space-md border-t border-outline-variant/60 gap-space-sm text-on-surface-variant">
+              <span class="font-body-sm text-body-sm">
+                Target mingguan: <span class="font-semibold text-on-surface">40 Jam</span> • Terpenuhi berjalan: <span class="font-semibold text-secondary">20 Jam</span>
+              </span>
+              <span class="font-label-sm text-label-sm text-secondary font-semibold">Tercatat On-Track (100% dari rasio waktu)</span>
             </div>
-            <div>
-              <span class="text-[10px] text-on-surface-variant block uppercase tracking-wide font-semibold">Alamat Lokasi Magang</span>
-              <p class="text-on-surface-variant text-[11px] leading-relaxed">
-                Jl. Gegerkalong Hilir No. 47, Sukasari, Kota Bandung, Jawa Barat 40152
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Mentorship & Milestones (4 cols) -->
+      <div class="lg:col-span-4 flex flex-col gap-space-xl">
+        <!-- Mentor Profile Card -->
+        <div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm border border-outline-variant flex flex-col gap-space-lg">
+          <div class="flex items-center justify-between">
+            <span class="font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider">Pembimbing Lapangan</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500" title="Mentor Aktif"></span>
+          </div>
+          <div class="flex items-start gap-space-md">
+            <div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-primary font-bold text-lg shrink-0 border border-outline-variant">
+              DA
+            </div>
+            <div class="flex flex-col">
+              <h3 class="font-headline-sm text-headline-sm text-primary font-bold leading-tight">
+                Dimas Ardiansyah, S.T.
+              </h3>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">
+                Lead Software Engineer &amp; Mentor
               </p>
+              <span class="font-label-sm text-label-sm text-secondary font-medium pt-1">
+                Review terakhir: Kemarin, 19:40
+              </span>
             </div>
-            <div class="p-space-sm rounded-lg bg-surface-container border border-outline-variant flex items-center justify-between">
-              <div class="flex flex-col">
-                <span class="text-[10px] text-on-surface-variant font-semibold">Kontak Mentor Industri</span>
-                <span class="font-mono text-xs font-bold text-on-surface">+62 811-2233-4455</span>
-              </div>
-              <a
-                class="px-2.5 py-1.5 rounded-lg bg-tertiary-container text-on-tertiary-container text-[11px] font-bold flex items-center gap-1 hover:opacity-90 active:scale-95"
-                href="https://wa.me/6281122334455"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <span class="material-symbols-outlined text-[14px]">chat</span>
-                WhatsApp
-              </a>
-            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-space-sm">
+            <button
+              @click="sendMessageToMentor"
+              class="inline-flex items-center justify-center gap-space-xs px-space-md py-2 bg-surface-container-low hover:bg-surface-container text-primary font-headline-sm text-body-sm rounded-lg transition-colors font-semibold border border-outline-variant"
+              type="button"
+            >
+              <span class="material-symbols-outlined text-[18px]">chat</span>
+              <span>Kirim Pesan</span>
+            </button>
+            <button
+              @click="openDiscussionModal"
+              class="inline-flex items-center justify-center gap-space-xs px-space-md py-2 bg-surface-container-low hover:bg-surface-container text-primary font-headline-sm text-body-sm rounded-lg transition-colors font-semibold border border-outline-variant"
+              type="button"
+            >
+              <span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+              <span>Diskusi</span>
+            </button>
           </div>
         </div>
 
-        <!-- 3. Administrasi PKL Card (Stitch Design) -->
-        <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-space-md flex flex-col gap-space-sm">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-[20px] text-primary">description</span>
-            <h2 class="font-headline text-sm font-bold text-on-surface">Administrasi PKL</h2>
+        <!-- Latest Mentor Feedback Box -->
+        <div class="bg-surface-container-low p-space-xl rounded-xl shadow-sm border border-outline-variant flex flex-col gap-space-md relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-space-xs text-primary font-headline-sm text-headline-sm font-bold">
+              <span class="material-symbols-outlined text-[20px] text-secondary">mark_chat_unread</span>
+              <span>Catatan Mentor Terbaru</span>
+            </div>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">22 Okt</span>
           </div>
-          <p class="text-[11px] text-on-surface-variant leading-relaxed">
-            Unduh berkas rekap presensi dan lembar logbook resmi berstempel digital untuk pelaporan ke guru pembimbing sekolah.
-          </p>
-          <div class="flex flex-col gap-2 pt-1">
+          <blockquote class="font-body-md text-body-md text-on-surface italic leading-relaxed pl-space-sm border-l-2 border-secondary">
+            “Catatan implementasi JWT token kemarin sudah sangat rapi. Penanganan corner case session expired berjalan lancar. Siapkan demo untuk sprint review hari Jumat ya.”
+          </blockquote>
+          <div class="flex items-center justify-between pt-space-xs">
+            <span class="font-label-sm text-label-sm text-on-surface-variant">Ref: Logbook #35 • Auth Service</span>
             <button
-              @click="downloadLembarKendali"
-              class="w-full py-2 px-space-md rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface text-xs font-semibold flex items-center justify-between transition-colors border border-outline-variant"
+              @click="replyFeedback"
+              class="text-secondary hover:text-primary font-label-sm text-label-sm font-semibold transition-colors"
               type="button"
             >
-              <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px] text-error">picture_as_pdf</span>
-                <span>Lembar Kendali Oktober 2026</span>
-              </div>
-              <span class="material-symbols-outlined text-[16px] text-on-surface-variant">download</span>
+              Balas Tanggapan
             </button>
+          </div>
+        </div>
 
+        <!-- Next Milestones & Interactive Checklists -->
+        <div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm border border-outline-variant flex flex-col gap-space-lg">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Target Minggu ke-8</h3>
+              <p class="font-body-sm text-body-sm text-on-surface-variant">Milestone &amp; checklist evaluasi</p>
+            </div>
+            <span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-surface-container text-secondary font-semibold border border-outline-variant">
+              {{ completedMilestonesCount }}/{{ milestones.length }} Selesai
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-space-sm">
+            <label
+              v-for="item in milestones"
+              :key="item.id"
+              class="flex items-start gap-space-sm p-space-sm rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer select-none"
+            >
+              <input
+                type="checkbox"
+                v-model="item.done"
+                class="mt-1 h-4 w-4 rounded text-secondary focus:ring-0 cursor-pointer"
+              />
+              <div class="flex flex-col">
+                <span
+                  class="font-body-md text-body-md font-medium transition-colors"
+                  :class="item.done ? 'line-through text-on-surface-variant' : 'text-primary font-semibold'"
+                >
+                  {{ item.title }}
+                </span>
+                <span class="font-label-sm text-label-sm text-on-surface-variant">
+                  {{ item.desc }}
+                </span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Documentation Quick Access -->
+          <div class="pt-space-sm flex items-center justify-between border-t border-outline-variant/60">
+            <span class="font-body-sm text-body-sm text-on-surface-variant">Template Laporan PKL SMKN 71:</span>
             <button
-              @click="downloadRekapExcel"
-              class="w-full py-2 px-space-md rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface text-xs font-semibold flex items-center justify-between transition-colors border border-outline-variant"
+              @click="downloadTemplate"
+              class="inline-flex items-center gap-1 text-secondary hover:text-primary font-label-md text-label-md font-semibold transition-colors"
               type="button"
             >
-              <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px] text-primary">download</span>
-                <span>Rekap Absensi Pekan 1-8 (.xlsx)</span>
-              </div>
-              <span class="material-symbols-outlined text-[16px] text-on-surface-variant">download</span>
+              <span class="material-symbols-outlined text-[16px]">download</span>
+              <span>Unduh DOCX</span>
             </button>
           </div>
+        </div>
+
+        <!-- Program Contact Support Info -->
+        <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+          <div class="flex items-center gap-space-md">
+            <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary border border-outline-variant">
+              <span class="material-symbols-outlined text-[20px]">school</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-headline-sm text-body-sm font-semibold text-primary">Guru Pembimbing Akademik</span>
+              <span class="font-label-sm text-label-sm text-on-surface-variant">Dra. Nurul Hidayah, M.Pd (SMKN 71)</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const {
-  currentUser,
-  activeMenu,
-  showToast
-} = useAppStore()
+const { currentUser, activeMenu, showToast } = useAppStore()
 
-// Attendance State
-const hasCheckedIn = ref(true)
-const hasCheckedOut = ref(false)
-const checkInTime = ref('07:35:12')
-const checkOutTime = ref('')
-
-// Live Clock Ticker (Stitch Ticker Engine)
-const liveClock = ref('08:14:22')
-let clockInterval: any = null
-
-onMounted(() => {
-  const updateClock = () => {
-    const now = new Date()
-    const hours = String(now.getHours()).padStart(2, '0')
-    const minutes = String(now.getMinutes()).padStart(2, '0')
-    const seconds = String(now.getSeconds()).padStart(2, '0')
-    liveClock.value = `${hours}:${minutes}:${seconds}`
+const todayFormatted = computed(() => {
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
   }
-  updateClock()
-  clockInterval = setInterval(updateClock, 1000)
+  return new Date().toLocaleDateString('id-ID', options)
 })
 
-onUnmounted(() => {
-  if (clockInterval) clearInterval(clockInterval)
+const isTodayLogged = ref(false)
+
+const milestones = ref([
+  {
+    id: 1,
+    title: 'Selesaikan modul autentikasi backend',
+    desc: 'Selesai pada 22 Okt 2024',
+    done: true
+  },
+  {
+    id: 2,
+    title: 'Verifikasi logbook mingguan ke mentor',
+    desc: 'Disetujui kemarin sore',
+    done: true
+  },
+  {
+    id: 3,
+    title: 'Penyusunan draft laporan tengah periode',
+    desc: 'Batas pengumpulan: Jumat, 25 Okt',
+    done: false
+  }
+])
+
+const completedMilestonesCount = computed(() => {
+  return milestones.value.filter(m => m.done).length
 })
-
-const handleCheckIn = () => {
-  const now = new Date()
-  const hours = String(now.getHours()).padStart(2, '0')
-  const minutes = String(now.getMinutes()).padStart(2, '0')
-  const seconds = String(now.getSeconds()).padStart(2, '0')
-  checkInTime.value = `${hours}:${minutes}:${seconds}`
-  hasCheckedIn.value = true
-  showToast(`Check-In berhasil tercatat pada ${checkInTime.value} WIB (Radius 12m terverifikasi GPS)!`, 'success')
-}
-
-const handleCheckOut = () => {
-  const now = new Date()
-  const hours = String(now.getHours()).padStart(2, '0')
-  const minutes = String(now.getMinutes()).padStart(2, '0')
-  const seconds = String(now.getSeconds()).padStart(2, '0')
-  checkOutTime.value = `${hours}:${minutes}:${seconds}`
-  hasCheckedOut.value = true
-  showToast(`Check-Out pulang berhasil tercatat pada ${checkOutTime.value} WIB! Selamat beristirahat.`, 'success')
-}
 
 const goToLogbook = () => {
   activeMenu.value = 'logbook'
 }
 
-const downloadLembarKendali = () => {
-  window.print()
+const showGuideline = () => {
+  showToast('Panduan Pengisian: Isi deskripsi aktivitas menggunakan metode STAR (Situation, Task, Action, Result).', 'info')
 }
 
-const downloadRekapExcel = () => {
-  showToast('Mengunduh Rekap_Absensi_Pekan_1_8_Budi_Santoso.xlsx...', 'success')
+const sendMessageToMentor = () => {
+  showToast('Membuka ruang obrolan internal dengan Sdr. Dimas Ardiansyah (Mentor)', 'info')
 }
 
-// Recent Logs matching Stitch
-const recentLogs = ref([
-  {
-    id: 1,
-    date: '26 Sep 2026',
-    time: '08:00 - 16:30 WIB',
-    title: 'Pembuatan Tampilan Split-Screen Validasi DUDI',
-    desc: 'Merancang layout split view sesuai panduan UX desktop: panel daftar siswa dan panel kanan detail jurnal.',
-    mentor: 'Hendra Wijaya',
-    company: 'PT Telkom Digital Solusi',
-    status: 'menunggu'
-  },
-  {
-    id: 2,
-    date: '25 Sep 2026',
-    time: '08:00 - 17:00 WIB',
-    title: 'Optimasi Upload Foto Jurnal dengan Kompresi Gambar Canvas',
-    desc: 'Menerapkan kompresi gambar berbasis HTML5 Canvas client-side sebelum upload ke server backend.',
-    mentor: 'Hendra Wijaya',
-    company: 'PT Telkom Digital Solusi',
-    status: 'revisi'
-  },
-  {
-    id: 3,
-    date: '24 Sep 2026',
-    time: '08:15 - 16:30 WIB',
-    title: 'Integrasi State Management Pinia pada Nuxt 3',
-    desc: 'Mengonfigurasi state global untuk token autentikasi, status koneksi offline/online dengan reactive indicator.',
-    mentor: 'Hendra Wijaya',
-    company: 'PT Telkom Digital Solusi',
-    status: 'diacc'
-  },
-  {
-    id: 4,
-    date: '23 Sep 2026',
-    time: '08:00 - 16:45 WIB',
-    title: 'Konfigurasi Endpoint REST API Sanctum di Laravel 11',
-    desc: 'Membangun resource controller untuk siswa, DUDI, guru, dan admin beserta SQLite database seeding.',
-    mentor: 'Hendra Wijaya',
-    company: 'PT Telkom Digital Solusi',
-    status: 'diacc'
-  }
-])
+const openDiscussionModal = () => {
+  showToast('Pengajuan sesi diskusi bimbingan 1-on-1 sedang disiapkan.', 'info')
+}
+
+const replyFeedback = () => {
+  showToast('Menautkan balasan tanggapan ke Logbook #35.', 'info')
+}
+
+const downloadTemplate = () => {
+  showToast('Mengunduh Template Laporan Magang Resmi SMKN 71 (.docx)...', 'success')
+}
 </script>

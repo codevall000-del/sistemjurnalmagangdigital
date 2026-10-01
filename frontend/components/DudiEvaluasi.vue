@@ -70,14 +70,14 @@
           <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
             <div class="flex items-center justify-between text-xs">
               <span class="font-bold text-slate-800">2. Keahlian Teknis &amp; Kualitas Kerja</span>
-              <span class="font-mono text-sm font-extrabold text-indigo-700">{{ scores.teknis }} / 100</span>
+              <span class="font-mono text-sm font-extrabold text-[#1e3a5f]">{{ scores.teknis }} / 100</span>
             </div>
             <input
               v-model.number="scores.teknis"
               type="range"
               min="50"
               max="100"
-              class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+              class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#1e3a5f]"
             />
             <p class="text-[10px] text-slate-500">Kemampuan coding, implementasi arsitektur REST API, dan debugging mandiri.</p>
           </div>
@@ -240,7 +240,7 @@ const qrCanvas = ref<HTMLCanvasElement | null>(null)
 
 const renderQr = () => {
   if (!qrCanvas.value) return
-  const verifyData = `https://magang.smkn1industri.sch.id/verify?hash=${qrHash.value}&student=${encodeURIComponent(selectedStudent.value.name)}&score=${calculatedAverage.value}`
+  const verifyData = `https://magang.smkn71jakarta.sch.id/verify?hash=${qrHash.value}&student=${encodeURIComponent(selectedStudent.value.name)}&score=${calculatedAverage.value}`
   QRCode.toCanvas(qrCanvas.value, verifyData, {
     width: 144,
     margin: 1,

@@ -15,14 +15,14 @@
       <div class="flex items-center gap-3">
         <button
           @click="exportToExcel"
-          class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
+          class="px-4 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
         >
           <span>📊</span> Export to Excel
         </button>
 
         <button
           @click="exportToPdf"
-          class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
+          class="px-4 py-2 bg-[#244b78] hover:bg-[#1a3656] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
         >
           <span>📄</span> Export to PDF (Cetak Dokumen)
         </button>
@@ -32,7 +32,7 @@
     <!-- PANEL FILTER YANG SANGAT LENGKAP (TAHUN AJARAN, ANGKATAN, DUDI) -->
     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4 no-print">
       <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-        <span class="text-xs font-bold uppercase tracking-wider text-rose-700">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-800">
           ⚙️ Panel Filter Arsip Dokumen
         </span>
         <span class="text-xs text-slate-500 font-mono">Ditemukan: {{ filteredReports.length }} Rekord</span>
@@ -44,7 +44,7 @@
           <label class="block font-semibold text-slate-700 mb-1.5">Tahun Ajaran</label>
           <select
             v-model="filters.academicYear"
-            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
+            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
           >
             <option value="all">Semua Tahun Ajaran</option>
             <option value="2025/2026">2025/2026 (Aktif)</option>
@@ -58,7 +58,7 @@
           <label class="block font-semibold text-slate-700 mb-1.5">Angkatan Siswa</label>
           <select
             v-model="filters.batch"
-            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
+            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
           >
             <option value="all">Semua Angkatan</option>
             <option value="Angkatan 32">Angkatan 32</option>
@@ -72,7 +72,7 @@
           <label class="block font-semibold text-slate-700 mb-1.5">Perusahaan Mitra (DUDI)</label>
           <select
             v-model="filters.dudi"
-            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
+            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
           >
             <option value="all">Semua Perusahaan</option>
             <option value="PT Telkom Digital Solusi">PT Telkom Digital Solusi</option>
@@ -87,7 +87,7 @@
           <label class="block font-semibold text-slate-700 mb-1.5">Status Nilai PKL</label>
           <select
             v-model="filters.gradeStatus"
-            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
+            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
           >
             <option value="all">Semua Status</option>
             <option value="completed">Sudah Final (Lengkap)</option>
@@ -100,13 +100,17 @@
     <!-- AREA BAWAH: PRATINJAU BUKU JURNAL CETAK (PRINTABLE PREVIEW) -->
     <div class="bg-white text-slate-900 rounded-2xl p-8 shadow-sm border border-slate-300 print:shadow-none print:border-none print:p-0">
       <!-- Kop Surat Resmi Sekolah -->
-      <div class="text-center pb-4 border-b-2 border-slate-900 space-y-1">
-        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-800">PEMERINTAH DAERAH PROVINSI JAWA BARAT</h3>
-        <h4 class="text-xs font-semibold uppercase text-slate-700">DINAS PENDIDIKAN • CABANG DINAS WILAYAH VII</h4>
-        <h2 class="text-base font-black uppercase text-slate-950 tracking-tight">SMK NEGERI 1 INDUSTRI DIGITAL KOTA BANDUNG</h2>
-        <p class="text-[10px] text-slate-600">
-          Jl. Soekarno Hatta No. 782, Bandung • Telp: (022) 7561234 • Website: smkn1industri.sch.id
-        </p>
+      <div class="flex items-center justify-between pb-4 border-b-2 border-slate-900 gap-4">
+        <img src="/images/logo-smkn71.png" alt="Logo SMKN 71" class="w-16 h-16 object-contain shrink-0" />
+        <div class="flex-1 text-center space-y-1">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-800">PEMERINTAH PROVINSI DAERAH KHUSUS IBUKOTA JAKARTA</h3>
+          <h4 class="text-xs font-semibold uppercase text-slate-700">DINAS PENDIDIKAN</h4>
+          <h2 class="text-base font-black uppercase text-slate-950 tracking-tight">SMK NEGERI 71 JAKARTA</h2>
+          <p class="text-[10px] text-slate-600">
+            Jl. Dr. KRT Radjiman Widyodiningrat, Cakung, Jakarta Timur • Website: smkn71jakarta.sch.id
+          </p>
+        </div>
+        <div class="w-16 shrink-0 hidden sm:block"></div>
       </div>
 
       <!-- Judul Dokumen Cetak -->

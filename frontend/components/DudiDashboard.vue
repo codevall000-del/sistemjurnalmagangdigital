@@ -26,7 +26,7 @@
           <div class="text-3xl font-extrabold text-slate-900 mt-1">4 <span class="text-sm font-normal text-slate-500">Siswa</span></div>
           <p class="text-xs text-emerald-700 font-semibold mt-1">Semua terdaftar aktif</p>
         </div>
-        <div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center text-2xl font-bold">
+        <div class="w-14 h-14 rounded-2xl bg-[#eef4fa] border border-[#d0e1f3] text-[#1e3a5f] flex items-center justify-center text-2xl font-bold">
           👥
         </div>
       </div>
@@ -86,7 +86,7 @@
                     {{ student.name }}
                   </h4>
                   <div class="text-xs text-slate-500 font-mono">NISN: {{ student.nisn }}</div>
-                  <div class="text-[11px] text-indigo-700 font-semibold">SMKN 1 Industri • RPL</div>
+                  <div class="text-[11px] text-[#1e3a5f] font-semibold">SMKN 71 Jakarta • RPL</div>
                 </div>
               </div>
 

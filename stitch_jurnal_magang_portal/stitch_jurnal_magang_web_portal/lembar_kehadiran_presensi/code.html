@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary":"#ffffff","on-primary-fixed":"#001c3b","surface-container-highest":"#d5e3fc","inverse-on-surface":"#eaf1ff","secondary":"#126588","tertiary":"#122537","surface-variant":"#d5e3fc","on-surface-variant":"#43474e","secondary-fixed-dim":"#8ccff6","on-secondary-container":"#015f81","surface-container-high":"#dce9ff","on-surface":"#0d1c2e","surface-tint":"#455f87","surface-container-lowest":"#ffffff","inverse-surface":"#233144","secondary-container":"#94d7ff","on-tertiary-fixed-variant":"#36495b","outline":"#74777f","on-secondary":"#ffffff","on-tertiary-container":"#92a5bb","background":"#f8f9ff","outline-variant":"#c4c6cf","on-background":"#0d1c2e","primary-fixed-dim":"#adc8f5","tertiary-container":"#283b4d","on-secondary-fixed-variant":"#004c69","surface-container-low":"#eff4ff","on-primary-fixed-variant":"#2d486d","inverse-primary":"#adc8f5","primary-container":"#1e3a5f","surface-container":"#e6eeff","surface-dim":"#ccdbf3","secondary-fixed":"#c4e7ff","on-primary":"#ffffff","on-error-container":"#93000a","surface":"#f8f9ff","on-secondary-fixed":"#001e2c","error":"#ba1a1a","on-tertiary-fixed":"#081d2e","error-container":"#ffdad6","primary-fixed":"#d5e3ff","on-error":"#ffffff","on-primary-container":"#8aa4cf","primary":"#022448","tertiary-fixed-dim":"#b5c9df","surface-bright":"#f8f9ff","tertiary-fixed":"#d1e5fc"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-lg":"1.5rem",gutter:"1.5rem",margin:"2rem","space-sm":"0.5rem","space-xs":"0.25rem","space-xl":"2rem","space-md":"1rem"},fontFamily:{"label-sm":["Inter"],"body-lg":["Inter"],"headline-xl":["Plus Jakarta Sans"],"label-md":["Inter"],"headline-sm":["Plus Jakarta Sans"],"body-sm":["Inter"],"headline-md":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.03em",fontWeight:"500"}],"body-lg":["16px",{lineHeight:"26px",letterSpacing:"0em",fontWeight:"400"}],"headline-xl":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-sm":["16px",{lineHeight:"24px",letterSpacing:"-0.005em",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"18px",letterSpacing:"0.005em",fontWeight:"400"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"22px",letterSpacing:"0em",fontWeight:"400"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between select-none"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="Logo Jurnal Magang" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UN7KF7VCxCpMOH38thp2YXbisvq0KZzEJ1GRpAFBGOAZm-Ct3D7SGQblcCpd-NIk6hT1NMG1eAChPqpnLg3g8t9mtlD3wFcxTtqv_9IuskACOVF6KY-yvBuamrXkNliLsy-EVv8Y0FpuDs644wVD4QymxKiGHW5oSrlBYFTZBMeJwfYY2VlO3Iy9svDZhgZUI4E8hN35xZfLIhyRrGK54Hb3M25xMa3OOXZ5pp8fjH2dBgeoU6ZvVNJoU"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-none">Jurnal Magang</span><span class="font-label-sm text-label-sm text-on-surface-variant">Sistem Catatan Mandiri</span></div></div><div class="px-space-md py-space-sm"><span class="px-space-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Menu Portal</span></div><nav class="px-space-sm space-y-space-xs flex flex-col" data-active-classes="bg-surface-container text-primary font-semibold"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="ringkasan-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span class="font-body-md text-body-md">Ringkasan &amp; Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="catatan-harian" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">Catatan Harian</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-colors bg-surface-container text-primary font-semibold" data-path="lembar-kehadiran" href="#"><span class="material-symbols-outlined text-[20px]">event_available</span><span class="font-body-md text-body-md">Lembar Kehadiran</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="laporan-mingguan-evaluasi" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">Laporan Mingguan &amp; Evaluasi</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="bimbingan-catatan-mentor" href="#"><span class="material-symbols-outlined text-[20px]">supervised_user_circle</span><span class="font-body-md text-body-md">Bimbingan &amp; Catatan Mentor</span></a></nav></div><div class="p-space-md flex flex-col gap-space-sm"><div class="bg-surface-container-low rounded-lg p-space-md"><div class="flex items-center gap-space-xs text-primary mb-space-xs"><span class="material-symbols-outlined text-[16px]">domain</span><span class="font-label-md text-label-md font-semibold truncate">PT Solusi Digital Pratama</span></div><p class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Tech Intern • Div. Frontend</p></div><div class="flex flex-col space-y-space-xs pt-space-xs"><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="bantuan-faq" href="#"><span class="material-symbols-outlined text-[18px]">help_outline</span><span class="font-body-sm text-body-sm">Bantuan &amp; FAQ</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="pengaturan" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">Pengaturan</span></a></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><img alt="Logo Jurnal Magang" class="h-8 w-auto object-contain md:hidden" src="https://lh3.googleusercontent.com/aida/AEtjO1UN7KF7VCxCpMOH38thp2YXbisvq0KZzEJ1GRpAFBGOAZm-Ct3D7SGQblcCpd-NIk6hT1NMG1eAChPqpnLg3g8t9mtlD3wFcxTtqv_9IuskACOVF6KY-yvBuamrXkNliLsy-EVv8Y0FpuDs644wVD4QymxKiGHW5oSrlBYFTZBMeJwfYY2VlO3Iy9svDZhgZUI4E8hN35xZfLIhyRrGK54Hb3M25xMa3OOXZ5pp8fjH2dBgeoU6ZvVNJoU"/><div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md"><span class="text-on-surface font-semibold">Portal Magang</span><span class="material-symbols-outlined text-[16px]">chevron_right</span><span class="text-primary">Sesi Aktif 2024</span></div><div class="hidden xl:flex items-center gap-space-xs bg-surface-container-low px-space-md py-1.5 rounded-full"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-label-sm text-label-sm text-on-surface">Minggu ke-8 dari 16 Minggu (50% Berjalan)</span></div></div><div class="flex items-center gap-space-md"><button class="inline-flex items-center gap-space-xs bg-primary text-on-primary hover:bg-primary-container px-space-md py-2 rounded-lg font-headline-sm text-headline-sm transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[18px]">add</span><span class="font-body-sm text-body-sm font-semibold">Tulis Jurnal Hari Ini</span></button><button aria-label="Notifikasi" class="relative p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full ring-2 ring-surface-container-lowest"></span></button><div class="flex items-center gap-space-sm pl-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB0AkvXMs3mTwPJ7rJSqor4csJ5BmJkvF_18CkTyk9yUyfMh3ao1KswO8PHF26taHBXNQYV2F7SIR1dilAWyWGh6T2zX5LwBMsLcD66IJzUVEiL7uJVRb_udAGsux_UOwqCaKHxc93vrmHZZg7wxoo5Oz2YZPHjdQ4PTzx_Hsq8lxq4EAl2rx-0s45tdwUmWEVFBfMKb3GKhTFsngtX9HghR7UVzLMKtb7FgwM4DSyh70G_-KzgXLZ"/><div class="hidden sm:flex flex-col text-left"><span class="font-headline-sm text-body-sm text-on-surface leading-tight font-semibold">Reza Pratama</span><span class="font-label-sm text-label-sm text-on-surface-variant">Sistem Informasi UI</span></div><span class="material-symbols-outlined text-[18px] text-on-surface-variant cursor-pointer">arrow_drop_down</span></div></div></header><main class="w-full pt-16 bg-surface flex-1"><div class="flex flex-col w-full">
+<div class="px-space-xl py-space-lg flex flex-col gap-space-lg max-w-[1400px] mx-auto w-full">
+<!-- Header & Breadcrumb Context -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-space-xs mb-1">
+<span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase font-semibold">Administrasi &amp; Logbook</span>
+<span class="text-outline-variant text-[10px]">•</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Semester Genap 2024</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">Lembar Kehadiran &amp; Presensi</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Pemantauan rekapitulasi jam kerja reguler, bukti lokasi presensi, dan validasi mentor.</p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface-container-lowest text-primary shadow-sm hover:bg-surface-container-low transition-colors font-headline-sm text-headline-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span class="font-body-sm text-body-sm font-semibold">Unduh Rekap PDF</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-secondary text-on-secondary shadow-sm hover:bg-on-secondary-container transition-colors font-headline-sm text-headline-sm" onclick="document.getElementById('modal-izin').classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span class="font-body-sm text-body-sm font-semibold">Ajukan Izin / Sakit</span>
+</button>
+</div>
+</div>
+<!-- Quick Presensi Today Panel (Hero-like split banner) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg relative overflow-hidden">
+<div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-secondary-container/20 blur-3xl pointer-events-none"></div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center relative z-10">
+<!-- Left Sub-panel: Realtime Clock & Status -->
+<div class="lg:col-span-4 flex flex-col gap-space-xs pr-0 lg:pr-space-md">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>Rabu, 23 Oktober 2024</span>
+<span class="text-outline-variant">•</span>
+<span class="text-secondary font-semibold">Sesi Siang</span>
+</div>
+<div class="flex items-baseline gap-space-sm mt-1">
+<span class="font-headline-xl text-[44px] leading-none text-primary font-bold tracking-tight" id="digital-clock">09:14:02</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">WIB</span>
+</div>
+<div class="mt-2 flex items-center gap-space-xs text-on-surface-variant bg-surface-container-low px-space-md py-2 rounded-lg">
+<span class="material-symbols-outlined text-[18px] text-secondary">verified</span>
+<span class="font-label-sm text-label-sm text-on-surface truncate">Tervalidasi GPS Kantor • Lantai 4 Tech Hub</span>
+</div>
+</div>
+<!-- Middle Sub-panel: Check-in Details -->
+<div class="lg:col-span-5 bg-surface-container-low/70 rounded-xl p-space-md flex flex-col justify-between gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Status Presensi Masuk</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              Tepat Waktu
+            </span>
+</div>
+<div class="flex items-center gap-space-md my-1">
+<div class="w-12 h-12 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[26px]">login</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-bold">08:24 WIB</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Check-in Terverifikasi • WFO Kantor Pusat</p>
+</div>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 35%;"></div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant font-label-sm text-label-sm">
+<span>Selesai 08:24</span>
+<span class="text-primary font-medium">Target Jam Pulang: 17:30 WIB</span>
+</div>
+</div>
+<!-- Right Sub-panel: Quick Checkout & Secondary Actions -->
+<div class="lg:col-span-3 flex flex-col justify-center gap-space-xs">
+<button class="w-full py-3 px-space-md rounded-lg bg-primary-container text-on-primary opacity-60 cursor-not-allowed flex items-center justify-center gap-space-xs shadow-sm font-headline-sm text-headline-sm" title="Check-out dapat dilakukan mulai pukul 17:00 WIB" type="button">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-body-sm text-body-sm font-semibold">Check-out Sore</span>
+</button>
+<div class="text-center font-label-sm text-label-sm text-on-surface-variant mt-1">
+            Aktif otomatis pada 17:00 WIB
+          </div>
+<button class="w-full py-2 px-space-sm text-secondary hover:text-primary transition-colors text-center font-body-sm text-body-sm font-medium flex items-center justify-center gap-1" onclick="document.getElementById('modal-lokasi').classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-[16px]">pin_drop</span>
+            Lihat Radius Geofence
+          </button>
+</div>
+</div>
+</div>
+<!-- Monthly Summary Metric Cards (4 Grid) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Metric 1: Total Hari Kerja -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Target Periode</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">22 Hari</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Total hari kerja Oktober 2024</div>
+</div>
+<div class="flex items-center gap-1 font-label-sm text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[15px]">info</span>
+<span>17 hari telah terselesaikan</span>
+</div>
+</div>
+<!-- Metric 2: Tepat Waktu -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Tepat Waktu</span>
+<div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-700">
+<span class="material-symbols-outlined text-[18px]">timer</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">21 Hari</div>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="inline-flex px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-label-sm text-label-sm font-semibold">95.5% Rasio</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sangat Bagus</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-low rounded-full h-1.5 overflow-hidden">
+<div class="bg-emerald-600 h-1.5 rounded-full" style="width: 95.5%;"></div>
+</div>
+</div>
+<!-- Metric 3: Terlambat -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Terlambat</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">running_with_errors</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">0 Hari</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">0 Menit akumulasi penalti</div>
+</div>
+<div class="flex items-center gap-1 font-label-sm text-label-sm text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-[15px]">check_circle</span>
+<span>Catatan kehadiran bersih</span>
+</div>
+</div>
+<!-- Metric 4: Izin & Sakit -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Izin / Sakit</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">medical_services</span>
+</div>
+</div>
+<div class="my-space-sm">
+<div class="font-headline-xl text-headline-xl text-primary font-bold">1 Hari</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">18 Okt 2024 (Surat Dokter)</div>
+</div>
+<div class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[15px]">task_alt</span>
+<span>Disetujui Pembimbing</span>
+</div>
+</div>
+</div>
+<!-- Main Content: Filters, View Toggle, and Table -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-md">
+<!-- Table Filter Bar & Tab Navigation -->
+<div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-sm pb-space-sm">
+<!-- Left: Month Selector & Search -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<div class="flex items-center bg-surface-container-low rounded-lg p-1">
+<button class="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Bulan Sebelumnya" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<div class="px-space-sm flex items-center gap-1 font-headline-sm text-body-sm font-semibold text-primary">
+<span class="material-symbols-outlined text-[16px] text-secondary">calendar_today</span>
+<span>Oktober 2024</span>
+</div>
+<button class="p-1 hover:bg-surface-container rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Bulan Berikutnya" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<div class="inline-flex rounded-lg bg-surface-container-low p-1 text-on-surface-variant font-label-md text-label-md">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-primary font-semibold shadow-xs" type="button">
+              Semua Jenis (8)
+            </button>
+<button class="px-space-md py-1.5 rounded-lg hover:text-on-surface transition-colors" type="button">
+              WFO (6)
+            </button>
+<button class="px-space-md py-1.5 rounded-lg hover:text-on-surface transition-colors" type="button">
+              WFH (1)
+            </button>
+</div>
+</div>
+<!-- Right: View Toggle Tabs -->
+<div class="flex items-center gap-space-xs self-end md:self-auto">
+<div class="bg-surface-container-low p-1 rounded-lg flex items-center">
+<button class="flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-primary shadow-xs font-label-md text-label-md font-semibold transition-all" id="tab-btn-table" onclick="switchView('table')" type="button">
+<span class="material-symbols-outlined text-[16px]">table_rows</span>
+<span>Tabel Rekap</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-medium transition-all" id="tab-btn-calendar" onclick="switchView('calendar')" type="button">
+<span class="material-symbols-outlined text-[16px]">calendar_view_month</span>
+<span>Kalender Bulanan</span>
+</button>
+</div>
+</div>
+</div>
+<!-- View 1: Data Table View -->
+<div class="w-full overflow-x-auto" id="view-table">
+<table class="w-full text-left font-body-md text-body-md border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-md text-label-md tracking-wider uppercase">
+<th class="py-3 px-space-md rounded-l-lg font-semibold">Hari / Tanggal</th>
+<th class="py-3 px-space-md font-semibold">Tipe Kerja</th>
+<th class="py-3 px-space-md font-semibold">Jam Masuk</th>
+<th class="py-3 px-space-md font-semibold">Jam Keluar</th>
+<th class="py-3 px-space-md font-semibold">Durasi Efektif</th>
+<th class="py-3 px-space-md font-semibold">Status Presensi</th>
+<th class="py-3 px-space-md font-semibold">Verifikasi Mentor</th>
+<th class="py-3 px-space-md text-right rounded-r-lg font-semibold">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<!-- Row 1: Hari Ini -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-lowest">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-primary">Rabu, 23 Okt 2024</div>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Hari Ini (Berlangsung)</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">apartment</span>
+                  WFO Kantor
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-headline-sm text-body-md font-semibold text-on-surface">08:24</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Lantai 4</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="text-on-surface-variant font-body-sm text-body-sm italic">Belum Check-out</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-body-sm text-body-sm text-primary font-medium">~50 mnt (berjalan)</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  Tepat Waktu
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-outline">pending</span>
+                  Otomatis Sore
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="p-1.5 rounded-lg text-secondary hover:bg-surface-container-low transition-colors" title="Lihat Catatan Logbook" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-low/20">
+<td class="py-3.5 px-space-md">
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface">Selasa, 22 Okt 2024</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Kemarin</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">apartment</span>
+                  WFO Kantor
+                </span>
+</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface">08:15</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface">17:42</td>
+<td class="py-3.5 px-space-md">
+<span class="font-headline-sm text-body-md font-semibold text-primary">8 Jam 27 Mnt</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  Tepat Waktu
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                  Divalidasi Mentor
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="p-1.5 rounded-lg text-secondary hover:bg-surface-container-low transition-colors" title="Lihat Catatan Logbook" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-lowest">
+<td class="py-3.5 px-space-md">
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface">Senin, 21 Okt 2024</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Awal Pekan</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">home_work</span>
+                  WFH Terjadwal
+                </span>
+</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface">08:20</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface">17:35</td>
+<td class="py-3.5 px-space-md">
+<span class="font-headline-sm text-body-md font-semibold text-primary">8 Jam 15 Mnt</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  Tepat Waktu
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                  Divalidasi Mentor
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="p-1.5 rounded-lg text-secondary hover:bg-surface-container-low transition-colors" title="Lihat Catatan Logbook" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Sakit / Izin -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-low/20">
+<td class="py-3.5 px-space-md">
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface">Jumat, 18 Okt 2024</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Izin Medis</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">block</span>
+                  Tidak Hadir
+                </span>
+</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface-variant">-</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface-variant">-</td>
+<td class="py-3.5 px-space-md">
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">0 Jam (Dispensasi)</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">local_hospital</span>
+                  Sakit (Dokter)
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                  Disetujui HR &amp; Mentor
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="p-1.5 rounded-lg text-secondary hover:bg-surface-container-low transition-colors" title="Lihat Surat Lampiran" type="button">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-lowest">
+<td class="py-3.5 px-space-md">
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface">Kamis, 17 Okt 2024</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pekan Lalu</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">apartment</span>
+                  WFO Kantor
+                </span>
+</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface">08:18</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface">17:50</td>
+<td class="py-3.5 px-space-md">
+<span class="font-headline-sm text-body-md font-semibold text-primary">8 Jam 32 Mnt</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  Tepat Waktu
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                  Divalidasi Mentor
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="p-1.5 rounded-lg text-secondary hover:bg-surface-container-low transition-colors" title="Lihat Catatan Logbook" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-low/20">
+<td class="py-3.5 px-space-md">
+<div>
+<div class="font-headline-sm text-body-md font-semibold text-on-surface">Rabu, 16 Okt 2024</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pekan Lalu</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">apartment</span>
+                  WFO Kantor
+                </span>
+</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface">08:28</td>
+<td class="py-3.5 px-space-md font-medium text-on-surface">17:32</td>
+<td class="py-3.5 px-space-md">
+<span class="font-headline-sm text-body-md font-semibold text-primary">8 Jam 04 Mnt</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  Tepat Waktu
+                </span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                  Divalidasi Mentor
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="p-1.5 rounded-lg text-secondary hover:bg-surface-container-low transition-colors" title="Lihat Catatan Logbook" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- View 2: Calendar View (Hidden by default) -->
+<div class="hidden flex-col gap-space-md" id="view-calendar">
+<div class="grid grid-cols-7 gap-2 text-center font-label-md text-label-md text-on-surface-variant uppercase font-semibold py-2 bg-surface-container-low rounded-lg">
+<div>Sen</div>
+<div>Sel</div>
+<div>Rab</div>
+<div>Kam</div>
+<div>Jum</div>
+<div>Sab</div>
+<div>Min</div>
+</div>
+<div class="grid grid-cols-7 gap-2">
+<!-- Disabled previous month days -->
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-low/40 text-outline-variant font-label-sm text-label-sm">30 Sep</div>
+<!-- October Active Days (sample mini grid) -->
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-lowest shadow-2xs flex flex-col justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">1 Okt</span>
+<div class="text-[10px] bg-emerald-50 text-emerald-700 p-1 rounded font-semibold">8j 20m • WFO</div>
+</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-lowest shadow-2xs flex flex-col justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">2 Okt</span>
+<div class="text-[10px] bg-emerald-50 text-emerald-700 p-1 rounded font-semibold">8j 15m • WFO</div>
+</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-lowest shadow-2xs flex flex-col justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">3 Okt</span>
+<div class="text-[10px] bg-emerald-50 text-emerald-700 p-1 rounded font-semibold">8j 30m • WFO</div>
+</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-lowest shadow-2xs flex flex-col justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">4 Okt</span>
+<div class="text-[10px] bg-secondary-container/40 text-on-secondary-container p-1 rounded font-semibold">8j 00m • WFH</div>
+</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-low/30 text-outline-variant font-label-sm text-label-sm">5 Okt (Libur)</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-low/30 text-outline-variant font-label-sm text-label-sm">6 Okt (Libur)</div>
+<!-- Highlight Current Day (23 Okt) -->
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-low/30 text-outline-variant font-label-sm text-label-sm">...</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-lowest shadow-2xs flex flex-col justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">21 Okt</span>
+<div class="text-[10px] bg-secondary-container/40 text-on-secondary-container p-1 rounded font-semibold">WFH Selesai</div>
+</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-lowest shadow-2xs flex flex-col justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">22 Okt</span>
+<div class="text-[10px] bg-emerald-50 text-emerald-700 p-1 rounded font-semibold">WFO Selesai</div>
+</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-high shadow-xs flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-body-sm font-bold text-primary">23 Okt</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="text-[10px] bg-primary text-on-primary p-1 rounded font-semibold text-center">Aktif Hari Ini</div>
+</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-lowest opacity-40 font-label-sm text-label-sm">24 Okt</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-lowest opacity-40 font-label-sm text-label-sm">25 Okt</div>
+<div class="p-2 min-h-[90px] rounded-lg bg-surface-container-low/30 opacity-40 font-label-sm text-label-sm">26 Okt</div>
+</div>
+</div>
+<!-- Pagination / Footer Info -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm pt-space-xs font-label-sm text-label-sm text-on-surface-variant">
+<span>Menampilkan 6 catatan logbook terkini dari 17 total hari aktif</span>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface transition-colors font-medium" type="button">Halaman 1 dari 3</button>
+<button class="p-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Informational Card: Internship Regulations & Policy -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Card Policy 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex gap-space-sm items-start">
+<div class="p-2 rounded-lg bg-surface-container text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">schedule</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-primary font-semibold">Beban Kerja Minimum</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Standar universitas mewajibkan minimal 40 jam kerja per minggu (rata-rata 8 jam/hari kerja efektif).
+          </p>
+</div>
+</div>
+<!-- Card Policy 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex gap-space-sm items-start">
+<div class="p-2 rounded-lg bg-surface-container text-secondary shrink-0">
+<span class="material-symbols-outlined text-[22px]">history_toggle_off</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-primary font-semibold">Toleransi Presensi Masuk</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Maksimum toleransi keterlambatan 15 menit (s.d. pukul 08:45 WIB). Melebihi batas memerlukan konfirmasi mentor.
+          </p>
+</div>
+</div>
+<!-- Card Policy 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex gap-space-sm items-start">
+<div class="p-2 rounded-lg bg-surface-container text-tertiary shrink-0">
+<span class="material-symbols-outlined text-[22px]">approval_delegation</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-primary font-semibold">Alur Persetujuan Izin</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Pengajuan sakit wajib melampirkan surat dokter resmi dalam kurun 1x24 jam untuk verifikasi pembimbing lapangan.
+          </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Ajukan Izin / Sakit -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/40 backdrop-blur-xs hidden p-space-md" id="modal-izin">
+<div class="bg-surface-container-lowest rounded-xl max-w-lg w-full p-space-lg shadow-xl flex flex-col gap-space-md animate-in fade-in zoom-in duration-150">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[24px]">assignment_add</span>
+<h2 class="font-headline-md text-headline-md font-bold">Formulir Pengajuan Izin / Sakit</h2>
+</div>
+<button class="p-1 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" onclick="document.getElementById('modal-izin').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-sm">
+<div>
+<label class="font-label-md text-label-md text-on-surface font-semibold block mb-1">Tipe Pengajuan</label>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="py-2 px-space-sm rounded-lg bg-primary text-on-primary font-body-sm text-body-sm font-semibold flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">medical_services</span>
+              Sakit / Rawat
+            </button>
+<button class="py-2 px-space-sm rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-body-sm text-body-sm font-medium flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">event_busy</span>
+              Izin Akademik / Lainnya
+            </button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-sm">
+<div>
+<label class="font-label-md text-label-md text-on-surface font-semibold block mb-1">Mulai Tanggal</label>
+<input class="w-full bg-surface-container-low rounded-lg px-space-md py-2 font-body-sm text-body-sm text-on-surface focus:outline-hidden focus:ring-2 focus:ring-secondary" type="date" value="2024-10-24"/>
+</div>
+<div>
+<label class="font-label-md text-label-md text-on-surface font-semibold block mb-1">Sampai Tanggal</label>
+<input class="w-full bg-surface-container-low rounded-lg px-space-md py-2 font-body-sm text-body-sm text-on-surface focus:outline-hidden focus:ring-2 focus:ring-secondary" type="date" value="2024-10-24"/>
+</div>
+</div>
+<div>
+<label class="font-label-md text-label-md text-on-surface font-semibold block mb-1">Alasan Lengkap</label>
+<textarea class="w-full bg-surface-container-low rounded-lg p-space-md font-body-sm text-body-sm text-on-surface focus:outline-hidden focus:ring-2 focus:ring-secondary" placeholder="Jelaskan kebutuhan izin atau kondisi kesehatan secara ringkas..." rows="3"></textarea>
+</div>
+<div>
+<label class="font-label-md text-label-md text-on-surface font-semibold block mb-1">Lampiran Dokumen (Surat Dokter / Undangan)</label>
+<div class="p-space-md rounded-lg bg-surface-container-low text-center flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[24px] text-secondary">cloud_upload</span>
+<span class="font-label-md text-label-md text-primary font-semibold">Klik untuk Unggah Berkas</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Format PDF, JPG, atau PNG (Maks 5 MB)</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md py-2 rounded-lg text-on-surface hover:bg-surface-container-low font-headline-sm text-headline-sm font-semibold transition-colors" onclick="document.getElementById('modal-izin').classList.add('hidden')" type="button">
+          Batal
+        </button>
+<button class="px-space-lg py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-headline-sm text-headline-sm font-semibold transition-colors shadow-sm" onclick="document.getElementById('modal-izin').classList.add('hidden')" type="button">
+          Kirim Pengajuan
+        </button>
+</div>
+</div>
+</div>
+<!-- Modal Radius Geofence -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/40 backdrop-blur-xs hidden p-space-md" id="modal-lokasi">
+<div class="bg-surface-container-lowest rounded-xl max-w-md w-full p-space-lg shadow-xl flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Validasi Lokasi Presensi</h3>
+<button class="p-1 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors" onclick="document.getElementById('modal-lokasi').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="rounded-lg overflow-hidden bg-surface-container-low h-48 relative flex items-center justify-center" data-location="PT Solusi Digital Pratama, Jakarta" style="">
+<div class="absolute inset-0 bg-cover bg-center opacity-60" data-alt="Stylized geometric blueprint and office floor map indicating modern high-tech headquarters workspace in Jakarta, navy and calm light blue tones with soft circular geofence boundary marker." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhFAOZ4h14Vmcev9yjDFKD0y5Dlk8PmxnNd3IubR45Aj1vbTWWrLAYZ6NSbTLf2uEnTSHpx3naxm_zntVc8MwJlbvYHEN2W21z3CHdzaPFVksr0H47V4kyT28yeXlODTBstAXz-CgNdMkdgiVLY3tZCnyQe_HgCMdJIxCInCpUQk3vTNA9HqX8MsfeYdOd9-2pOm3TAM59h5p70K_3lUvTpQ75poKf8epC__aD1LPAAqAVUS-rZJSo')"></div>
+<div class="relative z-10 flex flex-col items-center text-center p-space-md bg-surface-container-lowest/90 backdrop-blur-sm rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[28px]">my_location</span>
+<span class="font-label-md text-label-md font-semibold text-primary mt-1">Tech Hub Office - Lt. 4</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Jarak Anda: 12 meter dari titik pusat</span>
+</div>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+        Presensi WFO Anda tercatat sah dalam radius batas aman 100 meter dari koordinat resmi PT Solusi Digital Pratama.
+      </div>
+<button class="w-full py-2 rounded-lg bg-primary text-on-primary font-headline-sm text-headline-sm font-semibold" onclick="document.getElementById('modal-lokasi').classList.add('hidden')" type="button">
+        Tutup
+      </button>
+</div>
+</div>
+<!-- Interactive Logic for Clock and Tab Switching -->
+<script>
+    // Live Digital Clock
+    function updateDigitalClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const clockElement = document.getElementById('digital-clock');
+      if (clockElement) {
+        clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+      }
+    }
+    setInterval(updateDigitalClock, 1000);
+    updateDigitalClock();
+
+    // View Switcher between Table & Calendar
+    function switchView(mode) {
+      const tableView = document.getElementById('view-table');
+      const calView = document.getElementById('view-calendar');
+      const btnTable = document.getElementById('tab-btn-table');
+      const btnCal = document.getElementById('tab-btn-calendar');
+
+      if (mode === 'table') {
+        tableView.classList.remove('hidden');
+        calView.classList.add('hidden');
+        btnTable.className = 'flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-primary shadow-xs font-label-md text-label-md font-semibold transition-all';
+        btnCal.className = 'flex items-center gap-1.5 px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-medium transition-all';
+      } else {
+        tableView.classList.add('hidden');
+        calView.classList.remove('hidden');
+        btnCal.className = 'flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-primary shadow-xs font-label-md text-label-md font-semibold transition-all';
+        btnTable.className = 'flex items-center gap-1.5 px-space-md py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-medium transition-all';
+      }
+    }
+  </script>
+</div></main></div></body></html>

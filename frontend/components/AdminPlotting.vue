@@ -12,7 +12,7 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#eef4fa] text-[#1e3a5f] border border-[#d0e1f3]">
           Mode: Dual-Panel Matching System
         </span>
       </div>
@@ -38,14 +38,14 @@
             v-for="s in students"
             :key="s.id"
             @click="selectedStudent = s"
-            :class="selectedStudent.id === s.id ? 'bg-rose-50 border-2 border-rose-500 text-rose-950 shadow-sm' : 'bg-white border border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'"
+            :class="selectedStudent.id === s.id ? 'bg-[#eef4fa] border-2 border-[#1e3a5f] text-slate-900 shadow-xs' : 'bg-white border border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'"
             class="p-3.5 rounded-xl cursor-pointer transition flex items-center justify-between gap-3"
           >
             <div class="flex items-center gap-3">
               <input
                 type="radio"
                 :checked="selectedStudent.id === s.id"
-                class="accent-rose-600 w-4 h-4 cursor-pointer"
+                class="accent-[#1e3a5f] w-4 h-4 cursor-pointer"
               />
               <img :src="s.avatar" class="w-9 h-9 rounded-xl object-cover border border-slate-200" />
               <div>
@@ -80,10 +80,10 @@
               <span>2️⃣ Panel Penjodohan Guru &amp; DUDI</span>
             </h3>
             <p class="text-[11px] text-slate-500">
-              Siswa terpilih: <strong class="text-rose-700">{{ selectedStudent.name }}</strong>
+              Siswa terpilih: <strong class="text-[#1e3a5f]">{{ selectedStudent.name }}</strong>
             </p>
           </div>
-          <span class="text-xs font-mono font-bold text-emerald-700">Target Match</span>
+          <span class="text-xs font-mono font-bold text-[#1e3a5f]">Target Match</span>
         </div>
 
         <form @submit.prevent="handleAssignPlacement" class="space-y-4 text-xs">
@@ -95,7 +95,7 @@
             <select
               v-model="form.companyId"
               required
-              class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
+              class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
             >
               <option value="" disabled>-- Pilih Perusahaan Industri --</option>
               <option v-for="c in companies" :key="c.id" :value="c.id">
@@ -113,7 +113,7 @@
               <select
                 v-model="form.dudiMentorId"
                 required
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
               >
                 <option value="" disabled>-- Pilih Mentor DUDI --</option>
                 <option v-for="m in dudiMentors" :key="m.id" :value="m.id">
@@ -129,7 +129,7 @@
               <select
                 v-model="form.guruMentorId"
                 required
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm cursor-pointer"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
               >
                 <option value="" disabled>-- Pilih Guru Pembimbing --</option>
                 <option v-for="g in guruMentors" :key="g.id" :value="g.id">
@@ -147,7 +147,7 @@
                 v-model="form.startDate"
                 type="date"
                 required
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm"
               />
             </div>
             <div>
@@ -156,7 +156,7 @@
                 v-model="form.endDate"
                 type="date"
                 required
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-sm"
+                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm"
               />
             </div>
           </div>
@@ -166,7 +166,7 @@
             <button
               type="submit"
               :disabled="isAssigning"
-              class="w-full py-3.5 px-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+              class="w-full py-3.5 px-6 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
             >
               <span v-if="isAssigning" class="animate-spin inline-block">⏳</span>
               <span>🔗 Tetapkan Penempatan</span>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary":"#ffffff","on-primary-fixed":"#001c3b","surface-container-highest":"#d5e3fc","inverse-on-surface":"#eaf1ff","secondary":"#126588","tertiary":"#122537","surface-variant":"#d5e3fc","on-surface-variant":"#43474e","secondary-fixed-dim":"#8ccff6","on-secondary-container":"#015f81","surface-container-high":"#dce9ff","on-surface":"#0d1c2e","surface-tint":"#455f87","surface-container-lowest":"#ffffff","inverse-surface":"#233144","secondary-container":"#94d7ff","on-tertiary-fixed-variant":"#36495b","outline":"#74777f","on-secondary":"#ffffff","on-tertiary-container":"#92a5bb","background":"#f8f9ff","outline-variant":"#c4c6cf","on-background":"#0d1c2e","primary-fixed-dim":"#adc8f5","tertiary-container":"#283b4d","on-secondary-fixed-variant":"#004c69","surface-container-low":"#eff4ff","on-primary-fixed-variant":"#2d486d","inverse-primary":"#adc8f5","primary-container":"#1e3a5f","surface-container":"#e6eeff","surface-dim":"#ccdbf3","secondary-fixed":"#c4e7ff","on-primary":"#ffffff","on-error-container":"#93000a","surface":"#f8f9ff","on-secondary-fixed":"#001e2c","error":"#ba1a1a","on-tertiary-fixed":"#081d2e","error-container":"#ffdad6","primary-fixed":"#d5e3ff","on-error":"#ffffff","on-primary-container":"#8aa4cf","primary":"#022448","tertiary-fixed-dim":"#b5c9df","surface-bright":"#f8f9ff","tertiary-fixed":"#d1e5fc"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-lg":"1.5rem",gutter:"1.5rem",margin:"2rem","space-sm":"0.5rem","space-xs":"0.25rem","space-xl":"2rem","space-md":"1rem"},fontFamily:{"label-sm":["Inter"],"body-lg":["Inter"],"headline-xl":["Plus Jakarta Sans"],"label-md":["Inter"],"headline-sm":["Plus Jakarta Sans"],"body-sm":["Inter"],"headline-md":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.03em",fontWeight:"500"}],"body-lg":["16px",{lineHeight:"26px",letterSpacing:"0em",fontWeight:"400"}],"headline-xl":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"600"}],"headline-sm":["16px",{lineHeight:"24px",letterSpacing:"-0.005em",fontWeight:"600"}],"body-sm":["13px",{lineHeight:"18px",letterSpacing:"0.005em",fontWeight:"400"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"22px",letterSpacing:"0em",fontWeight:"400"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between select-none"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm"><img alt="Logo Jurnal Magang" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UN7KF7VCxCpMOH38thp2YXbisvq0KZzEJ1GRpAFBGOAZm-Ct3D7SGQblcCpd-NIk6hT1NMG1eAChPqpnLg3g8t9mtlD3wFcxTtqv_9IuskACOVF6KY-yvBuamrXkNliLsy-EVv8Y0FpuDs644wVD4QymxKiGHW5oSrlBYFTZBMeJwfYY2VlO3Iy9svDZhgZUI4E8hN35xZfLIhyRrGK54Hb3M25xMa3OOXZ5pp8fjH2dBgeoU6ZvVNJoU"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-none">Jurnal Magang</span><span class="font-label-sm text-label-sm text-on-surface-variant">Sistem Catatan Mandiri</span></div></div><div class="px-space-md py-space-sm"><span class="px-space-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Menu Portal</span></div><nav class="px-space-sm space-y-space-xs flex flex-col" data-active-classes="bg-surface-container text-primary font-semibold"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="ringkasan-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span class="font-body-md text-body-md">Ringkasan &amp; Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="catatan-harian" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">Catatan Harian</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="lembar-kehadiran" href="#"><span class="material-symbols-outlined text-[20px]">event_available</span><span class="font-body-md text-body-md">Lembar Kehadiran</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="laporan-mingguan-evaluasi" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">Laporan Mingguan &amp; Evaluasi</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="bimbingan-catatan-mentor" href="#"><span class="material-symbols-outlined text-[20px]">supervised_user_circle</span><span class="font-body-md text-body-md">Bimbingan &amp; Catatan Mentor</span></a></nav></div><div class="p-space-md flex flex-col gap-space-sm"><div class="bg-surface-container-low rounded-lg p-space-md"><div class="flex items-center gap-space-xs text-primary mb-space-xs"><span class="material-symbols-outlined text-[16px]">domain</span><span class="font-label-md text-label-md font-semibold truncate">PT Solusi Digital Pratama</span></div><p class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Tech Intern • Div. Frontend</p></div><div class="flex flex-col space-y-space-xs pt-space-xs"><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="bantuan-faq" href="#"><span class="material-symbols-outlined text-[18px]">help_outline</span><span class="font-body-sm text-body-sm">Bantuan &amp; FAQ</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="pengaturan" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">Pengaturan</span></a></div></div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><img alt="Logo Jurnal Magang" class="h-8 w-auto object-contain md:hidden" src="https://lh3.googleusercontent.com/aida/AEtjO1UN7KF7VCxCpMOH38thp2YXbisvq0KZzEJ1GRpAFBGOAZm-Ct3D7SGQblcCpd-NIk6hT1NMG1eAChPqpnLg3g8t9mtlD3wFcxTtqv_9IuskACOVF6KY-yvBuamrXkNliLsy-EVv8Y0FpuDs644wVD4QymxKiGHW5oSrlBYFTZBMeJwfYY2VlO3Iy9svDZhgZUI4E8hN35xZfLIhyRrGK54Hb3M25xMa3OOXZ5pp8fjH2dBgeoU6ZvVNJoU"/><div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md"><span class="text-on-surface font-semibold">Portal Magang</span><span class="material-symbols-outlined text-[16px]">chevron_right</span><span class="text-primary">Sesi Aktif 2024</span></div><div class="hidden xl:flex items-center gap-space-xs bg-surface-container-low px-space-md py-1.5 rounded-full"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-label-sm text-label-sm text-on-surface">Minggu ke-8 dari 16 Minggu (50% Berjalan)</span></div></div><div class="flex items-center gap-space-md"><button class="inline-flex items-center gap-space-xs bg-primary text-on-primary hover:bg-primary-container px-space-md py-2 rounded-lg font-headline-sm text-headline-sm transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[18px]">add</span><span class="font-body-sm text-body-sm font-semibold">Tulis Jurnal Hari Ini</span></button><button aria-label="Notifikasi" class="relative p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full ring-2 ring-surface-container-lowest"></span></button><div class="flex items-center gap-space-sm pl-space-sm"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB0AkvXMs3mTwPJ7rJSqor4csJ5BmJkvF_18CkTyk9yUyfMh3ao1KswO8PHF26taHBXNQYV2F7SIR1dilAWyWGh6T2zX5LwBMsLcD66IJzUVEiL7uJVRb_udAGsux_UOwqCaKHxc93vrmHZZg7wxoo5Oz2YZPHjdQ4PTzx_Hsq8lxq4EAl2rx-0s45tdwUmWEVFBfMKb3GKhTFsngtX9HghR7UVzLMKtb7FgwM4DSyh70G_-KzgXLZ"/><div class="hidden sm:flex flex-col text-left"><span class="font-headline-sm text-body-sm text-on-surface leading-tight font-semibold">Reza Pratama</span><span class="font-label-sm text-label-sm text-on-surface-variant">Sistem Informasi UI</span></div><span class="material-symbols-outlined text-[18px] text-on-surface-variant cursor-pointer">arrow_drop_down</span></div></div></header><main class="w-full pt-16 bg-surface flex-1"><div class="flex flex-col w-full">
+<div class="w-full max-w-[1440px] mx-auto px-margin py-space-xl flex flex-col gap-space-xl">
+<!-- Top Context & Header Action -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-lg">
+<div class="flex flex-col gap-space-xs max-w-2xl">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm uppercase tracking-wider font-semibold">
+            Modul Pembimbingan
+          </span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+            Akreditasi Kampus Merdeka
+          </span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">
+          Bimbingan &amp; Catatan Mentor
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Ruang diskusi terarah, umpan balik performa berkala, dan rekap bimbingan akademik magang.
+        </p>
+</div>
+<div class="flex items-center flex-wrap gap-space-sm">
+<button class="inline-flex items-center gap-space-xs bg-surface-container hover:bg-surface-container-high text-primary px-space-md py-2.5 rounded-lg font-label-md text-label-md transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">cloud_download</span>
+<span>Unduh Lembar Verifikasi Bimbingan</span>
+</button>
+<button class="inline-flex items-center gap-space-xs bg-primary hover:bg-primary-container text-on-primary px-space-md py-2.5 rounded-lg font-headline-sm text-headline-sm transition-all shadow-sm" id="btnOpenRequestModal" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Ajukan Sesi Bimbingan 1-on-1</span>
+</button>
+</div>
+</div>
+<!-- Dual Supervisor Overview Strip -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Industry Mentor Card -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between gap-space-md">
+<div class="flex gap-space-md">
+<div class="relative">
+<img class="w-14 h-14 rounded-xl object-cover shadow-sm" data-alt="Professional corporate portrait of Dimas Ardiansyah, a tech lead in smart casual attire against an architectural modern software studio backdrop, warm natural daylight, navy and steel grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU5MvhpUfkm0NbnnmYZ5_qV5nT8gGmG1oKIT1NjKsNbvg4ZH7KinClbug0--crdDSGPYKUoX2KkpXEWQGHBIegohmLNUx-JLQfuDxgFmX86drdTDHmk5C-L8MoTBnXbvoIbGhlTHvNQ8POtwystd4YQml3NsMbv8dXh6rbJ3WUPZE6fnJDmtYKnMU8Vt9BwWaigqcBMr-A3GCfkFMpae4Ji0yz2Lt2cEz37Lj89uL8XOhA-IHqUhVc"/>
+<span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-surface-container-lowest ring-1 ring-emerald-300"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="inline-flex items-center gap-1.5 self-start px-2 py-0.5 rounded-full bg-surface-container-low text-secondary font-label-sm text-label-sm mb-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Mentor Perusahaan
+              </div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Dimas Ardiansyah, S.T.</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Tech Lead • PT Solusi Digital Pratama</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant hover:text-primary transition-colors cursor-pointer text-[20px]">chat_bubble_outline</span>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-secondary">domain</span> Divisi Frontend Architecture</span>
+<span class="text-primary font-semibold">3 Sesi Selesai</span>
+</div>
+</div>
+<!-- Academic Advisor Card -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-start justify-between gap-space-md">
+<div class="flex gap-space-md">
+<div class="relative">
+<img class="w-14 h-14 rounded-xl object-cover shadow-sm" data-alt="Portrait of an esteemed university professor, Dr Hendra Kusuma, with glasses and a friendly scholarly expression, modern university faculty library setting with soft academic lighting and deep navy accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUdQIB9i0BFCoHSQ6qWoL9RIMkdiA78GMGeUN3VFyN6MhUBSr4Xtc56cnv6cEAVU0nFvgHHUF3wnLKTFm33QHu3NyY6My8fP_gdco-ubTwLNDvPiFLY9iRrU4bO95sZGDWTqEY62VnfKfV6HHedukqHGet5CyMluyBW92-07kpoJOB3SL2_s1DqmUqCxlMnMM6_20BLcoKC_kVI5CTxPukULMYGjEOLEPEVE5EV50EXzuMEBVGKi4q"/>
+<span class="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-500 rounded-full border-2 border-surface-container-lowest ring-1 ring-blue-300"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="inline-flex items-center gap-1.5 self-start px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm mb-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                Pembimbing Akademik
+              </div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Dr. Ir. Hendra Kusuma, M.Kom.</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Dosen Pembimbing • Fasilkom UI</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant hover:text-primary transition-colors cursor-pointer text-[20px]">alternate_email</span>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">school</span> NIP: 198204122005011002</span>
+<span class="text-primary font-semibold">2 Sesi Evaluasi</span>
+</div>
+</div>
+<!-- Alignment / Status Widget -->
+<div class="lg:col-span-2 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl p-space-md flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between">
+<span class="material-symbols-outlined text-[24px] text-secondary-fixed">sync_saved_locally</span>
+<span class="px-2 py-0.5 rounded-full bg-white/10 text-on-primary font-label-sm text-label-sm font-semibold">100% Valid</span>
+</div>
+<div class="my-space-xs">
+<span class="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider block">Status Sinkronisasi</span>
+<h3 class="font-headline-sm text-headline-sm text-white font-semibold">Selaras Sempurna</h3>
+<p class="font-label-sm text-label-sm text-surface-container-highest/80 mt-0.5">Sinkron terakhir 2 hari lalu</p>
+</div>
+<div class="w-full bg-white/20 h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary-fixed h-full rounded-full w-full"></div>
+</div>
+</div>
+</div>
+<!-- Main Two-Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- Left Column: Umpan Balik & Evaluasi Kinerja Berkala (7 cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- Section Title -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-6 bg-secondary rounded-full"></span>
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Umpan Balik &amp; Evaluasi Kinerja</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low px-space-sm py-1 rounded-md">
+            Periode: Bulan ke-2 (Mid-Internship)
+          </span>
+</div>
+<!-- Competency Matrix Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Skor Aspek Kompetensi Magang</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Penilaian gabungan oleh mentor industri dan rubrik akademik kampus</p>
+</div>
+<div class="flex items-baseline gap-1 bg-surface-container-low px-space-md py-space-xs rounded-lg self-start">
+<span class="font-headline-xl text-headline-xl text-primary font-bold leading-none">4.75</span>
+<span class="font-label-md text-label-md text-on-surface-variant">/ 5.0</span>
+</div>
+</div>
+<!-- Rating Bars -->
+<div class="grid grid-cols-1 gap-space-md">
+<!-- Metric 1 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-md text-label-md">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">code_blocks</span>
+                  Kualitas Teknis &amp; Problem Solving
+                </span>
+<span class="font-bold text-primary">4.8 <span class="text-outline-variant font-normal">/ 5.0</span></span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden p-0.5">
+<div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 96%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Keahlian slicing UI, clean code, serta integrasi REST API sangat konsisten.</span>
+</div>
+<!-- Metric 2 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-md text-label-md">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">forum</span>
+                  Komunikasi &amp; Kerjasama Tim
+                </span>
+<span class="font-bold text-primary">4.7 <span class="text-outline-variant font-normal">/ 5.0</span></span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden p-0.5">
+<div class="bg-secondary h-full rounded-full transition-all duration-1000 ease-out" style="width: 94%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Aktif berdiskusi saat daily standup dan selalu proaktif mengabarkan blocker.</span>
+</div>
+<!-- Metric 3 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-md text-label-md">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">timer</span>
+                  Disiplin &amp; Manajemen Waktu
+                </span>
+<span class="font-bold text-primary">4.9 <span class="text-outline-variant font-normal">/ 5.0</span></span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden p-0.5">
+<div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out" style="width: 98%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Semua deliverable sprint dikirim tepat waktu tanpa penundaan.</span>
+</div>
+<!-- Metric 4 -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center font-label-md text-label-md">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">psychology</span>
+                  Inisiatif &amp; Kemandirian
+                </span>
+<span class="font-bold text-primary">4.6 <span class="text-outline-variant font-normal">/ 5.0</span></span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden p-0.5">
+<div class="bg-secondary h-full rounded-full transition-all duration-1000 ease-out" style="width: 92%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Dapat mencari solusi dokumentasi teknis secara mandiri sebelum eskalasi.</span>
+</div>
+</div>
+</div>
+<!-- Latest Official Mentor Recommendation & Quote -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 text-surface-container-highest/20 pointer-events-none select-none">
+<span class="material-symbols-outlined text-[160px]">format_quote</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-primary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-[20px] text-secondary">rate_review</span>
+<h3>Catatan Evaluasi Resmi Terakhir</h3>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              Tervalidasi Digital
+            </span>
+</div>
+<blockquote class="font-body-md text-body-md text-on-surface italic relative z-10 leading-relaxed bg-surface-container-low/60 p-space-md rounded-lg">
+            “Reza menunjukkan adaptasi luar biasa dalam menangani modul rekayasa antarmuka internal kami. Arsitektur state management yang disusun menggunakan Tailwind dan modular pattern sangat rapi. Untuk sprint berikutnya, kami mendorong Reza untuk lebih mendalami automated integration test (Vitest/Playwright) agar stabilitas rilis semakin terjamin.”
+          </blockquote>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pt-space-xs gap-space-sm z-10">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-semibold font-headline-sm text-body-sm">
+                DA
+              </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Dimas Ardiansyah, S.T.</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Direview pada 18 Oktober 2024 • 17:35 WIB</span>
+</div>
+</div>
+<!-- Digital Stamp Verification -->
+<div class="flex items-center gap-2 bg-surface-container-lowest px-space-sm py-1.5 rounded-md shadow-xs">
+<span class="material-symbols-outlined text-secondary text-[22px]">verified</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-semibold text-primary">SHA-256 DIGITAL SIG</span>
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest font-mono">0x8F3A...419C</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Items (Rencana Pengembangan) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">checklist</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Rencana Pengembangan (Next 2 Weeks)</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">3 dari 4 Terselesaikan</span>
+</div>
+<div class="flex flex-col gap-space-xs" id="checklistContainer">
+<!-- Item 1 -->
+<label class="flex items-start gap-space-sm p-space-sm rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer group">
+<input checked="" class="mt-1 w-4 h-4 rounded text-primary focus:ring-secondary accent-primary" type="checkbox"/>
+<div class="flex flex-col flex-1">
+<span class="font-body-md text-body-md text-on-surface font-medium line-through opacity-70">
+                  Implementasi caching token HTTP-Only pada pipeline auth klien
+                </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Saran teknis mentor perusahaan • Selesai 14 Okt</span>
+</div>
+<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
+</label>
+<!-- Item 2 -->
+<label class="flex items-start gap-space-sm p-space-sm rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer group">
+<input checked="" class="mt-1 w-4 h-4 rounded text-primary focus:ring-secondary accent-primary" type="checkbox"/>
+<div class="flex flex-col flex-1">
+<span class="font-body-md text-body-md text-on-surface font-medium line-through opacity-70">
+                  Konsultasi draft bab 3 laporan magang ke dosen pembimbing
+                </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Target akademik Fasilkom UI • Selesai 17 Okt</span>
+</div>
+<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
+</label>
+<!-- Item 3 -->
+<label class="flex items-start gap-space-sm p-space-sm rounded-lg hover:bg-surface-container-low transition-colors cursor-pointer group">
+<input checked="" class="mt-1 w-4 h-4 rounded text-primary focus:ring-secondary accent-primary" type="checkbox"/>
+<div class="flex flex-col flex-1">
+<span class="font-body-md text-body-md text-on-surface font-medium line-through opacity-70">
+                  Penyelarasan dokumentasi Swagger API bersama backend team
+                </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Deliverable kolaboratif sprint 4 • Selesai 19 Okt</span>
+</div>
+<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
+</label>
+<!-- Item 4 (Ongoing) -->
+<label class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low/70 transition-colors cursor-pointer group">
+<input class="mt-1 w-4 h-4 rounded text-primary focus:ring-secondary accent-primary" type="checkbox"/>
+<div class="flex flex-col flex-1">
+<span class="font-body-md text-body-md text-on-surface font-semibold">
+                  Penyusunan automated end-to-end testing coverage minimal 75%
+                </span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Batas waktu: 28 Oktober 2024 • Sedang Berjalan</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]">pending</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Right Column: Log Pertemuan & Riwayat Sesi Konsultasi (5 cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-lg">
+<!-- Section Title -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-6 bg-primary rounded-full"></span>
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Log &amp; Riwayat Bimbingan</h2>
+</div>
+<span class="font-label-md text-label-md text-secondary font-semibold cursor-pointer hover:underline">
+            Semua (4 Sesi)
+          </span>
+</div>
+<!-- Upcoming Featured Agenda Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm font-semibold animate-pulse">
+<span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+              Agenda Terdekat
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">videocam</span> Google Meet
+            </span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary font-bold">
+            Sesi Review Tengah Periode (Mid-term Evaluation)
+          </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            Evaluasi menyeluruh 8 minggu pertama bersama kedua pihak pembimbing untuk penyelarasan nilai konversi 20 SKS.
+          </p>
+<!-- Schedule Meta Box -->
+<div class="mt-space-md p-space-md rounded-lg bg-surface-container flex flex-col gap-space-xs">
+<div class="flex items-center justify-between font-label-md text-label-md text-primary">
+<span class="flex items-center gap-1.5 font-semibold">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                Jumat, 25 Okt 2024
+              </span>
+<span class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-secondary">schedule</span>
+                14:00 - 15:00 WIB
+              </span>
+</div>
+<div class="pt-space-xs flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Peserta: Dosen, Mentor &amp; Mahasiswa</span>
+<span class="text-emerald-700 font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Disetujui Bersama
+              </span>
+</div>
+</div>
+<!-- Agenda points -->
+<div class="mt-space-md flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">
+              Poin Pokok Agenda:
+            </span>
+<ul class="font-body-sm text-body-sm text-on-surface space-y-1 list-disc list-inside">
+<li>Pemaparan capaian progress modul frontend (demo interaktif)</li>
+<li>Validasi logbook kehadiran dan pengisian catatan mingguan</li>
+<li>Penilaian kualitatif dan feedback dari Tech Lead</li>
+</ul>
+</div>
+<!-- Action Link -->
+<div class="mt-space-md pt-space-xs flex items-center justify-between gap-space-sm">
+<a class="flex-1 inline-flex items-center justify-center gap-space-xs bg-primary text-on-primary hover:bg-primary-container px-space-md py-2.5 rounded-lg font-headline-sm text-headline-sm transition-all shadow-sm" href="https://meet.google.com/abc-defg-hij" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">video_call</span>
+<span>Buka Google Meet Room</span>
+</a>
+<button class="p-2.5 bg-surface-container hover:bg-surface-container-high rounded-lg text-primary transition-colors" title="Salin Jadwal ke Kalender" type="button">
+<span class="material-symbols-outlined text-[20px]">event_repeat</span>
+</button>
+</div>
+</div>
+<!-- Consultation History Timeline -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Riwayat Sesi Selesai</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Diurutkan terbaru</span>
+</div>
+<div class="relative pl-6 space-y-space-lg before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-surface-container">
+<!-- Session 3 -->
+<div class="relative group">
+<div class="absolute -left-[27px] top-1 w-3.5 h-3.5 rounded-full bg-secondary ring-4 ring-surface-container-lowest"></div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-space-xs">
+<span class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">
+                    Pertemuan ke-3 • 11 Okt 2024
+                  </span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface font-label-sm text-label-sm font-medium">
+                    Catatan Diterbitkan
+                  </span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                  Evaluasi Arsitektur Database &amp; Relasi Model
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Pembimbing: <span class="font-medium text-on-surface">Dimas Ardiansyah (Mentor Industri)</span>
+</p>
+<div class="mt-1 text-on-surface-variant font-body-sm text-body-sm bg-surface-container-low p-space-sm rounded-md">
+                  “Refactor foreign key indexes dan optimasi query paginasi pada log aktivitas telah divalidasi.”
+                </div>
+<div class="flex items-center gap-space-sm pt-1 font-label-sm text-label-sm text-secondary font-semibold">
+<button class="hover:underline flex items-center gap-0.5" type="button">
+<span class="material-symbols-outlined text-[14px]">description</span> Lihat Berita Acara
+                  </button>
+</div>
+</div>
+</div>
+<!-- Session 2 -->
+<div class="relative group">
+<div class="absolute -left-[27px] top-1 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-space-xs">
+<span class="font-label-sm text-label-sm text-primary font-semibold uppercase tracking-wider">
+                    Pertemuan ke-2 • 27 Sep 2024
+                  </span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface font-label-sm text-label-sm font-medium">
+                    Selesai
+                  </span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                  Sinkronisasi Silabus Kampus Merdeka &amp; Project Scope
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Pembimbing: <span class="font-medium text-on-surface">Dr. Hendra Kusuma &amp; Dimas Ardiansyah</span>
+</p>
+<div class="mt-1 text-on-surface-variant font-body-sm text-body-sm bg-surface-container-low p-space-sm rounded-md">
+                  “Penetapan 4 pilar kompetensi akademik yang dikonversikan ke dalam tugas harian industri.”
+                </div>
+<div class="flex items-center gap-space-sm pt-1 font-label-sm text-label-sm text-secondary font-semibold">
+<button class="hover:underline flex items-center gap-0.5" type="button">
+<span class="material-symbols-outlined text-[14px]">description</span> Lihat Berita Acara
+                  </button>
+</div>
+</div>
+</div>
+<!-- Session 1 -->
+<div class="relative group">
+<div class="absolute -left-[27px] top-1 w-3.5 h-3.5 rounded-full bg-outline-variant ring-4 ring-surface-container-lowest"></div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold uppercase tracking-wider">
+                    Pertemuan ke-1 • 13 Sep 2024
+                  </span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface font-label-sm text-label-sm font-medium">
+                    Terarsip
+                  </span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">
+                  Onboarding &amp; Penentuan Target Pembelajaran Magang
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Pembimbing: <span class="font-medium text-on-surface">Dimas Ardiansyah (Mentor Industri)</span>
+</p>
+<div class="mt-1 text-on-surface-variant font-body-sm text-body-sm bg-surface-container-low p-space-sm rounded-md">
+                  “Setup lingkungan repositori, standarisasi commit convention Git, dan pengenalan tim dev.”
+                </div>
+<div class="flex items-center gap-space-sm pt-1 font-label-sm text-label-sm text-secondary font-semibold">
+<button class="hover:underline flex items-center gap-0.5" type="button">
+<span class="material-symbols-outlined text-[14px]">description</span> Lihat Berita Acara
+                  </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Academic Guidelines & Verification Helper Notice -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px] mt-0.5">info</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-primary">Ketentuan Bimbingan Fasilkom UI</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-relaxed">
+              Mahasiswa wajib melaksanakan minimal 6 kali sesi bimbingan bersama mentor/dosen selama durasi 16 minggu untuk memenuhi syarat sidang akhir magang MBKM.
+            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Modal: Ajukan Sesi Bimbingan (Hidden by default) -->
+<div class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-space-md hidden transition-opacity duration-200" id="requestSessionModal">
+<div class="bg-surface-container-lowest w-full max-w-xl rounded-xl shadow-xl overflow-hidden flex flex-col">
+<!-- Modal Header -->
+<div class="px-space-lg py-space-md bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">calendar_add_on</span>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold">Ajukan Sesi Bimbingan Baru</h3>
+</div>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" id="btnCloseRequestModal" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<form class="p-space-lg flex flex-col gap-space-md" id="consultationForm">
+<!-- Target Pembimbing -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Pilih Pembimbing</label>
+<select class="w-full bg-surface-container-lowest text-on-surface px-space-md py-2 rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary/50">
+<option>Dimas Ardiansyah, S.T. (Mentor Industri - Tech Lead)</option>
+<option>Dr. Ir. Hendra Kusuma, M.Kom. (Dosen Pembimbing Akademik)</option>
+<option>Keduanya (Sesi Evaluasi Bersama / Gabungan)</option>
+</select>
+</div>
+<!-- Topik & Agenda -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Topik / Bahasan Konsultasi</label>
+<input class="w-full bg-surface-container-lowest text-on-surface px-space-md py-2 rounded-lg font-body-md text-body-md placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-secondary/50" placeholder="Contoh: Evaluasi Optimasi SSR &amp; Refactor Komponen" type="text"/>
+</div>
+<!-- Date & Time Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Usulan Tanggal</label>
+<input class="w-full bg-surface-container-lowest text-on-surface px-space-md py-2 rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary/50" type="date" value="2024-10-30"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Usulan Waktu (WIB)</label>
+<input class="w-full bg-surface-container-lowest text-on-surface px-space-md py-2 rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary/50" type="time" value="14:00"/>
+</div>
+</div>
+<!-- Format Sesi -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Format Pertemuan</label>
+<div class="grid grid-cols-2 gap-space-sm">
+<label class="flex items-center gap-space-xs p-space-sm bg-surface-container-low rounded-lg cursor-pointer hover:bg-surface-container transition-colors">
+<input checked="" class="accent-primary" name="sessionType" type="radio"/>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Online (Google Meet)</span>
+</label>
+<label class="flex items-center gap-space-xs p-space-sm bg-surface-container-low rounded-lg cursor-pointer hover:bg-surface-container transition-colors">
+<input class="accent-primary" name="sessionType" type="radio"/>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Tatap Muka (Kantor/Kampus)</span>
+</label>
+</div>
+</div>
+<!-- Detail Catatan Pembuka -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface">Catatan Awal / Lampiran Tautan PR</label>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Opsional</span>
+</div>
+<textarea class="w-full bg-surface-container-lowest text-on-surface p-space-sm rounded-lg font-body-md text-body-md placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-secondary/50" placeholder="Sertakan poin blocker atau tautan dokumen yang ingin direview terlebih dahulu..." rows="3"></textarea>
+</div>
+<!-- Modal Actions -->
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md py-2 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" id="btnCancelModal" type="button">
+            Batalkan
+          </button>
+<button class="px-space-md py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-headline-sm transition-colors shadow-sm" type="submit">
+            Kirimkan Pengajuan
+          </button>
+</div>
+</form>
+</div>
+</div>
+<!-- Inline Micro-interactions Script -->
+<script>
+    (function() {
+      const openBtn = document.getElementById('btnOpenRequestModal');
+      const closeBtn = document.getElementById('btnCloseRequestModal');
+      const cancelBtn = document.getElementById('btnCancelModal');
+      const modal = document.getElementById('requestSessionModal');
+      const form = document.getElementById('consultationForm');
+
+      function openModal() {
+        if (!modal) return;
+        modal.classList.remove('hidden');
+      }
+
+      function closeModal() {
+        if (!modal) return;
+        modal.classList.add('hidden');
+      }
+
+      if (openBtn) openBtn.addEventListener('click', openModal);
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+      // Close modal on background backdrop click
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+      }
+
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          // Visual feedback confirmation
+          const submitBtn = form.querySelector('button[type="submit"]');
+          if (submitBtn) {
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined text-[16px] animate-spin">progress_activity</span> Mengirimkan...';
+            setTimeout(function() {
+              submitBtn.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span> Terkirim!';
+              setTimeout(function() {
+                closeModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                alert('Pengajuan sesi bimbingan berhasil dikirimkan ke pembimbing. Notifikasi kalender telah dibuat.');
+              }, 600);
+            }, 800);
+          }
+        });
+      }
+    })();
+  </script>
+</div></main></div></body></html>

@@ -11,51 +11,54 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Stitch "Field Verified Enterprise PKL" Design Tokens
-        "surface": "#f8f9ff",
-        "surface-dim": "#cbdbf5",
-        "surface-bright": "#f8f9ff",
-        "surface-container-lowest": "#ffffff",
-        "surface-container-low": "#eff4ff",
-        "surface-container": "#e5eeff",
-        "surface-container-high": "#dce9ff",
-        "surface-container-highest": "#d3e4fe",
-        "surface-variant": "#d3e4fe",
-        "surface-tint": "#2151da",
-        "on-surface": "#0b1c30",
-        "on-surface-variant": "#434655",
-        "inverse-surface": "#213145",
+        // Serene Academic Desk Palette (Calm Slate-Navy & Azure)
+        "surface": "#f8f9ff",                  // Serene low-fatigue slate canvas
+        "surface-dim": "#ccdbf3",
+        "surface-bright": "#ffffff",           // Pure white
+        "surface-container-lowest": "#ffffff", // Pure white for cards & sidebars
+        "surface-container-low": "#eff4ff",    // Soft azure tint elevation
+        "surface-container": "#e6eeff",        // Muted academic surface
+        "surface-container-high": "#dce9ff",   // Subtle grouping
+        "surface-container-highest": "#d5e3fc",// Soft border elevation
+        "surface-variant": "#d5e3fc",
+        "surface-tint": "#455f87",
+        "on-surface": "#0d1c2e",               // Deep legible contrast
+        "on-surface-variant": "#43474e",       // Balanced body text slate
+        "inverse-surface": "#233144",
         "inverse-on-surface": "#eaf1ff",
-        "outline": "#747686",
-        "outline-variant": "#c4c5d7",
+        "outline": "#74777f",
+        "outline-variant": "#c4c6cf",          // Refined micro-border
 
-        "primary": "#0037b0",
+        // Primary: Deep Academic Navy
+        "primary": "#022448",                  // Deep academic navy
         "on-primary": "#ffffff",
-        "primary-container": "#1d4ed8",
-        "on-primary-container": "#cad3ff",
-        "primary-fixed": "#dce1ff",
-        "primary-fixed-dim": "#b7c4ff",
-        "on-primary-fixed": "#001551",
-        "on-primary-fixed-variant": "#0039b5",
-        "inverse-primary": "#b7c4ff",
+        "primary-container": "#1e3a5f",        // Poised slate navy
+        "on-primary-container": "#8aa4cf",
+        "primary-fixed": "#d5e3ff",
+        "primary-fixed-dim": "#adc8f5",
+        "on-primary-fixed": "#001c3b",
+        "on-primary-fixed-variant": "#2d486d",
+        "inverse-primary": "#adc8f5",
 
-        "secondary": "#565e74",
+        // Secondary: Calm Desaturated Azure
+        "secondary": "#126588",                // Soft calm azure
         "on-secondary": "#ffffff",
-        "secondary-container": "#dae2fd",
-        "on-secondary-container": "#5c647a",
-        "secondary-fixed": "#dae2fd",
-        "secondary-fixed-dim": "#bec6e0",
-        "on-secondary-fixed": "#131b2e",
-        "on-secondary-fixed-variant": "#3f465c",
+        "secondary-container": "#94d7ff",
+        "on-secondary-container": "#015f81",
+        "secondary-fixed": "#c4e7ff",
+        "secondary-fixed-dim": "#8ccff6",
+        "on-secondary-fixed": "#001e2c",
+        "on-secondary-fixed-variant": "#004c69",
 
-        "tertiary": "#004f35",
+        // Tertiary: Refined Emerald / Forest (Clean status indicator)
+        "tertiary": "#047857",                 // Emerald-700
         "on-tertiary": "#ffffff",
-        "tertiary-container": "#006948",
-        "on-tertiary-container": "#76eab6",
-        "tertiary-fixed": "#85f8c4",
-        "tertiary-fixed-dim": "#68dba9",
-        "on-tertiary-fixed": "#002114",
-        "on-tertiary-fixed-variant": "#005137",
+        "tertiary-container": "#059669",       // Emerald-600
+        "on-tertiary-container": "#d1fae5",
+        "tertiary-fixed": "#d1fae5",           // Soft mint chip
+        "tertiary-fixed-dim": "#a7f3d0",
+        "on-tertiary-fixed": "#064e3b",
+        "on-tertiary-fixed-variant": "#065f46",
 
         "error": "#ba1a1a",
         "on-error": "#ffffff",
@@ -63,23 +66,34 @@ export default {
         "on-error-container": "#93000a",
 
         "background": "#f8f9ff",
-        "on-background": "#0b1c30"
+        "on-background": "#0d1c2e"
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        headline: ['"Space Grotesk"', 'sans-serif'],
-        body: ['Geist', 'system-ui', 'sans-serif'],
+        headline: ['"Plus Jakarta Sans"', '"Space Grotesk"', 'sans-serif'],
+        body: ['Inter', 'Geist', 'sans-serif'],
         mono: ['Geist', '"JetBrains Mono"', 'monospace'],
-        "headline-xl": ['"Space Grotesk"', 'sans-serif'],
-        "headline-lg": ['"Space Grotesk"', 'sans-serif'],
-        "headline-md": ['"Space Grotesk"', 'sans-serif'],
-        "headline-sm": ['"Space Grotesk"', 'sans-serif'],
-        "body-lg": ['Geist', 'sans-serif'],
-        "body-md": ['Geist', 'sans-serif'],
-        "body-sm": ['Geist', 'sans-serif'],
-        "label-md": ['Geist', 'sans-serif'],
-        "label-sm": ['Geist', 'sans-serif'],
+        "headline-xl": ['"Plus Jakarta Sans"', 'sans-serif'],
+        "headline-lg": ['"Plus Jakarta Sans"', 'sans-serif'],
+        "headline-md": ['"Plus Jakarta Sans"', 'sans-serif'],
+        "headline-sm": ['"Plus Jakarta Sans"', 'sans-serif'],
+        "body-lg": ['Inter', 'sans-serif'],
+        "body-md": ['Inter', 'sans-serif'],
+        "body-sm": ['Inter', 'sans-serif'],
+        "label-md": ['Inter', 'sans-serif'],
+        "label-sm": ['Inter', 'sans-serif'],
         "code-sm": ['Geist', 'monospace']
+      },
+      fontSize: {
+        "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.03em", fontWeight: "500" }],
+        "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }],
+        "body-sm": ["13px", { lineHeight: "18px", letterSpacing: "0.005em", fontWeight: "400" }],
+        "body-md": ["14px", { lineHeight: "22px", letterSpacing: "0em", fontWeight: "400" }],
+        "body-lg": ["16px", { lineHeight: "26px", letterSpacing: "0em", fontWeight: "400" }],
+        "headline-sm": ["16px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "600" }],
+        "headline-md": ["20px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.015em", fontWeight: "600" }],
+        "headline-xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }]
       },
       spacing: {
         "space-xs": "0.25rem",
