@@ -13,10 +13,11 @@ Lihat juga panduan lengkap di [`AGENTS.md`](file:///c:/Users/Assyifa%20Odellia/O
   - Guru Pembimbing: `guru@gmail.com`
   - Admin / Kaprog: `admin@gmail.com`
 
-## 🔍 Saat User Meminta "Analisis Project" atau "Lanjutkan Project":
-1. Jalankan verifikasi backend (port 8000) dan frontend (port 3000).
-2. Periksa status database SQLite `backend/database/database.sqlite`.
-3. Laporkan status fitur per aktor dan usulkan langkah konkret selanjutnya.
+## 🔍 Perintah Utama: "Perform" (atau "Analisis Project" / "Lanjutkan Project")
+Saat user mengetik **`Perform`**:
+1. Jalankan verifikasi backend (port 8000), frontend (port 3000), dan database SQLite `backend/database/database.sqlite`.
+2. Laporkan status fitur per 4 aktor (Siswa, Mentor, Guru, Admin).
+3. Langsung sajikan langkah konkret roadmap berikutnya yang siap dieksekusi.
 
 ## 🌟 Fitur Unggulan Terkini (Sudah Selesai):
 - **Admin Diagram Relasi PKL (`AdminDiagramRelasi.vue`):** Topologi visual interaktif alur penempatan (Siswa -> DUDI -> Mentor -> Guru) & visualisasi Skema ERD basis data lengkap dengan cardinalities dan export SVG.

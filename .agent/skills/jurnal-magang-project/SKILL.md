@@ -120,9 +120,9 @@ Skill ini dirancang agar Antigravity AI di komputer/device mana pun dapat langsu
 
 ---
 
-## 📋 Protokol Analisis Antigravity AI (Saat User Meminta "Analisis Project")
+## 📋 Protokol Eksekusi & Analisis (Kata Kunci Utama: "Perform")
 
-Ketika user berpindah device dan memberikan perintah seperti **"analisis project ini"**, **"cek kondisi project"**, atau **"apa saja yang harus dilakukan"**, Antigravity AI harus melakukan tahapan berikut:
+Ketika user memberikan perintah **`Perform`** (atau variasi seperti *"analisis project ini"*, *"cek kondisi project"*, atau *"apa saja yang harus dilakukan"*), Antigravity AI harus langsung melakukan tahapan berikut:
 
 ### Langkah 1: Pengecekan Lingkungan & Servis
 Jalankan verifikasi status:

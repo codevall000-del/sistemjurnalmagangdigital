@@ -32,9 +32,11 @@ Semua akun menggunakan password: **`12345678`**
 
 ---
 
-## 🔍 Protokol Analisis (Saat User Meminta "Analisis Project")
+## 🔍 Protokol Analisis & Eksekusi (Trigger Kata Kunci: "Perform")
 
-Jika pengguna meminta:
+Jika pengguna mengetik atau meminta:
+- **`Perform`** *(Perintah Utama)*
+- *"perform"*
 - *"analisis project"*
 - *"apa yang harus dilakukan"*
 - *"cek status project ini"*
