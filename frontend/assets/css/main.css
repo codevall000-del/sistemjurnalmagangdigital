@@ -361,6 +361,15 @@ html[data-theme="dark"] .text-on-surface {
   color: #f5f5f7 !important;
 }
 
+html.dark .text-\[\#1d1d1f\]\/80,
+html[data-theme="dark"] .text-\[\#1d1d1f\]\/80,
+html.dark .text-\[\#1d1d1f\]\/70,
+html[data-theme="dark"] .text-\[\#1d1d1f\]\/70,
+html.dark .text-\[\#1d1d1f\]\/60,
+html[data-theme="dark"] .text-\[\#1d1d1f\]\/60 {
+  color: #a1a1a6 !important;
+}
+
 html.dark .text-\[\#86868b\],
 html[data-theme="dark"] .text-\[\#86868b\],
 html.dark .text-on-surface-variant,
@@ -540,51 +549,30 @@ html.dark ::-webkit-scrollbar-thumb:hover {
 /* ==========================================================================
    Smooth Apple Fluid Theme Transition (Light <-> Dark)
    ========================================================================== */
-/* Disable conflicting CSS transitions during View Transitions so snapshots are crisp & perfectly synced */
-html.view-transitioning,
-html.view-transitioning *,
-html.view-transitioning *::before,
-html.view-transitioning *::after {
-  transition: none !important;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 350ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-::view-transition-old(root) {
-  animation-name: apple-theme-fade-out;
-}
-
-::view-transition-new(root) {
-  animation-name: apple-theme-fade-in;
-}
-
-@keyframes apple-theme-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@keyframes apple-theme-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 /* Global & Component Level Smooth Interpolation during Theme Toggle */
 html.theme-transition,
-html.theme-transition *,
-html.theme-transition *::before,
-html.theme-transition *::after {
-  transition: background-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
-              color 300ms cubic-bezier(0.16, 1, 0.3, 1),
-              fill 300ms cubic-bezier(0.16, 1, 0.3, 1),
-              stroke 300ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 350ms cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 350ms ease !important;
+html.theme-transition body,
+html.theme-transition main,
+html.theme-transition header,
+html.theme-transition aside,
+html.theme-transition section,
+html.theme-transition div,
+html.theme-transition nav,
+html.theme-transition .apple-card,
+html.theme-transition .apple-glass,
+html.theme-transition .apple-glass-subtle {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow !important;
+  transition-duration: 550ms !important;
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1) !important;
   transition-delay: 0s !important;
+}
+
+/* Ensure transform transitions on segmented pills and buttons always animate with physical fluid motion */
+.theme-pill-indicator {
+  transition: transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 520ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 520ms cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  will-change: transform;
 }
 
 /* Standalone container transitions */
@@ -597,10 +585,10 @@ section,
 .apple-card,
 .apple-glass,
 .apple-glass-subtle {
-  transition: background-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
-              color 300ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 550ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 550ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              color 500ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 550ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* ==========================================================================

@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'nisn_nip' => '198001012005011001',
             'phone' => '081200000001',
-            'major' => 'PPLG',
+            'major' => 'RPL',
             'class_name' => 'Kaprog Vokasi',
             'avatar' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
         ]);
@@ -40,16 +40,16 @@ class DatabaseSeeder extends Seeder
             'role' => 'guru',
             'nisn_nip' => '198502142010011002',
             'phone' => '081200000002',
-            'major' => 'PPLG',
+            'major' => 'RPL',
             'class_name' => 'Guru Pembimbing Utama',
             'avatar' => 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
         ]);
 
         // 2. Tiga Tempat Magang (Instansi/Perusahaan) & Pembimbing Lapangan untuk 3 Konsentrasi Keahlian SMKN 71
-        // Tempat 1: PPLG / RPL
+        // Tempat 1: RPL
         $compTelkom = Company::create([
             'name' => 'PT Telkom Digital Solusi',
-            'sector' => 'Software House & Cloud Infrastructure (PPLG)',
+            'sector' => 'Software House & Cloud Infrastructure (RPL)',
             'address' => 'Jl. Gatot Subroto Kav. 52, Gedung Telkom Landmark Lt. 14, Jakarta Selatan',
             'phone' => '021-52991000',
             'email' => 'internship@telkomdigital.co.id',
@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'mentor',
             'nisn_nip' => 'ID-TELKOM-8821',
             'phone' => '081200000003',
-            'major' => 'PPLG',
+            'major' => 'RPL',
             'class_name' => 'Lead Software Engineer',
             'avatar' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
         ]);
@@ -129,14 +129,14 @@ class DatabaseSeeder extends Seeder
 
         // 3. Siswa Binaan (> 5 siswa dengan PT berbeda-beda di bawah bimbingan Guru Nurul Hidayah)
         $studentsConfig = [
-            // PPLG di PT Telkom
+            // RPL di PT Telkom
             [
                 'name' => 'Budi Santoso',
                 'email' => 'siswa@gmail.com',
                 'nisn' => '0061234567',
                 'phone' => '081200000004',
-                'major' => 'PPLG',
-                'class' => 'XII PPLG 1',
+                'major' => 'RPL',
+                'class' => 'XII RPL 1',
                 'avatar' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
                 'company' => $compTelkom,
                 'dudi' => $mentorTelkom,
@@ -148,8 +148,8 @@ class DatabaseSeeder extends Seeder
                 'email' => 'siti@gmail.com',
                 'nisn' => '0061234568',
                 'phone' => '081200000005',
-                'major' => 'PPLG',
-                'class' => 'XII PPLG 2',
+                'major' => 'RPL',
+                'class' => 'XII RPL 2',
                 'avatar' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
                 'company' => $compTelkom,
                 'dudi' => $mentorTelkom,
@@ -231,7 +231,7 @@ class DatabaseSeeder extends Seeder
 
             // Schedule Mingguan berdasarkan Konsentrasi Keahlian & Perusahaan
             $scheduleConfig = match ($cfg['major']) {
-                'PPLG' => [
+                'RPL', 'PPLG' => [
                     'monday' => 'wfo',
                     'tuesday' => 'wfo',
                     'wednesday' => 'wfo',

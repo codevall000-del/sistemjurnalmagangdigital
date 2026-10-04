@@ -69,9 +69,12 @@ Skill ini dirancang agar Antigravity AI di komputer/device mana pun dapat langsu
     - Rekap otomatis nilai dari Mentor Lapangan + form input nilai Laporan Sekolah = Nilai Akhir PKL.
 
 ### 4. Admin / Kaprog (Administrator)
-- **Komponen Utama:** `AdminDashboard.vue`, `AdminDataMaster.vue`, `AdminPlotting.vue`, `AdminLaporan.vue`.
+- **Komponen Utama:** `AdminDashboard.vue`, `AdminDataMaster.vue`, `AdminPlotting.vue`, `AdminDiagramRelasi.vue`, `AdminLaporan.vue`.
 - **Fitur Utama:**
   - **Dashboard Makro:** Statistik agregat siswa, tempat magang, guru, utilisasi kuota, status konektivitas online.
+  - **Diagram Relasi PKL Interaktif (Topologi & ERD):**
+    - Mode Alur Penempatan: Visualisasi pipeline real-time (Siswa -> DUDI -> Mentor -> Guru) dengan filter jurusan, pencarian, dan node detail.
+    - Mode Skema ERD: Visualisasi relasi 6 entitas basis data dengan foreign key, cardinalities (1:N, M:N), dan export SVG diagram.
   - **Data Master All-in-One Quick Enrollment:**
     - CRUD Siswa, Tempat Magang, Pembimbing Lapangan, Guru Pembimbing.
     - Pendaftaran siswa baru langsung memilih atau **menambahkan tempat magang baru secara inline** di satu modal tanpa keluar halaman.

@@ -35,74 +35,157 @@
     </div>
 
     <!-- Quick Presensi Today Panel (Apple Hero Split Banner) -->
-    <div class="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] p-6 sm:p-7 relative overflow-hidden">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative z-10">
+    <div class="bg-white dark:bg-[#1c1c1e] rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] dark:border-white/[0.08] p-5 sm:p-6 relative overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch relative z-10">
         <!-- Left Sub-panel: Realtime Clock & Status -->
-        <div class="lg:col-span-4 flex flex-col gap-2 pr-0 lg:pr-4">
-          <div class="flex items-center gap-2 text-[#86868b] text-[12px] font-medium">
-            <span class="w-2 h-2 rounded-full bg-[#34c759] animate-pulse"></span>
-            <span>Rabu, 23 Oktober 2024</span>
-            <span class="text-black/20">•</span>
-            <span class="text-[#0071e3] font-semibold">Sesi Siang</span>
+        <div class="lg:col-span-4 flex flex-col justify-between gap-4 p-5 rounded-2xl bg-[#f5f5f7]/70 dark:bg-white/[0.04] border border-black/[0.04] dark:border-white/[0.06]">
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2 text-[#86868b] dark:text-[#a1a1a6] text-[12px] font-medium">
+              <span class="w-2 h-2 rounded-full bg-[#34c759] animate-pulse"></span>
+              <span>Rabu, 23 Oktober 2024</span>
+              <span class="text-black/20 dark:text-white/20">•</span>
+              <span class="text-[#0071e3] font-semibold">{{ currentSessionName }}</span>
+            </div>
+
+            <div class="flex items-baseline gap-2 mt-0.5">
+              <span class="text-[38px] sm:text-[42px] leading-none text-[#1d1d1f] dark:text-white font-bold tracking-tight font-headline">
+                {{ currentTime }}
+              </span>
+              <span class="text-[12px] text-[#86868b] font-medium">WIB</span>
+            </div>
           </div>
 
-          <div class="flex items-baseline gap-2 mt-0.5">
-            <span class="text-[44px] leading-none text-[#1d1d1f] font-bold tracking-tight font-headline">
-              {{ currentTime }}
-            </span>
-            <span class="text-[12px] text-[#86868b] font-medium">WIB</span>
-          </div>
-
-          <div class="mt-2 flex items-center gap-2 text-[#1d1d1f] bg-[#f5f5f7] px-3.5 py-2 rounded-xl border border-black/[0.04]">
-            <span class="material-symbols-outlined text-[18px] text-[#0071e3]">verified</span>
-            <span class="text-[11px] truncate">Tervalidasi GPS Kantor • Lantai 4 Tech Hub</span>
-          </div>
+          <button
+            @click="isGeofenceModalOpen = true"
+            type="button"
+            class="flex items-center justify-between gap-2 text-[#1d1d1f] dark:text-[#f5f5f7] bg-white/90 dark:bg-black/30 hover:bg-white dark:hover:bg-black/40 px-3.5 py-2.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] shadow-xs transition-all apple-press cursor-pointer text-left group"
+          >
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="material-symbols-outlined text-[18px] text-[#0071e3] shrink-0">verified</span>
+              <span class="text-[11px] font-medium truncate">Tervalidasi GPS Kantor • Lantai 4 Tech Hub</span>
+            </div>
+            <span class="material-symbols-outlined text-[15px] text-[#86868b] group-hover:text-[#0071e3] transition-colors shrink-0">arrow_forward_ios</span>
+          </button>
         </div>
 
-        <!-- Middle Sub-panel: Check-in Details -->
-        <div class="lg:col-span-5 bg-[#f5f5f7] rounded-2xl p-4.5 flex flex-col justify-between gap-3 border border-black/[0.04]">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] uppercase tracking-wider text-[#86868b] font-semibold">Status Presensi Masuk</span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#34c759]/10 text-[#248a3d] text-[11px] font-semibold">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#34c759]"></span>
-              Tepat Waktu
+        <!-- Middle Sub-panel: Check-in Details (STATUS PRESENSI MASUK) -->
+        <div class="lg:col-span-5 bg-gradient-to-br from-[#f9f9fb] via-[#f5f5f8] to-[#ededf2] dark:from-white/[0.06] dark:to-white/[0.02] rounded-2xl p-5 flex flex-col justify-between gap-4 border border-black/[0.06] dark:border-white/[0.08] shadow-[0_2px_8px_rgba(0,0,0,0.02)] relative overflow-hidden">
+          <!-- Header: Category Title + Pill Badge -->
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-lg bg-[#0071e3]/10 dark:bg-[#0071e3]/20 text-[#0071e3] dark:text-[#38bdf8] flex items-center justify-center">
+                <span class="material-symbols-outlined text-[15px]">how_to_reg</span>
+              </div>
+              <span class="text-[11px] uppercase tracking-wider text-[#86868b] dark:text-[#a1a1a6] font-bold">Status Presensi Masuk</span>
+            </div>
+
+            <!-- Dynamic Status Badge -->
+            <span
+              v-if="attendanceState.hasCheckedOut"
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0071e3]/10 text-[#0071e3] border border-[#0071e3]/20 text-[11px] font-semibold"
+            >
+              <span class="material-symbols-outlined text-[13px]">task_alt</span>
+              <span>Selesai Sesi</span>
+            </span>
+            <span
+              v-else-if="attendanceState.hasCheckedIn"
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#34c759]/12 text-[#248a3d] dark:text-emerald-400 border border-[#34c759]/25 text-[11px] font-semibold shadow-xs"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-[#34c759] animate-pulse"></span>
+              <span>Hadir Tepat Waktu</span>
+            </span>
+            <span
+              v-else
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/12 text-amber-700 border border-amber-500/25 text-[11px] font-semibold"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              <span>Belum Tap-In</span>
             </span>
           </div>
 
-          <div class="flex items-center gap-3.5 my-1">
-            <div class="w-11 h-11 rounded-xl bg-[#0071e3] text-white flex items-center justify-center shadow-[0_2px_8px_rgba(0,113,227,0.3)]">
-              <span class="material-symbols-outlined text-[24px]">login</span>
+          <!-- Hero Metric: Large Check-in Time & Work Mode -->
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-[#0071e3]/10 dark:bg-[#0071e3]/20 text-[#0071e3] dark:text-[#38bdf8] flex items-center justify-center border border-[#0071e3]/15 shadow-xs shrink-0">
+                <span class="material-symbols-outlined text-[24px]">login</span>
+              </div>
+              <div class="flex flex-col">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-[26px] sm:text-[28px] font-bold text-[#1d1d1f] dark:text-white tracking-tight leading-none font-headline">
+                    {{ effectiveCheckInTime }}
+                  </span>
+                  <span class="text-[12px] font-semibold text-[#86868b]">WIB</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-[12px] text-[#86868b] dark:text-[#a1a1a6] mt-1">
+                  <span class="material-symbols-outlined text-[15px] text-[#34c759]">verified</span>
+                  <span class="font-medium text-[#1d1d1f] dark:text-[#f5f5f7]">{{ currentWorkModeLabel }}</span>
+                  <span class="text-black/20 dark:text-white/20">•</span>
+                  <span>{{ currentLocationLabel }}</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <div class="text-[16px] text-[#1d1d1f] font-bold">08:24 WIB</div>
-              <p class="text-[12px] text-[#86868b]">Check-in Terverifikasi • WFO Kantor Pusat</p>
+
+            <!-- Elapsed Duration Mini Card -->
+            <div class="hidden sm:flex flex-col items-end px-3 py-1.5 rounded-xl bg-white/80 dark:bg-black/30 border border-black/[0.05] dark:border-white/[0.08] shadow-xs shrink-0">
+              <span class="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider">Durasi Kerja</span>
+              <span class="text-[13px] font-bold text-[#0071e3] dark:text-[#38bdf8]">{{ currentDurationElapsed }}</span>
             </div>
           </div>
 
-          <div class="w-full bg-black/[0.06] rounded-full h-1.5 overflow-hidden">
-            <div class="bg-[#0071e3] h-1.5 rounded-full" style="width: 60%;"></div>
-          </div>
+          <!-- Workday Progress Track & Timeline Bar -->
+          <div class="flex flex-col gap-2 pt-2 border-t border-black/[0.05] dark:border-white/[0.06]">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-[#86868b] dark:text-[#a1a1a6] font-medium flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[14px] text-[#0071e3]">timelapse</span>
+                <span>Progres Jam Kerja Hari Ini</span>
+              </span>
+              <span class="font-semibold text-[#1d1d1f] dark:text-white">
+                {{ workdayProgressPercent }}% <span class="font-normal text-[#86868b]">menuju jam pulang</span>
+              </span>
+            </div>
 
-          <div class="flex justify-between items-center text-[#86868b] text-[11px]">
-            <span>Masuk: {{ attendanceState.checkInTime ? `${attendanceState.checkInTime} WIB` : `${targetJamMasuk} WIB` }}</span>
-            <span class="text-[#0071e3] font-semibold">Target Jam Pulang: {{ targetJamPulang }} WIB</span>
+            <!-- Progress Bar -->
+            <div class="w-full bg-black/[0.06] dark:bg-white/[0.08] rounded-full h-2 overflow-hidden p-0.5">
+              <div
+                class="h-full rounded-full bg-gradient-to-r from-[#0071e3] to-[#34c759] transition-all duration-700 ease-out shadow-xs"
+                :style="{ width: `${workdayProgressPercent}%` }"
+              ></div>
+            </div>
+
+            <!-- Timeline Boundary Endpoints -->
+            <div class="flex items-center justify-between text-[11px] text-[#86868b] dark:text-[#a1a1a6] font-medium">
+              <div class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#0071e3]"></span>
+                <span>Masuk: <strong class="text-[#1d1d1f] dark:text-white font-semibold">{{ effectiveCheckInTime }} WIB</strong></span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#34c759]"></span>
+                <span>Target Pulang: <strong class="text-[#0071e3] dark:text-[#38bdf8] font-semibold">{{ targetJamPulang }} WIB</strong></span>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Right Sub-panel: Quick Checkout & Secondary Actions -->
-        <div class="lg:col-span-3 flex flex-col justify-center gap-2">
-          <button
-            @click="handleCheckOut"
-            :disabled="attendanceState.hasCheckedOut"
-            :class="attendanceState.hasCheckedOut ? 'bg-black/[0.05] text-[#86868b] cursor-default' : 'bg-[#ff9500] text-white hover:bg-[#e08500] shadow-[0_2px_8px_rgba(255,149,0,0.3)] apple-press cursor-pointer'"
-            class="w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-[13px] font-semibold transition-all"
-            type="button"
-          >
-            <span class="material-symbols-outlined text-[19px]">logout</span>
-            <span>
-              {{ attendanceState.hasCheckedOut ? 'Sudah Check-out Sore' : 'Check-out Sore' }}
+        <div class="lg:col-span-3 flex flex-col justify-between gap-3 p-5 rounded-2xl bg-[#f5f5f7]/70 dark:bg-white/[0.04] border border-black/[0.04] dark:border-white/[0.06]">
+          <div class="flex flex-col gap-2">
+            <span class="text-[11px] uppercase tracking-wider text-[#86868b] dark:text-[#a1a1a6] font-bold">
+              Kepulangan &amp; Validasi
             </span>
-          </button>
+
+            <button
+              @click="handleCheckOut"
+              :disabled="attendanceState.hasCheckedOut"
+              :class="attendanceState.hasCheckedOut ? 'bg-black/[0.05] dark:bg-white/[0.08] text-[#86868b] cursor-default' : 'bg-[#ff9500] text-white hover:bg-[#e08500] shadow-[0_2px_8px_rgba(255,149,0,0.3)] apple-press cursor-pointer'"
+              class="w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-[13px] font-semibold transition-all"
+              type="button"
+            >
+              <span class="material-symbols-outlined text-[19px]">logout</span>
+              <span>
+                {{ attendanceState.hasCheckedOut ? 'Sudah Check-out Sore' : 'Check-out Sore' }}
+              </span>
+            </button>
+          </div>
 
           <!-- Alert Callout if Checked Out but Journal is not filled -->
           <div
@@ -141,12 +224,13 @@
             </button>
           </div>
 
-          <div v-else class="text-center text-[11px] text-[#86868b]">
-            {{ attendanceState.hasCheckedOut ? 'Presensi & jurnal hari ini tuntas' : `Aktif otomatis pada ${targetJamPulang} WIB` }}
+          <div v-else class="text-center text-[11px] text-[#86868b] dark:text-[#a1a1a6]">
+            {{ attendanceState.hasCheckedOut ? 'Presensi &amp; jurnal hari ini tuntas' : `Aktif otomatis pada ${targetJamPulang} WIB` }}
           </div>
+
           <button
             @click="isGeofenceModalOpen = true"
-            class="w-full py-1.5 text-[#0071e3] hover:underline text-center text-[12px] font-medium flex items-center justify-center gap-1 transition-all apple-press cursor-pointer"
+            class="w-full py-2 px-3 rounded-xl bg-white dark:bg-black/20 text-[#0071e3] hover:bg-black/[0.03] border border-black/[0.06] dark:border-white/[0.08] text-center text-[12px] font-semibold flex items-center justify-center gap-1.5 transition-all apple-press shadow-xs cursor-pointer"
             type="button"
           >
             <span class="material-symbols-outlined text-[16px]">pin_drop</span>
@@ -578,7 +662,8 @@ const {
   isTodayLogged,
   journalUrgency,
   effectiveMinutesSinceTapOut,
-  recordCheckOut
+  recordCheckOut,
+  authToken
 } = useAppStore()
 
 const currentTime = ref('09:14:02')
@@ -599,6 +684,69 @@ const targetJamPulang = ref('16:00')
 const targetJamMasuk = ref('07:30')
 const isHolidayToday = ref(false)
 const holidayNameToday = ref('')
+
+const effectiveCheckInTime = computed(() => {
+  return attendanceState.checkInTime || '08:24'
+})
+
+const currentWorkModeLabel = computed(() => {
+  if (attendanceState.workMode === 'wfh') return 'WFH Mandiri'
+  if (attendanceState.workMode === 'wfa') return 'WFA Fleksibel'
+  return 'WFO Kantor Pusat'
+})
+
+const currentLocationLabel = computed(() => 'Tech Hub Lt. 4')
+
+const currentSessionName = computed(() => {
+  try {
+    const hour = parseInt(currentTime.value.split(':')[0], 10)
+    if (hour < 11) return 'Sesi Pagi'
+    if (hour < 15) return 'Sesi Siang'
+    return 'Sesi Sore'
+  } catch (e) {
+    return 'Sesi Siang'
+  }
+})
+
+const currentDurationElapsed = computed(() => {
+  if (attendanceState.hasCheckedOut && attendanceState.checkOutTime) {
+    const [inH, inM] = effectiveCheckInTime.value.split(':').map(Number)
+    const [outH, outM] = attendanceState.checkOutTime.split(':').map(Number)
+    const diffMin = Math.max(0, (outH * 60 + outM) - (inH * 60 + inM))
+    const h = Math.floor(diffMin / 60)
+    const m = diffMin % 60
+    return `${h} Jam${m > 0 ? ` ${m} Mnt` : ''}`
+  }
+  try {
+    const [inH, inM] = effectiveCheckInTime.value.split(':').map(Number)
+    const [nowH, nowM] = currentTime.value.split(':').map(Number)
+    const diffMin = (nowH * 60 + nowM) - (inH * 60 + inM)
+    if (diffMin <= 0 || isNaN(diffMin)) {
+      return '5.5 Jam'
+    }
+    const h = Math.floor(diffMin / 60)
+    const m = diffMin % 60
+    return `${h} Jam${m > 0 ? ` ${m} Mnt` : ''}`
+  } catch (e) {
+    return '5.5 Jam'
+  }
+})
+
+const workdayProgressPercent = computed(() => {
+  if (attendanceState.hasCheckedOut) return 100
+  try {
+    const [inH, inM] = effectiveCheckInTime.value.split(':').map(Number)
+    const [targetH, targetM] = targetJamPulang.value.split(':').map(Number)
+    const [nowH, nowM] = currentTime.value.split(':').map(Number)
+    const totalTargetMin = (targetH * 60 + targetM) - (inH * 60 + inM)
+    const elapsedMin = (nowH * 60 + nowM) - (inH * 60 + inM)
+    if (totalTargetMin <= 0) return 65
+    if (elapsedMin <= 0) return 25
+    return Math.min(100, Math.max(15, Math.round((elapsedMin / totalTargetMin) * 100)))
+  } catch (e) {
+    return 65
+  }
+})
 
 let timer: any = null
 

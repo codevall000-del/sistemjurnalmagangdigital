@@ -95,7 +95,7 @@
           class="px-3 py-2 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-xs text-[#1d1d1f] font-medium transition cursor-pointer"
         >
           <option value="all">Semua Jurusan</option>
-          <option value="PPLG">PPLG / RPL</option>
+          <option value="RPL">RPL</option>
           <option value="Animasi">Animasi</option>
           <option value="DKV">DKV</option>
         </select>
@@ -146,9 +146,9 @@
                 <div class="flex items-center gap-1.5">
                   <span
                     class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase"
-                    :class="item.major === 'PPLG' ? 'bg-[#0071e3]/10 text-[#0071e3]' : (item.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
+                    :class="(item.major === 'RPL' || item.major === 'PPLG') ? 'bg-[#0071e3]/10 text-[#0071e3]' : (item.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
                   >
-                    {{ item.major }}
+                    {{ item.major === 'PPLG' ? 'RPL' : item.major }}
                   </span>
                   <span class="text-[11px] font-mono text-[#86868b] font-medium">{{ item.className }}</span>
                 </div>
@@ -354,14 +354,14 @@
                 <div>
                   <label class="block font-medium text-[#1d1d1f] mb-1">Konsentrasi Keahlian *</label>
                   <select v-model="formData.major" required class="w-full px-3 py-2 bg-white border border-black/[0.08] focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer">
-                    <option value="PPLG">PPLG / RPL</option>
+                    <option value="RPL">RPL</option>
                     <option value="Animasi">Animasi</option>
                     <option value="DKV">DKV</option>
                   </select>
                 </div>
                 <div>
                   <label class="block font-medium text-[#1d1d1f] mb-1">Kelas *</label>
-                  <input v-model="formData.className" type="text" required placeholder="XII PPLG 1" class="w-full px-3 py-2 bg-white border border-black/[0.08] focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition" />
+                  <input v-model="formData.className" type="text" required placeholder="XII RPL 1" class="w-full px-3 py-2 bg-white border border-black/[0.08] focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition" />
                 </div>
                 <div>
                   <label class="block font-medium text-[#1d1d1f] mb-1">No. WhatsApp *</label>
@@ -655,8 +655,8 @@ const formData = ref({
   idNumber: '',
   phone: '',
   email: '',
-  major: 'PPLG',
-  className: 'XII PPLG 1',
+  major: 'RPL',
+  className: 'XII RPL 1',
   companyId: 1 as number | null,
   newCompanyName: '',
   newCompanySector: '',
@@ -672,8 +672,8 @@ const formData = ref({
 
 // Data Siswa (6 Siswa SMKN 71 lengkap dengan jurusan dan tempat PKL)
 const studentsList = ref([
-  { id: 4, name: 'Budi Santoso', idNumber: '0061234567', major: 'PPLG', className: 'XII PPLG 1', email: 'siswa@gmail.com', phone: '0812-0000-0004', company: 'PT Telkom Digital Solusi', dudiMentor: 'Hendra Wijaya, S.Kom', teacherMentor: 'Dra. Nurul Hidayah, M.Pd', workMode: 'WFO', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
-  { id: 5, name: 'Siti Fauziah', idNumber: '0061234568', major: 'PPLG', className: 'XII PPLG 2', email: 'siti@gmail.com', phone: '0812-0000-0005', company: 'PT Telkom Digital Solusi', dudiMentor: 'Hendra Wijaya, S.Kom', teacherMentor: 'Dra. Nurul Hidayah, M.Pd', workMode: 'WFH', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
+  { id: 4, name: 'Budi Santoso', idNumber: '0061234567', major: 'RPL', className: 'XII RPL 1', email: 'siswa@gmail.com', phone: '0812-0000-0004', company: 'PT Telkom Digital Solusi', dudiMentor: 'Hendra Wijaya, S.Kom', teacherMentor: 'Dra. Nurul Hidayah, M.Pd', workMode: 'WFO', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
+  { id: 5, name: 'Siti Fauziah', idNumber: '0061234568', major: 'RPL', className: 'XII RPL 2', email: 'siti@gmail.com', phone: '0812-0000-0005', company: 'PT Telkom Digital Solusi', dudiMentor: 'Hendra Wijaya, S.Kom', teacherMentor: 'Dra. Nurul Hidayah, M.Pd', workMode: 'WFH', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
   { id: 6, name: 'Ahmad Danu', idNumber: '0061234569', major: 'Animasi', className: 'XII Animasi 1', email: 'danu@gmail.com', phone: '0812-0000-0006', company: 'Studio Animasi Kinetik Digital', dudiMentor: 'Raditya Pratama, S.Sn', teacherMentor: 'Dra. Nurul Hidayah, M.Pd', workMode: 'WFA', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150' },
   { id: 7, name: 'Putri Maharani', idNumber: '0061234570', major: 'Animasi', className: 'XII Animasi 2', email: 'putri@gmail.com', phone: '0812-0000-0007', company: 'Studio Animasi Kinetik Digital', dudiMentor: 'Raditya Pratama, S.Sn', teacherMentor: 'Dra. Nurul Hidayah, M.Pd', workMode: 'WFO', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150' },
   { id: 8, name: 'Rizky Pratama', idNumber: '0061234571', major: 'DKV', className: 'XII DKV 1', email: 'rizky@gmail.com', phone: '0812-0000-0008', company: 'Pixel Kreatif Visual Agency', dudiMentor: 'Maya Safitri, M.Ds', teacherMentor: 'Dra. Nurul Hidayah, M.Pd', workMode: 'WFO', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150' },
@@ -682,7 +682,7 @@ const studentsList = ref([
 
 // Data Tempat PKL / Industri
 const companiesList = ref([
-  { id: 1, name: 'PT Telkom Digital Solusi', icon: '💻', sector: 'Software House & Cloud (PPLG)', address: 'Gedung Telkom Landmark Lt. 14, Jakarta Selatan', quota: 6, placementsCount: 2, workModes: 'WFO, WFH', radius: 150 },
+  { id: 1, name: 'PT Telkom Digital Solusi', icon: '💻', sector: 'Software House & Cloud (RPL)', address: 'Gedung Telkom Landmark Lt. 14, Jakarta Selatan', quota: 6, placementsCount: 2, workModes: 'WFO, WFH', radius: 150 },
   { id: 2, name: 'Studio Animasi Kinetik Digital', icon: '🎬', sector: '3D Animation & CGI (Animasi)', address: 'Jl. Raden Saleh No. 18, Cikini, Jakarta Pusat', quota: 4, placementsCount: 2, workModes: 'WFO, WFH, WFA', radius: 200 },
   { id: 3, name: 'Pixel Kreatif Visual Agency', icon: '🎨', sector: 'Branding & UI/UX (DKV)', address: 'Jl. Pemuda No. 65, Rawamangun, Jakarta Timur', quota: 5, placementsCount: 2, workModes: 'WFO, WFA', radius: 150 },
 ])
@@ -697,7 +697,7 @@ const dudiList = ref([
 // Data Guru Pembimbing
 const guruList = ref([
   { id: 2, name: 'Dra. Nurul Hidayah, M.Pd', idNumber: '198502142010011002', email: 'guru@gmail.com', phone: '0812-0000-0002', extraInfo: 'Guru Kejuruan Utama SMKN 71', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150' },
-  { id: 12, name: 'Bambang Irawan, S.Kom', idNumber: '198803152012011003', email: 'bambang.guru@gmail.com', phone: '0812-0000-0012', extraInfo: 'Pembimbing PPLG & Game', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150' },
+  { id: 12, name: 'Bambang Irawan, S.Kom', idNumber: '198803152012011003', email: 'bambang.guru@gmail.com', phone: '0812-0000-0012', extraInfo: 'Pembimbing RPL & Game', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150' },
 ])
 
 const activeDisplayList = computed(() => {
@@ -705,7 +705,7 @@ const activeDisplayList = computed(() => {
   if (currentSubTab.value === 'siswa') {
     list = studentsList.value
     if (selectedMajorFilter.value !== 'all') {
-      list = list.filter(s => s.major === selectedMajorFilter.value)
+      list = list.filter(s => s.major === selectedMajorFilter.value || (selectedMajorFilter.value === 'RPL' && s.major === 'PPLG'))
     }
   } else if (currentSubTab.value === 'company') {
     list = companiesList.value
@@ -735,8 +735,8 @@ const openCreateModal = () => {
     idNumber: '',
     phone: '',
     email: '',
-    major: 'PPLG',
-    className: 'XII PPLG 1',
+    major: 'RPL',
+    className: 'XII RPL 1',
     companyId: 1,
     newCompanyName: '',
     newCompanySector: '',

@@ -1,11 +1,11 @@
 <template>
-  <div class="h-screen w-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] flex flex-col md:flex-row select-none font-body text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors duration-350">
+  <div class="h-screen w-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] flex flex-col md:flex-row select-none font-body text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]">
     <!-- 1. LEFT PANEL: FOTO GEDUNG SEKOLAH (ARTWORK DENGAN FADE TRANSISI HALUS) -->
-    <div class="hidden md:block w-full md:w-[50%] lg:w-[54%] h-full relative overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] transition-colors duration-350">
-      <!-- Masked Wrapper: Foto & Vignette menyatu halus 100% sempurna ke panel kanan dari atas sampai bawah -->
+    <div class="hidden md:block w-full md:w-[50%] lg:w-[54%] h-full relative overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] transition-colors duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]">
+      <!-- Masked Wrapper: Foto & Vignette menyatu halus 100% sempurna ke panel kanan tanpa garis pembatas kaku -->
       <div
         class="w-full h-full relative overflow-hidden"
-        style="-webkit-mask-image: linear-gradient(to right, black 0%, black 50%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.45) 82%, rgba(0,0,0,0.12) 93%, transparent 100%); mask-image: linear-gradient(to right, black 0%, black 50%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.45) 82%, rgba(0,0,0,0.12) 93%, transparent 100%);"
+        style="-webkit-mask-image: linear-gradient(to right, black 0%, black 45%, rgba(0,0,0,0.85) 65%, rgba(0,0,0,0.45) 80%, rgba(0,0,0,0.12) 92%, transparent 100%); mask-image: linear-gradient(to right, black 0%, black 45%, rgba(0,0,0,0.85) 65%, rgba(0,0,0,0.45) 80%, rgba(0,0,0,0.12) 92%, transparent 100%);"
       >
         <!-- Foto Gedung Sekolah Asli -->
         <img
@@ -14,7 +14,7 @@
           class="w-full h-full object-cover object-center transform scale-[1.01]"
         />
 
-        <!-- Subtle Dark Bottom Vignette (Hanya di area kiri bawah teks caption, otomatis memudar halus ke kanan) -->
+        <!-- Subtle Dark Bottom Vignette (Hanya di area kiri bawah untuk teks caption, otomatis memudar halus ke kanan) -->
         <div class="absolute bottom-0 left-0 w-full h-80 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none"></div>
       </div>
 
@@ -40,30 +40,40 @@
     </div>
 
     <!-- 2. RIGHT PANEL: CLEAN LOGIN CARD -->
-    <div class="w-full md:w-[50%] lg:w-[46%] h-full flex flex-col justify-between items-center p-6 sm:p-8 lg:p-12 overflow-y-auto bg-[#f5f5f7] dark:bg-[#121214] z-20 relative transition-colors duration-350">
+    <div class="w-full md:w-[50%] lg:w-[46%] h-full flex flex-col justify-between items-center p-6 sm:p-8 lg:p-12 overflow-y-auto bg-[#f5f5f7] dark:bg-[#121214] z-20 relative transition-colors duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]">
       <!-- Top Row with Apple Segmented Theme Switcher -->
       <div class="w-full max-w-[400px] flex items-center justify-between pb-2">
         <span class="text-[11px] font-semibold text-[#86868b] dark:text-[#98989f]">
           EduAccess v2.4
         </span>
 
-        <!-- Segmented 2-Pill Switch (☀️ Terang | 🌙 Gelap) -->
-        <div class="p-0.5 rounded-full bg-black/[0.05] dark:bg-white/[0.1] border-0 dark:border dark:border-white/[0.08] flex items-center gap-0.5">
+        <!-- Segmented 2-Pill Switch (☀️ Terang | 🌙 Gelap) with Smooth Sliding Apple Pill Animation -->
+        <div class="relative p-1 rounded-full bg-black/[0.06] dark:bg-white/[0.1] border border-black/[0.05] dark:border-white/[0.08] flex items-center select-none w-[164px] h-[34px] overflow-hidden">
+          <!-- Animated Sliding Background Pill Indicator -->
+          <div
+            aria-hidden="true"
+            class="theme-pill-indicator absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-white dark:bg-[#2c2c2e] shadow-[0_2px_8px_rgba(0,0,0,0.14)] dark:shadow-[0_2px_10px_rgba(0,0,0,0.5)] border border-black/[0.04] dark:border-white/[0.08] pointer-events-none"
+            :style="{ transform: isDarkMode ? 'translateX(100%)' : 'translateX(0%)' }"
+          ></div>
+
+          <!-- ☀️ Terang Button -->
           <button
             type="button"
             @click="applyTheme('light')"
-            class="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] transition-all apple-press cursor-pointer"
-            :class="!isDarkMode ? 'bg-white text-[#1d1d1f] shadow-xs font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white font-medium'"
+            class="relative z-10 w-1/2 h-full flex items-center justify-center gap-1.5 rounded-full text-[11px] transition-colors duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] cursor-pointer apple-press"
+            :class="!isDarkMode ? 'text-[#1d1d1f] font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:text-[#98989f] dark:hover:text-white font-medium'"
             title="Aktifkan Mode Terang (Light Canvas)"
           >
             <span class="material-symbols-outlined text-[14px] text-[#ff9500]">light_mode</span>
             <span>Terang</span>
           </button>
+
+          <!-- 🌙 Gelap Button -->
           <button
             type="button"
             @click="applyTheme('dark')"
-            class="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] transition-all apple-press cursor-pointer"
-            :class="isDarkMode ? 'bg-[#2c2c2e] text-white shadow-xs font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white font-medium'"
+            class="relative z-10 w-1/2 h-full flex items-center justify-center gap-1.5 rounded-full text-[11px] transition-colors duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] cursor-pointer apple-press"
+            :class="isDarkMode ? 'text-white font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:text-[#98989f] dark:hover:text-white font-medium'"
             title="Aktifkan Mode Gelap (Apple Obsidian)"
           >
             <span class="material-symbols-outlined text-[14px] text-[#0a84ff]">dark_mode</span>
@@ -73,7 +83,7 @@
       </div>
 
       <!-- MAIN CARD LOGIN -->
-      <section class="my-auto w-full max-w-[400px] bg-white dark:bg-[#1c1c1e] rounded-3xl border-0 dark:border dark:border-white/[0.1] p-7 sm:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.6)] relative transition-all duration-350">
+      <section class="my-auto w-full max-w-[400px] bg-white dark:bg-[#1c1c1e] rounded-3xl border border-black/[0.06] dark:border-white/[0.1] p-7 sm:p-8 shadow-[0_10px_35px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.6)] relative transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]">
         <!-- Brand Header (Bersih, Fokus & Profesional) -->
         <div class="flex flex-col items-center text-center mb-6">
           <div class="w-14 h-14 rounded-2xl bg-[#0071e3]/10 dark:bg-[#0071e3]/20 border-0 dark:border dark:border-[#0071e3]/30 flex items-center justify-center p-2 mb-3 shadow-xs">
@@ -98,8 +108,8 @@
                 type="email"
                 autocomplete="username"
                 required
-                placeholder="nama@smkn71.sch.id"
-                class="w-full py-2.5 px-3.5 bg-[#f5f5f7] dark:bg-[#26262a] border-0 dark:border dark:border-white/[0.12] rounded-xl text-[13px] text-[#1d1d1f] dark:text-[#f5f5f7] placeholder-[#86868b] dark:placeholder-[#71717a] focus:outline-none focus:bg-white dark:focus:bg-[#2c2c30] focus:ring-2 focus:ring-[#0071e3]/25 transition-all shadow-none"
+                placeholder="nama@gmail.com"
+                class="w-full py-2.5 px-3.5 bg-[#f5f5f7] dark:bg-[#26262a] border border-black/[0.08] dark:border-white/[0.12] rounded-xl text-[13px] text-[#1d1d1f] dark:text-[#f5f5f7] placeholder-[#86868b] dark:placeholder-[#71717a] focus:outline-none focus:bg-white dark:focus:bg-[#2c2c30] focus:ring-2 focus:ring-[#0071e3]/25 transition-all shadow-none"
               />
             </div>
           </div>
@@ -123,7 +133,7 @@
                 autocomplete="current-password"
                 required
                 placeholder="••••••••"
-                class="w-full py-2.5 px-3.5 pr-10 bg-[#f5f5f7] dark:bg-[#26262a] border-0 dark:border dark:border-white/[0.12] rounded-xl text-[13px] text-[#1d1d1f] dark:text-[#f5f5f7] placeholder-[#86868b] dark:placeholder-[#71717a] focus:outline-none focus:bg-white dark:focus:bg-[#2c2c30] focus:ring-2 focus:ring-[#0071e3]/25 transition-all shadow-none"
+                class="w-full py-2.5 px-3.5 pr-10 bg-[#f5f5f7] dark:bg-[#26262a] border border-black/[0.08] dark:border-white/[0.12] rounded-xl text-[13px] text-[#1d1d1f] dark:text-[#f5f5f7] placeholder-[#86868b] dark:placeholder-[#71717a] focus:outline-none focus:bg-white dark:focus:bg-[#2c2c30] focus:ring-2 focus:ring-[#0071e3]/25 transition-all shadow-none"
               />
               <button
                 type="button"
@@ -167,7 +177,7 @@
             <button
               type="button"
               @click="quickLogin('siswa')"
-              class="py-2 px-1 rounded-xl bg-black/[0.03] hover:bg-black/[0.06] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border-0 dark:border dark:border-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7] font-medium transition-all text-center apple-press cursor-pointer flex flex-col items-center gap-0.5"
+              class="py-2 px-1 rounded-xl bg-black/[0.03] hover:bg-black/[0.06] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7] font-medium transition-all text-center apple-press cursor-pointer flex flex-col items-center gap-0.5"
               title="Masuk sebagai Siswa (Budi Santoso - siswa@gmail.com)"
             >
               <span class="text-[14px]">🎓</span>
@@ -176,7 +186,7 @@
             <button
               type="button"
               @click="quickLogin('mentor')"
-              class="py-2 px-1 rounded-xl bg-black/[0.03] hover:bg-black/[0.06] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border-0 dark:border dark:border-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7] font-medium transition-all text-center apple-press cursor-pointer flex flex-col items-center gap-0.5"
+              class="py-2 px-1 rounded-xl bg-black/[0.03] hover:bg-black/[0.06] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7] font-medium transition-all text-center apple-press cursor-pointer flex flex-col items-center gap-0.5"
               title="Masuk sebagai Pembimbing Lapangan (Hendra Wijaya - mentor@gmail.com)"
             >
               <span class="text-[14px]">🏢</span>
@@ -185,7 +195,7 @@
             <button
               type="button"
               @click="quickLogin('guru')"
-              class="py-2 px-1 rounded-xl bg-black/[0.03] hover:bg-black/[0.06] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border-0 dark:border dark:border-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7] font-medium transition-all text-center apple-press cursor-pointer flex flex-col items-center gap-0.5"
+              class="py-2 px-1 rounded-xl bg-black/[0.03] hover:bg-black/[0.06] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7] font-medium transition-all text-center apple-press cursor-pointer flex flex-col items-center gap-0.5"
               title="Masuk sebagai Guru Pembimbing (Dra. Nurul Hidayah - guru@gmail.com)"
             >
               <span class="text-[14px]">👩‍🏫</span>
@@ -194,7 +204,7 @@
             <button
               type="button"
               @click="quickLogin('admin')"
-              class="py-2 px-1 rounded-xl bg-black/[0.03] hover:bg-black/[0.06] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border-0 dark:border dark:border-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7] font-medium transition-all text-center apple-press cursor-pointer flex flex-col items-center gap-0.5"
+              class="py-2 px-1 rounded-xl bg-black/[0.03] hover:bg-black/[0.06] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7] font-medium transition-all text-center apple-press cursor-pointer flex flex-col items-center gap-0.5"
               title="Masuk sebagai Admin Kaprog (Ir. Bambang Hermanto - admin@gmail.com)"
             >
               <span class="text-[14px]">⚡</span>

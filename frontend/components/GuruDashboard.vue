@@ -43,7 +43,7 @@
           <span class="text-base">🏢</span>
         </div>
         <div class="text-3xl font-bold text-[#0071e3] tracking-tight mt-2">3 <span class="text-sm font-normal text-[#86868b]">Perusahaan</span></div>
-        <span class="text-[11px] text-[#86868b] font-medium block mt-1">PPLG, Animasi, DKV</span>
+        <span class="text-[11px] text-[#86868b] font-medium block mt-1">RPL, Animasi, DKV</span>
       </div>
 
       <div class="bg-white border border-black/[0.05] rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] apple-press transition-all">
@@ -164,9 +164,9 @@
                   <h4 class="text-base font-bold text-[#1d1d1f]">{{ company.name }}</h4>
                   <span
                     class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider"
-                    :class="company.major === 'PPLG / RPL' ? 'bg-[#0071e3]/10 text-[#0071e3]' : (company.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
+                    :class="(company.major === 'RPL' || company.major === 'PPLG / RPL') ? 'bg-[#0071e3]/10 text-[#0071e3]' : (company.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
                   >
-                    {{ company.major }}
+                    {{ company.major === 'PPLG / RPL' ? 'RPL' : company.major }}
                   </span>
                   <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/[0.04] text-[#86868b]">
                     Mode: {{ company.workModes }}
@@ -336,7 +336,7 @@ const companies = ref([
     name: 'PT Telkom Digital Solusi',
     shortName: 'PT Telkom (RPL)',
     icon: '💻',
-    major: 'PPLG / RPL',
+    major: 'RPL',
     badgeClass: 'bg-blue-50 text-blue-800 border border-blue-200',
     sector: 'Software House & Cloud Infrastructure',
     address: 'Telkom Landmark Lt. 14, Jakarta Selatan',
@@ -350,7 +350,7 @@ const companies = ref([
         id: 4,
         name: 'Budi Santoso',
         nisn: '0061234567',
-        className: 'XII PPLG 1',
+        className: 'XII RPL 1',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
         phoneClean: '6281200000004',
         status: 'Aktif',
@@ -364,7 +364,7 @@ const companies = ref([
         id: 5,
         name: 'Siti Fauziah',
         nisn: '0061234568',
-        className: 'XII PPLG 2',
+        className: 'XII RPL 2',
         avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
         phoneClean: '6281200000005',
         status: 'Aktif',

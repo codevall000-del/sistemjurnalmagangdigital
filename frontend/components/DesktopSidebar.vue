@@ -1,12 +1,15 @@
 <template>
-  <aside class="fixed left-0 top-0 h-full w-[260px] bg-[#fbfbfd]/90 backdrop-blur-2xl border-r border-black/[0.07] z-50 flex flex-col justify-between select-none shadow-[1px_0_12px_rgba(0,0,0,0.02)]">
+  <aside
+    :class="isSidebarCollapsed ? '-translate-x-full' : 'translate-x-0'"
+    class="fixed left-0 top-0 h-full w-[260px] bg-[#fbfbfd]/90 dark:bg-[#18181b]/95 backdrop-blur-2xl border-r border-black/[0.07] dark:border-white/[0.08] z-50 flex flex-col justify-between select-none shadow-[1px_0_12px_rgba(0,0,0,0.02)] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+  >
     <!-- Top Section: macOS Window Controls & Header -->
     <div class="flex flex-col">
       <!-- Brand Header -->
-      <div class="py-3.5 px-4 border-b border-black/[0.05]">
+      <div class="py-3.5 px-4 border-b border-black/[0.05] dark:border-white/[0.08]">
         <!-- App Brand -->
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] border border-black/[0.06] flex items-center justify-center p-1 shrink-0">
+          <div class="w-9 h-9 rounded-xl bg-white dark:bg-[#242427] shadow-[0_2px_8px_rgba(0,0,0,0.06)] border border-black/[0.06] dark:border-white/[0.1] flex items-center justify-center p-1 shrink-0">
             <img
               src="/images/logo-smkn71.png"
               alt="Logo SMKN 71"
@@ -14,11 +17,11 @@
             />
           </div>
           <div class="flex flex-col min-w-0">
-            <span class="text-[14px] font-bold text-[#1d1d1f] tracking-tight truncate font-headline">
+            <span class="text-[14px] font-bold text-[#1d1d1f] dark:text-[#f5f5f7] tracking-tight truncate font-headline">
               EduAccess
             </span>
             <div class="flex items-center gap-1.5 mt-0.5">
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#0071e3]/10 text-[#0071e3] font-semibold inline-block truncate">
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#0071e3]/10 dark:bg-[#0071e3]/20 text-[#0071e3] dark:text-[#388bfd] font-semibold inline-block truncate">
                 Jurnal Magang • SMKN 71
               </span>
             </div>
@@ -26,20 +29,20 @@
         </div>
 
         <!-- Quick Access Role Switcher -->
-        <div class="mt-3 pt-2.5 border-t border-black/[0.06]">
-          <div class="flex items-center justify-between text-[11px] text-[#86868b] mb-1.5 font-medium px-0.5">
-            <span class="flex items-center gap-1 font-semibold text-[#1d1d1f]">
-              <span class="material-symbols-outlined text-[13px] text-[#0071e3]">swap_horiz</span>
+        <div class="mt-3 pt-2.5 border-t border-black/[0.06] dark:border-white/[0.08]">
+          <div class="flex items-center justify-between text-[11px] text-[#86868b] dark:text-[#98989f] mb-1.5 font-medium px-0.5">
+            <span class="flex items-center gap-1 font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">
+              <span class="material-symbols-outlined text-[13px] text-[#0071e3] dark:text-[#388bfd]">swap_horiz</span>
               <span>Quick Access:</span>
             </span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-[#0071e3]/10 text-[#0071e3] font-mono font-bold uppercase tracking-wider">
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-[#0071e3]/10 dark:bg-[#0071e3]/20 text-[#0071e3] dark:text-[#388bfd] font-mono font-bold uppercase tracking-wider">
               {{ currentRole === 'mentor' || currentRole === 'dudi' ? 'MENTOR' : currentRole }}
             </span>
           </div>
-          <div class="grid grid-cols-4 gap-1 p-0.5 bg-black/[0.03] rounded-xl border border-black/[0.05] text-[10px] font-semibold text-center">
+          <div class="grid grid-cols-4 gap-1 p-0.5 bg-black/[0.03] dark:bg-white/[0.06] rounded-xl border border-black/[0.05] dark:border-white/[0.08] text-[10px] font-semibold text-center">
             <button
               @click="switchRole('siswa')"
-              :class="currentRole === 'siswa' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#1d1d1f]/70 hover:text-[#1d1d1f] hover:bg-black/[0.04]'"
+              :class="currentRole === 'siswa' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#48484a] dark:text-[#98989f] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'"
               class="py-1 px-1 rounded-lg transition-all apple-press cursor-pointer"
               title="Akses Cepat: Siswa (Budi Santoso)"
             >
@@ -47,7 +50,7 @@
             </button>
             <button
               @click="switchRole('mentor')"
-              :class="(currentRole === 'dudi' || currentRole === 'mentor') ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#1d1d1f]/70 hover:text-[#1d1d1f] hover:bg-black/[0.04]'"
+              :class="(currentRole === 'dudi' || currentRole === 'mentor') ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#48484a] dark:text-[#98989f] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'"
               class="py-1 px-1 rounded-lg transition-all apple-press cursor-pointer"
               title="Akses Cepat: Pembimbing Lapangan (Hendra Wijaya)"
             >
@@ -55,7 +58,7 @@
             </button>
             <button
               @click="switchRole('guru')"
-              :class="currentRole === 'guru' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#1d1d1f]/70 hover:text-[#1d1d1f] hover:bg-black/[0.04]'"
+              :class="currentRole === 'guru' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#48484a] dark:text-[#98989f] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'"
               class="py-1 px-1 rounded-lg transition-all apple-press cursor-pointer"
               title="Akses Cepat: Guru (Dra. Nurul Hidayah)"
             >
@@ -63,7 +66,7 @@
             </button>
             <button
               @click="switchRole('admin')"
-              :class="currentRole === 'admin' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#1d1d1f]/70 hover:text-[#1d1d1f] hover:bg-black/[0.04]'"
+              :class="currentRole === 'admin' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#48484a] dark:text-[#98989f] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'"
               class="py-1 px-1 rounded-lg transition-all apple-press cursor-pointer"
               title="Akses Cepat: Admin (Ir. Bambang Hermanto)"
             >
@@ -78,13 +81,13 @@
         <!-- 1. MODUL SISWA -->
         <template v-if="currentRole === 'siswa'">
           <div class="px-2.5 pt-2 pb-1">
-            <span class="text-[10px] text-[#86868b] uppercase tracking-wider font-semibold">Portal Siswa</span>
+            <span class="text-[10px] text-[#86868b] dark:text-[#98989f] uppercase tracking-wider font-semibold">Portal Siswa</span>
           </div>
 
           <a
             href="#"
             @click.prevent="activeMenu = 'dashboard'"
-            :class="activeMenu === 'dashboard' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'dashboard' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">space_dashboard</span>
@@ -94,7 +97,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'logbook'"
-            :class="activeMenu === 'logbook' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'logbook' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <div class="flex items-center gap-2.5 truncate">
@@ -122,7 +125,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'presensi'"
-            :class="activeMenu === 'presensi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'presensi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">event_available</span>
@@ -132,7 +135,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'penempatan'"
-            :class="activeMenu === 'penempatan' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'penempatan' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">supervised_user_circle</span>
@@ -143,13 +146,13 @@
         <!-- 2. MODUL PEMBIMBING LAPANGAN (INSTANSI / PERUSAHAAN) -->
         <template v-else-if="currentRole === 'dudi' || currentRole === 'mentor'">
           <div class="px-2.5 pt-2 pb-1">
-            <span class="text-[10px] text-[#86868b] uppercase tracking-wider font-semibold">Pembimbing Lapangan</span>
+            <span class="text-[10px] text-[#86868b] dark:text-[#98989f] uppercase tracking-wider font-semibold">Pembimbing Lapangan</span>
           </div>
 
           <a
             href="#"
             @click.prevent="activeMenu = 'dashboard_dudi'"
-            :class="activeMenu === 'dashboard_dudi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="(activeMenu === 'dashboard_dudi' || activeMenu === 'dashboard_mentor') ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">storefront</span>
@@ -159,7 +162,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'validasi_jurnal'"
-            :class="activeMenu === 'validasi_jurnal' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'validasi_jurnal' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <div class="flex items-center gap-2.5 truncate">
@@ -172,7 +175,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'presensi_siswa'"
-            :class="activeMenu === 'presensi_siswa' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'presensi_siswa' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">group</span>
@@ -182,7 +185,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'evaluasi'"
-            :class="activeMenu === 'evaluasi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'evaluasi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">workspace_premium</span>
@@ -193,13 +196,13 @@
         <!-- 3. MODUL GURU PEMBIMBING -->
         <template v-else-if="currentRole === 'guru'">
           <div class="px-2.5 pt-2 pb-1">
-            <span class="text-[10px] text-[#86868b] uppercase tracking-wider font-semibold">Guru Pembimbing</span>
+            <span class="text-[10px] text-[#86868b] dark:text-[#98989f] uppercase tracking-wider font-semibold">Guru Pembimbing</span>
           </div>
 
           <a
             href="#"
             @click.prevent="activeMenu = 'dashboard_guru'"
-            :class="activeMenu === 'dashboard_guru' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'dashboard_guru' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">insights</span>
@@ -209,7 +212,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'monitoring'"
-            :class="activeMenu === 'monitoring' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'monitoring' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">history_edu</span>
@@ -219,7 +222,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'manajemen_nilai'"
-            :class="activeMenu === 'manajemen_nilai' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'manajemen_nilai' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">calculate</span>
@@ -230,13 +233,13 @@
         <!-- 4. MODUL ADMIN / KAPROG -->
         <template v-else-if="currentRole === 'admin'">
           <div class="px-2.5 pt-2 pb-1">
-            <span class="text-[10px] text-[#86868b] uppercase tracking-wider font-semibold">Administrasi PKL</span>
+            <span class="text-[10px] text-[#86868b] dark:text-[#98989f] uppercase tracking-wider font-semibold">Administrasi PKL</span>
           </div>
 
           <a
             href="#"
             @click.prevent="activeMenu = 'dashboard_admin'"
-            :class="activeMenu === 'dashboard_admin' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'dashboard_admin' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">tune</span>
@@ -246,7 +249,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'data_master_siswa'"
-            :class="['data_master_siswa', 'data_master_dudi', 'data_master_guru'].includes(activeMenu) ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="['data_master_siswa', 'data_master_dudi', 'data_master_guru'].includes(activeMenu) ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">folder_shared</span>
@@ -256,7 +259,7 @@
           <a
             href="#"
             @click.prevent="activeMenu = 'plotting'"
-            :class="activeMenu === 'plotting' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'plotting' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">hub</span>
@@ -265,8 +268,18 @@
 
           <a
             href="#"
+            @click.prevent="activeMenu = 'diagram_relasi'"
+            :class="activeMenu === 'diagram_relasi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
+            class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
+          >
+            <span class="material-symbols-outlined text-[19px]">account_tree</span>
+            <span class="truncate">Diagram Relasi PKL</span>
+          </a>
+
+          <a
+            href="#"
             @click.prevent="activeMenu = 'laporan'"
-            :class="activeMenu === 'laporan' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#1d1d1f]/80 hover:bg-black/[0.04] hover:text-[#1d1d1f]'"
+            :class="activeMenu === 'laporan' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">print</span>
@@ -277,26 +290,26 @@
     </div>
 
     <!-- Apple macOS Bottom Section: Profile & System Info -->
-    <div class="flex flex-col p-3 border-t border-black/[0.05] bg-white/50 backdrop-blur-md gap-2">
+    <div class="flex flex-col p-3 border-t border-black/[0.05] dark:border-white/[0.08] bg-white/50 dark:bg-[#18181b]/95 backdrop-blur-md gap-2">
       <!-- Affiliation Card for Siswa -->
       <div
         v-if="currentRole === 'siswa'"
         @click="openIdCard"
-        class="bg-white/80 dark:bg-[#242427] rounded-xl p-2.5 border border-black/[0.05] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.03)] cursor-pointer apple-press hover:border-[#0071e3]/30 transition-all group"
+        class="bg-white/80 dark:bg-[#242427] rounded-xl p-2.5 border border-black/[0.05] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.03)] cursor-pointer apple-press hover:border-[#0071e3]/30 dark:hover:border-[#0071e3]/50 transition-all group"
         title="Klik untuk membuka Kartu Tanda Peserta PKL Digital"
       >
-        <div class="flex items-center justify-between text-[#0071e3] mb-0.5">
+        <div class="flex items-center justify-between text-[#0071e3] dark:text-[#388bfd] mb-0.5">
           <div class="flex items-center gap-1.5 min-w-0">
             <span class="material-symbols-outlined text-[16px]">domain</span>
             <span class="text-[12px] font-semibold truncate">{{ currentUser.company_name || 'PT Telkom Digital Solusi' }}</span>
           </div>
-          <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#0071e3]/10 text-[#0071e3] font-bold">NISN</span>
+          <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#0071e3]/10 dark:bg-[#0071e3]/20 text-[#0071e3] dark:text-[#388bfd] font-bold">NISN</span>
         </div>
         <div class="flex items-center justify-between text-[11px] text-[#86868b] dark:text-[#98989f]">
           <span class="font-mono">NISN: {{ currentUser.nisn_nip || '0061234567' }}</span>
           <span class="text-[10px] font-medium text-[#1d1d1f] dark:text-[#f5f5f7] flex items-center gap-1">
-            <span>{{ currentUser.class_name || 'XII PPLG 1' }}</span>
-            <span class="material-symbols-outlined text-[13px] text-[#86868b] group-hover:text-[#0071e3] transition-colors" title="Kartu Tanda Siswa PKL">badge</span>
+            <span>{{ currentUser.class_name || 'XII RPL 1' }}</span>
+            <span class="material-symbols-outlined text-[13px] text-[#86868b] dark:text-[#98989f] group-hover:text-[#0071e3] dark:group-hover:text-[#388bfd] transition-colors" title="Kartu Tanda Siswa PKL">badge</span>
           </span>
         </div>
       </div>
@@ -305,7 +318,7 @@
       <div
         v-else
         @click="openIdCard"
-        class="p-2 rounded-xl bg-white/80 dark:bg-[#242427] border border-black/[0.05] dark:border-white/[0.08] flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.03)] cursor-pointer apple-press hover:border-[#0071e3]/30 transition-all group"
+        class="p-2 rounded-xl bg-white/80 dark:bg-[#242427] border border-black/[0.05] dark:border-white/[0.08] flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.03)] cursor-pointer apple-press hover:border-[#0071e3]/30 dark:hover:border-[#0071e3]/50 transition-all group"
         title="Klik untuk membuka Kartu Identitas Digital"
       >
         <div class="flex items-center gap-2 min-w-0">
@@ -313,7 +326,7 @@
             <span class="material-symbols-outlined text-[16px]">person</span>
           </div>
           <div class="flex flex-col min-w-0">
-            <span class="text-[12px] font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] truncate group-hover:text-[#0071e3] transition-colors">
+            <span class="text-[12px] font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] truncate group-hover:text-[#0071e3] dark:group-hover:text-[#388bfd] transition-colors">
               {{ currentUser.name }}
             </span>
             <span class="text-[10px] text-[#86868b] dark:text-[#98989f] truncate font-mono">
@@ -321,31 +334,14 @@
             </span>
           </div>
         </div>
-        <span class="material-symbols-outlined text-[16px] text-[#86868b] dark:text-[#98989f] group-hover:text-[#0071e3] transition-colors">badge</span>
+        <span class="material-symbols-outlined text-[16px] text-[#86868b] dark:text-[#98989f] group-hover:text-[#0071e3] dark:group-hover:text-[#388bfd] transition-colors">badge</span>
       </div>
 
-      <!-- macOS Quick Links: Tampilan, Pengaturan, Bantuan -->
+      <!-- macOS Quick Links: Pengaturan, Bantuan -->
       <div class="flex flex-col space-y-0.5">
         <button
-          @click="toggleTheme"
-          class="flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[#86868b] hover:bg-black/[0.04] hover:text-[#1d1d1f] dark:hover:text-white transition-all text-left apple-press cursor-pointer"
-          type="button"
-          :title="isDarkMode ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap'"
-        >
-          <div class="flex items-center gap-2.5">
-            <span class="material-symbols-outlined text-[17px] text-[#0071e3]">
-              {{ isDarkMode ? 'light_mode' : 'dark_mode' }}
-            </span>
-            <span class="text-[12px] font-medium">Tampilan</span>
-          </div>
-          <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.08] text-[#1d1d1f] dark:text-[#f5f5f7]">
-            {{ isDarkMode ? 'Gelap' : 'Terang' }}
-          </span>
-        </button>
-
-        <button
           @click="openSettings"
-          class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-[#86868b] hover:bg-black/[0.04] hover:text-[#1d1d1f] dark:hover:text-white transition-all text-left apple-press cursor-pointer"
+          class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-[#86868b] dark:text-[#98989f] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-all text-left apple-press cursor-pointer"
           type="button"
         >
           <span class="material-symbols-outlined text-[17px]">settings</span>
@@ -354,7 +350,7 @@
 
         <button
           @click="openHelp"
-          class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-[#86868b] hover:bg-black/[0.04] hover:text-[#1d1d1f] dark:hover:text-white transition-all text-left apple-press cursor-pointer"
+          class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-[#86868b] dark:text-[#98989f] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-all text-left apple-press cursor-pointer"
           type="button"
         >
           <span class="material-symbols-outlined text-[17px]">help_outline</span>
@@ -362,7 +358,7 @@
         </button>
       </div>
 
-      <!-- Live Cloud Online Indicator & Logout -->
+      <!-- Live Sync Cloud Online Indicator & Logout -->
       <div class="flex items-center justify-between pt-2 border-t border-black/[0.05] dark:border-white/[0.08]">
         <div class="flex items-center gap-1.5 pl-1" title="Sistem terhubung online realtime ke backend API SMKN 71">
           <span class="w-2 h-2 rounded-full bg-[#34c759] shadow-[0_0_8px_rgba(52,199,89,0.5)]"></span>
@@ -373,7 +369,7 @@
         <button
           @click="handleLogout"
           aria-label="Keluar"
-          class="px-2.5 py-1 rounded-lg bg-[#ff3b30]/10 text-[#ff3b30] hover:bg-[#ff3b30]/15 transition-all font-medium flex items-center justify-center gap-1 text-[11px] apple-press cursor-pointer"
+          class="px-2.5 py-1 rounded-lg bg-[#ff3b30]/10 dark:bg-[#ff3b30]/15 text-[#ff3b30] hover:bg-[#ff3b30]/15 dark:hover:bg-[#ff3b30]/25 transition-all font-medium flex items-center justify-center gap-1 text-[11px] apple-press cursor-pointer"
           title="Keluar / Logout"
           type="button"
         >
@@ -448,20 +444,16 @@ const {
   currentUser,
   isOnline,
   isSettingsModalOpen,
+  openSettings,
   isIdCardModalOpen,
   switchRole,
   showToast,
   logout,
   journalUrgency,
-  isDarkMode,
-  toggleTheme
+  isSidebarCollapsed
 } = useAppStore()
 
 const showLogoutConfirm = ref(false)
-
-const openSettings = () => {
-  isSettingsModalOpen.value = true
-}
 
 const openIdCard = () => {
   isIdCardModalOpen.value = true

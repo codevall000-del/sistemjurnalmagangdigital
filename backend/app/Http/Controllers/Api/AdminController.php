@@ -160,7 +160,7 @@ class AdminController extends Controller
             'role' => $request->role,
             'nisn_nip' => $request->nisn_nip,
             'phone' => $request->phone,
-            'major' => $request->major ?? ($request->role === 'siswa' ? 'PPLG' : null),
+            'major' => $request->major ?? ($request->role === 'siswa' ? 'RPL' : null),
             'class_name' => $request->class_name,
             'password' => Hash::make($request->password ?? 'password123'),
             'avatar' => $request->avatar ?? 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',

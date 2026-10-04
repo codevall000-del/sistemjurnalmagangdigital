@@ -8,7 +8,7 @@ export interface UserProfile {
   nisn_nip?: string
   phone?: string
   avatar?: string
-  major?: 'PPLG' | 'DKV' | 'Animasi' | string
+  major?: 'RPL' | 'PPLG' | 'DKV' | 'Animasi' | string
   class_name?: string
   company_name?: string
   company_address?: string
@@ -27,7 +27,7 @@ const mentorProfile: UserProfile = {
   role: 'mentor',
   nisn_nip: 'ID-TELKOM-8821',
   phone: '0812-0000-0003',
-  major: 'PPLG',
+  major: 'RPL',
   class_name: 'Lead Software Engineer',
   company_name: 'PT Telkom Digital Solusi',
   company_address: 'Jl. Gatot Subroto Kav. 52, Gedung Telkom Landmark Lt. 14, Jakarta Selatan',
@@ -48,8 +48,8 @@ const defaultProfiles: Record<string, UserProfile> = {
     role: 'siswa',
     nisn_nip: '0061234567',
     phone: '0812-0000-0004',
-    major: 'PPLG (Pengembangan Perangkat Lunak dan Gim)',
-    class_name: 'XII PPLG 1',
+    major: 'RPL (Rekayasa Perangkat Lunak)',
+    class_name: 'XII RPL 1',
     company_name: 'PT Telkom Digital Solusi',
     company_address: 'Jl. Gatot Subroto Kav. 52, Gedung Telkom Landmark Lt. 14, Jakarta Selatan',
     mentor_name: 'Hendra Wijaya, S.Kom',
@@ -58,7 +58,7 @@ const defaultProfiles: Record<string, UserProfile> = {
     academic_year: '2024/2025 (Semester Ganjil)',
     department: 'Rekayasa Perangkat Lunak (RPL)',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    roleLabel: 'Budi Santoso - Siswa PPLG'
+    roleLabel: 'Budi Santoso - Siswa RPL'
   },
   mentor: mentorProfile,
   dudi: mentorProfile,
@@ -69,12 +69,12 @@ const defaultProfiles: Record<string, UserProfile> = {
     role: 'guru',
     nisn_nip: '198502142010011002',
     phone: '0812-0000-0002',
-    major: 'PPLG',
+    major: 'RPL',
     class_name: 'Guru Pembimbing Utama',
     company_name: 'SMKN 71 Jakarta',
     company_address: 'Jl. Raden Saleh No. 45, Senen, Jakarta Pusat',
     mentor_name: 'Dra. Nurul Hidayah, M.Pd',
-    division: 'Konsentrasi Keahlian PPLG',
+    division: 'Konsentrasi Keahlian RPL',
     status: 'Guru Pembimbing Aktif',
     academic_year: 'Tahun Ajaran 2024/2025',
     department: 'Jurusan Teknik Komputer & Informatika',
@@ -88,12 +88,12 @@ const defaultProfiles: Record<string, UserProfile> = {
     role: 'admin',
     nisn_nip: '198001012005011001',
     phone: '0812-0000-0001',
-    major: 'PPLG',
+    major: 'RPL',
     class_name: 'Kaprog Vokasi / Super Admin',
     company_name: 'SMKN 71 Jakarta',
     company_address: 'Jl. Raden Saleh No. 45, Senen, Jakarta Pusat',
     mentor_name: 'Ir. Bambang Hermanto, M.T',
-    division: 'Program Keahlian Pengembangan Perangkat Lunak',
+    division: 'Program Keahlian Rekayasa Perangkat Lunak',
     status: 'Administrator Utama Sistem',
     academic_year: 'Tahun Ajaran 2024/2025',
     department: 'Ketua Program Keahlian (Kaprog)',
@@ -152,36 +152,12 @@ const applyTheme = (mode: ThemeMode, animate = true) => {
     return
   }
 
-  // Smooth View Transition API (Chrome, Edge, Safari 18+)
-  if (typeof document !== 'undefined' && 'startViewTransition' in document && typeof (document as any).startViewTransition === 'function') {
-    document.documentElement.classList.add('view-transitioning')
-    try {
-      const transition = (document as any).startViewTransition(() => {
-        updateDOM()
-      })
-      if (transition && transition.finished) {
-        transition.finished.finally(() => {
-          document.documentElement.classList.remove('view-transitioning')
-        })
-      } else {
-        setTimeout(() => {
-          document.documentElement.classList.remove('view-transitioning')
-        }, 400)
-      }
-    } catch (e) {
-      updateDOM()
-      document.documentElement.classList.remove('view-transitioning')
-    }
-  } else if (typeof document !== 'undefined') {
-    // Universal CSS fallback: enable temporary 350ms smooth transition
-    document.documentElement.classList.add('theme-transition')
-    updateDOM()
-    setTimeout(() => {
-      document.documentElement.classList.remove('theme-transition')
-    }, 400)
-  } else {
-    updateDOM()
-  }
+  // Smooth Apple fluid transition across all backgrounds, cards & surfaces
+  document.documentElement.classList.add('theme-transition')
+  updateDOM()
+  setTimeout(() => {
+    document.documentElement.classList.remove('theme-transition')
+  }, 600)
 }
 
 // Client-side initialization for theme
@@ -216,6 +192,20 @@ if (typeof window !== 'undefined') {
 // Real-time Cloud Online State (Full Online Architecture, no sync push needed)
 const isOnline = ref<boolean>(true)
 const isSettingsModalOpen = ref<boolean>(false)
+export type SettingsTab = 'profile' | 'appearance' | 'security'
+const settingsActiveTab = ref<SettingsTab>('profile')
+
+// Canvas Workspace Mode (Zen / Fullscreen Sidebar Collapse)
+const isSidebarCollapsed = ref<boolean>(false)
+const toggleSidebarCollapse = () => {
+  isSidebarCollapsed.value = !isSidebarCollapsed.value
+}
+
+const openSettings = (tab: SettingsTab = 'profile') => {
+  settingsActiveTab.value = tab
+  isSettingsModalOpen.value = true
+}
+
 const isIdCardModalOpen = ref<boolean>(false)
 const notificationToast = ref<{ show: boolean; message: string; type: 'success' | 'info' | 'warning' | 'error' }>({
   show: false,
@@ -236,7 +226,7 @@ export interface SiswaAttendanceState {
 const attendanceState = reactive<SiswaAttendanceState>({
   hasCheckedIn: true,
   hasCheckedOut: false,
-  checkInTime: '07:35',
+  checkInTime: '08:24',
   checkOutTime: '',
   checkOutTimestamp: null,
   workMode: 'wfo'
@@ -462,6 +452,8 @@ export function useAppStore() {
     authToken,
     isOnline,
     isSettingsModalOpen,
+    settingsActiveTab,
+    openSettings,
     isIdCardModalOpen,
     notificationToast,
     showToast,
@@ -469,6 +461,9 @@ export function useAppStore() {
     loginAs,
     logout,
     switchRole,
+    // Sidebar & Canvas Workspace Expansion
+    isSidebarCollapsed,
+    toggleSidebarCollapse,
     // Theme & Appearance
     themeMode,
     isDarkMode,

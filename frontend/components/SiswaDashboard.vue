@@ -1249,7 +1249,7 @@ const updateClock = () => {
 // Company & Placement context (SMKN 71 Jakarta)
 const companyInfo = reactive({
   name: 'PT Telkom Digital Solusi',
-  sector: 'Software House & Cloud (PPLG)',
+  sector: 'Software House & Cloud (RPL)',
   lat: -6.2301000,
   lng: 106.8228000,
   radius: 150

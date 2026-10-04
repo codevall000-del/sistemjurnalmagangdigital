@@ -13,7 +13,35 @@ Lihat juga panduan lengkap di [`AGENTS.md`](file:///c:/Users/Assyifa%20Odellia/O
   - Guru Pembimbing: `guru@gmail.com`
   - Admin / Kaprog: `admin@gmail.com`
 
-## 🔍 Saat User Meminta "Analisis Project":
+## 🔍 Saat User Meminta "Analisis Project" atau "Lanjutkan Project":
 1. Jalankan verifikasi backend (port 8000) dan frontend (port 3000).
 2. Periksa status database SQLite `backend/database/database.sqlite`.
 3. Laporkan status fitur per aktor dan usulkan langkah konkret selanjutnya.
+
+## 🌟 Fitur Unggulan Terkini (Sudah Selesai):
+- **Admin Diagram Relasi PKL (`AdminDiagramRelasi.vue`):** Topologi visual interaktif alur penempatan (Siswa -> DUDI -> Mentor -> Guru) & visualisasi Skema ERD basis data lengkap dengan cardinalities dan export SVG.
+- **Siswa Presensi Pintar (`SiswaPresensi.vue`):** Live Geofencing GPS (Haversine Formula), auto camera selfie capture, simulasi bypass mode demo, dan validasi radius kantor.
+- **Mentor Split-Screen Review (`DudiValidasi.vue`):** Validasi ACC/Revisi jurnal STAR dengan photo viewer.
+- **Guru Red Alert Monitoring (`GuruMonitoring.vue`):** Deteksi otomatis siswa >3 hari alfa/tanpa jurnal + direct WhatsApp.
+- **All-in-One Quick Enrollment (`AdminDataMaster.vue`):** Tambah siswa langsung buat mitra PT inline dalam 1 klik.
+
+## 🎯 Rencana Pengembangan Selanjutnya (Next Steps / Roadmap):
+1. **Export PDF Rekap Presensi & Jurnal:** Menyediakan tombol unduh laporan presensi bulanan berformat PDF resmi per siswa / per DUDI.
+2. **Offline Support & PWA Service Worker:** Dukungan mode offline saat siswa tidak ada koneksi internet di lokasi PKL.
+3. **Notifikasi Otomatis (WhatsApp Gateway / Webhook):** Integrasi pesan WhatsApp langsung untuk Red Alert guru dan reminder tap out siswa.
+4. **Unit & Feature Testing:** Pembuatan test suite otomatis menggunakan `php artisan test`.
+
+## ⚡ Panduan Cepat Menjalankan di Komputer Baru:
+```powershell
+# Terminal 1 - Backend
+cd backend
+if (!(Test-Path .env)) { copy .env.example .env }
+php artisan key:generate
+php artisan serve --port=8000
+
+# Terminal 2 - Frontend
+cd frontend
+if (!(Test-Path .env)) { copy .env.example .env }
+npm install
+npm run dev
+```

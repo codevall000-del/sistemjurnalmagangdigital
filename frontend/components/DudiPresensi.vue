@@ -772,42 +772,26 @@
         </div>
       </div>
 
-      <!-- 6. Sticky Action Bar: Simpan & Terapkan -->
-      <div class="bg-white border border-black/[0.08] rounded-2xl p-4.5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <label class="flex items-center gap-2.5 cursor-pointer select-none">
-          <input
-            v-model="applyToAllStudents"
-            type="checkbox"
-            class="w-4 h-4 rounded text-[#0071e3] focus:ring-[#0071e3] cursor-pointer"
-          />
-          <div class="text-xs">
-            <span class="font-bold text-[#1d1d1f]">Terapkan otomatis ke seluruh siswa binaan saya</span>
-            <span class="text-[#86868b] block text-[11px]">
-              Jadwal mingguan siswa akan diselaraskan dengan ritme kantor yang baru diatur.
-            </span>
-          </div>
-        </label>
-
-        <div class="flex items-center gap-2">
-          <button
-            type="button"
-            @click="resetScheduleToDefault"
-            class="px-4 py-2.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.08] text-[#1d1d1f] text-xs font-semibold transition apple-press cursor-pointer"
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            @click="saveCompanySchedule"
-            :disabled="isSavingOfficeSchedule"
-            class="px-6 py-2.5 rounded-xl bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-bold shadow-[0_2px_8px_rgba(0,113,227,0.3)] transition apple-press flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-          >
-            <span class="material-symbols-outlined text-[17px]">
-              {{ isSavingOfficeSchedule ? 'progress_activity' : 'save' }}
-            </span>
-            <span>{{ isSavingOfficeSchedule ? 'Menyimpan ke Server...' : 'Simpan Jadwal Kantor Mingguan' }}</span>
-          </button>
-        </div>
+      <!-- 6. Sticky Action Bar: Simpan Jadwal -->
+      <div class="bg-white border border-black/[0.08] rounded-2xl p-4.5 shadow-[0_4px_20px_rgba(0,0,0,0.06)] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2.5">
+        <button
+          type="button"
+          @click="resetScheduleToDefault"
+          class="px-4 py-2.5 rounded-xl bg-black/[0.04] hover:bg-black/[0.08] text-[#1d1d1f] text-xs font-semibold transition apple-press cursor-pointer"
+        >
+          Reset
+        </button>
+        <button
+          type="button"
+          @click="saveCompanySchedule"
+          :disabled="isSavingOfficeSchedule"
+          class="px-6 py-2.5 rounded-xl bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-bold shadow-[0_2px_8px_rgba(0,113,227,0.3)] transition apple-press flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+        >
+          <span class="material-symbols-outlined text-[17px]">
+            {{ isSavingOfficeSchedule ? 'progress_activity' : 'save' }}
+          </span>
+          <span>{{ isSavingOfficeSchedule ? 'Menyimpan ke Server...' : 'Simpan Jadwal Kantor Mingguan' }}</span>
+        </button>
       </div>
     </div>
 
@@ -1244,7 +1228,6 @@ const officeSchedule = reactive({
 })
 
 const activePresetKey = ref<string>('bkkbn')
-const applyToAllStudents = ref(true)
 const isSavingOfficeSchedule = ref(false)
 
 const bulkInTime = ref('07:30')
@@ -1574,7 +1557,15 @@ const saveCompanySchedule = async () => {
         policy_description: officeSchedule.policy_description,
         special_holidays: officeSchedule.special_holidays,
       },
-      apply_to_all_students: applyToAllStudents.value
+      schedule: {
+        work_days: allDaysOrder.filter(k => officeSchedule.days[k]?.is_work_day),
+        days: officeSchedule.days,
+        late_tolerance_minutes: officeSchedule.late_tolerance_minutes,
+        policy_name: officeSchedule.policy_name,
+        policy_description: officeSchedule.policy_description,
+        special_holidays: officeSchedule.special_holidays,
+      },
+      apply_to_all_students: true
     }
 
     const res = await fetch('http://127.0.0.1:8000/api/mentor/company-schedule', {
@@ -1589,15 +1580,15 @@ const saveCompanySchedule = async () => {
 
     const data = await res.json()
     if (res.ok && data.success) {
-      showToast(data.message || 'Jadwal kantor mingguan berhasil disimpan!', 'success')
+      showToast(data.message || 'Jadwal kantor mingguan berhasil disimpan & diterapkan ke seluruh siswa binaan!', 'success')
       // Refresh students schedule list to reflect changes
       fetchSchedules()
     } else {
       showToast(data.message || 'Gagal menyimpan jadwal kantor.', 'danger')
     }
   } catch (err) {
-    // Offline / Demo fallback
-    if (applyToAllStudents.value && studentsWithSchedules.value.length > 0) {
+    // Offline / Demo fallback: otomatis selaraskan ke seluruh siswa binaan
+    if (studentsWithSchedules.value.length > 0) {
       studentsWithSchedules.value.forEach(item => {
         item.work_schedule.monday = officeSchedule.days.monday.is_work_day ? officeSchedule.days.monday.mode : 'libur'
         item.work_schedule.tuesday = officeSchedule.days.tuesday.is_work_day ? officeSchedule.days.tuesday.mode : 'libur'
@@ -1606,7 +1597,7 @@ const saveCompanySchedule = async () => {
         item.work_schedule.friday = officeSchedule.days.friday.is_work_day ? officeSchedule.days.friday.mode : 'libur'
       })
     }
-    showToast('Jadwal kantor mingguan berhasil disimpan & disinkronkan ke siswa binaan!', 'success')
+    showToast('Jadwal kantor mingguan berhasil disimpan & disinkronkan ke seluruh siswa binaan!', 'success')
   } finally {
     isSavingOfficeSchedule.value = false
   }
@@ -1650,7 +1641,7 @@ const fetchRequests = async () => {
     modeRequests.value = [
       {
         id: 1,
-        student: { name: 'Siti Fauziah', major: 'PPLG', class_name: 'XII PPLG 2', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
+        student: { name: 'Siti Fauziah', major: 'RPL', class_name: 'XII RPL 2', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
         date: '2026-10-02',
         requested_mode: 'wfh',
         reason: 'Demam ringan dan flu, namun siap stand-by coding dan menyelesaikan modul REST API dari rumah.',
@@ -1679,12 +1670,12 @@ const fetchSchedules = async () => {
     studentsWithSchedules.value = [
       {
         placement_id: 1,
-        student: { name: 'Budi Santoso', major: 'PPLG', class_name: 'XII PPLG 1', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
+        student: { name: 'Budi Santoso', major: 'RPL', class_name: 'XII RPL 1', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
         work_schedule: { monday: 'wfo', tuesday: 'wfh', wednesday: 'wfo', thursday: 'wfh', friday: 'wfo' }
       },
       {
         placement_id: 2,
-        student: { name: 'Siti Fauziah', major: 'PPLG', class_name: 'XII PPLG 2', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
+        student: { name: 'Siti Fauziah', major: 'RPL', class_name: 'XII RPL 2', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
         work_schedule: { monday: 'wfo', tuesday: 'wfh', wednesday: 'wfo', thursday: 'wfh', friday: 'wfo' }
       }
     ]

@@ -45,12 +45,25 @@
 
           <!-- 2. APPLE SEGMENTED TAB NAVIGATION -->
           <div class="pt-4 pb-2 shrink-0">
-            <div class="grid grid-cols-3 gap-1 p-1 bg-black/[0.04] dark:bg-white/[0.06] rounded-xl border border-black/[0.05] dark:border-white/[0.08] text-[12px] font-medium text-center">
+            <div class="relative grid grid-cols-3 p-1 bg-black/[0.04] dark:bg-white/[0.06] rounded-xl border border-black/[0.05] dark:border-white/[0.08] text-[12px] font-medium text-center select-none overflow-hidden">
+              <!-- Sliding Indicator Pill -->
+              <span
+                aria-hidden="true"
+                class="theme-pill-indicator absolute top-1 bottom-1 left-1 w-[calc((100%-8px)/3)] rounded-lg bg-white dark:bg-[#2c2c2e] shadow-xs border border-black/[0.04] dark:border-white/[0.08] pointer-events-none"
+                :style="{
+                  transform: activeTab === 'profile'
+                    ? 'translateX(0%)'
+                    : activeTab === 'appearance'
+                    ? 'translateX(100%)'
+                    : 'translateX(200%)'
+                }"
+              />
+
               <button
                 type="button"
                 @click="activeTab = 'profile'"
-                :class="activeTab === 'profile' ? 'bg-white dark:bg-[#2c2c2e] text-[#1d1d1f] dark:text-[#f5f5f7] shadow-xs font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white'"
-                class="py-2 px-2 rounded-lg transition-all apple-press flex items-center justify-center gap-1.5 cursor-pointer truncate"
+                :class="activeTab === 'profile' ? 'text-[#1d1d1f] dark:text-[#f5f5f7] font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white'"
+                class="relative z-10 py-2 px-2 rounded-lg transition-colors duration-200 apple-press flex items-center justify-center gap-1.5 cursor-pointer truncate"
               >
                 <span class="material-symbols-outlined text-[17px]">account_circle</span>
                 <span class="truncate">Identitas Akun</span>
@@ -59,8 +72,8 @@
               <button
                 type="button"
                 @click="activeTab = 'appearance'"
-                :class="activeTab === 'appearance' ? 'bg-white dark:bg-[#2c2c2e] text-[#1d1d1f] dark:text-[#f5f5f7] shadow-xs font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white'"
-                class="py-2 px-2 rounded-lg transition-all apple-press flex items-center justify-center gap-1.5 cursor-pointer truncate"
+                :class="activeTab === 'appearance' ? 'text-[#1d1d1f] dark:text-[#f5f5f7] font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white'"
+                class="relative z-10 py-2 px-2 rounded-lg transition-colors duration-200 apple-press flex items-center justify-center gap-1.5 cursor-pointer truncate"
               >
                 <span class="material-symbols-outlined text-[17px]">palette</span>
                 <span class="truncate">Tampilan (Display)</span>
@@ -69,8 +82,8 @@
               <button
                 type="button"
                 @click="activeTab = 'security'"
-                :class="activeTab === 'security' ? 'bg-white dark:bg-[#2c2c2e] text-[#1d1d1f] dark:text-[#f5f5f7] shadow-xs font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white'"
-                class="py-2 px-2 rounded-lg transition-all apple-press flex items-center justify-center gap-1.5 cursor-pointer truncate"
+                :class="activeTab === 'security' ? 'text-[#1d1d1f] dark:text-[#f5f5f7] font-bold' : 'text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white'"
+                class="relative z-10 py-2 px-2 rounded-lg transition-colors duration-200 apple-press flex items-center justify-center gap-1.5 cursor-pointer truncate"
               >
                 <span class="material-symbols-outlined text-[17px]">lock</span>
                 <span class="truncate">Kata Sandi</span>
@@ -175,7 +188,7 @@
                     {{ (currentRole === 'dudi' || currentRole === 'mentor') ? 'Bidang Usaha / Instansi' : 'Konsentrasi Keahlian' }}
                   </span>
                   <p class="text-[13px] font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">
-                    {{ currentUser.major || 'PPLG (Pengembangan Perangkat Lunak dan Gim)' }}
+                    {{ currentUser.major || 'RPL (Rekayasa Perangkat Lunak)' }}
                   </p>
                 </div>
 
@@ -535,10 +548,11 @@ const {
   showToast,
   themeMode,
   applyTheme,
-  updateUserProfile
+  updateUserProfile,
+  settingsActiveTab
 } = useAppStore()
 
-const activeTab = ref<'profile' | 'appearance' | 'security'>('profile')
+const activeTab = settingsActiveTab
 
 // Editable Phone
 const editablePhone = ref(currentUser.value.phone || '')

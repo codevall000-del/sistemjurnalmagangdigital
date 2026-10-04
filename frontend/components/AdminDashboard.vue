@@ -19,7 +19,15 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-black/[0.04] text-[#1d1d1f] border border-black/[0.06]">
+        <button
+          type="button"
+          @click="activeMenu = 'diagram_relasi'"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#0071e3]/10 hover:bg-[#0071e3]/20 text-[#0071e3] border border-[#0071e3]/20 transition flex items-center gap-1.5 apple-press cursor-pointer"
+        >
+          <span class="material-symbols-outlined text-[15px]">account_tree</span>
+          <span>Buka Peta Relasi PKL</span>
+        </button>
+        <span class="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-black/[0.04] text-[#1d1d1f] border border-black/[0.06] hidden sm:inline-block">
           Tahun Ajaran: 2025/2026 • Semester Ganjil
         </span>
       </div>
@@ -134,7 +142,7 @@
             </div>
             <div class="flex items-center justify-between">
               <span class="text-[#86868b]">Konsentrasi Keahlian:</span>
-              <span class="text-[#1d1d1f] font-mono font-medium">PPLG, Animasi, DKV</span>
+              <span class="text-[#1d1d1f] font-mono font-medium">RPL, Animasi, DKV</span>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-[#86868b]">Protokol Keamanan:</span>
@@ -162,14 +170,14 @@
 import { ref } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { showToast } = useAppStore()
+const { showToast, activeMenu } = useAppStore()
 
 const isPinging = ref(false)
 
 const industryDistribution = ref([
   {
     name: 'PT Telkom Digital Solusi',
-    sector: 'Software House & Cloud (PPLG)',
+    sector: 'Software House & Cloud (RPL)',
     students: 2,
     quota: 6,
     mentor: 'Hendra Wijaya, S.Kom',

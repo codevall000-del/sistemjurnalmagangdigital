@@ -340,15 +340,41 @@ class MentorController extends Controller
         }
 
         $request->validate([
-            'schedule' => 'required|array',
+            'schedule' => 'nullable|array',
+            'office_schedule' => 'nullable|array',
         ]);
 
-        $company->office_schedule = $request->schedule;
+        $scheduleData = $request->input('schedule') ?? $request->input('office_schedule');
+        if (!$scheduleData) {
+            return response()->json(['success' => false, 'message' => 'Jadwal kantor wajib diisi.'], 422);
+        }
+
+        $company->office_schedule = $scheduleData;
         $company->save();
+
+        // Otomatis terapkan ke seluruh siswa binaan mentor / tempat magang ini
+        $placements = Placement::where('dudi_mentor_id', $user->id)->get();
+        if ($placements->isEmpty() && $company) {
+            $placements = Placement::where('company_id', $company->id)->get();
+        }
+
+        foreach ($placements as $p) {
+            $p->work_schedule = null; // Menyelaraskan penuh ke ritme kantor
+            $p->save();
+
+            if ($p->student_id) {
+                Notification::create([
+                    'user_id' => $p->student_id,
+                    'title' => 'Jadwal Operasional Tempat Magang Diperbarui',
+                    'message' => 'Jadwal operasional tempat magang telah diperbarui dan otomatis diselaraskan untuk seluruh siswa binaan.',
+                    'type' => 'info',
+                ]);
+            }
+        }
 
         return response()->json([
             'success' => true,
-            'message' => "Jadwal operasional tempat magang ({$company->name}) berhasil diperbarui.",
+            'message' => "Jadwal operasional tempat magang ({$company->name}) berhasil diperbarui dan diterapkan ke seluruh siswa binaan.",
             'schedule' => $company->getEffectiveSchedule(),
         ]);
     }

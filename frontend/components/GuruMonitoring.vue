@@ -106,9 +106,9 @@
             <h3 class="text-lg font-bold text-[#1d1d1f] tracking-tight">{{ selectedStudent.name }}</h3>
             <span
               class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider"
-              :class="selectedStudent.major === 'PPLG' ? 'bg-[#0071e3]/10 text-[#0071e3]' : (selectedStudent.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
+              :class="(selectedStudent.major === 'RPL' || selectedStudent.major === 'PPLG') ? 'bg-[#0071e3]/10 text-[#0071e3]' : (selectedStudent.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
             >
-              {{ selectedStudent.major }}
+              {{ selectedStudent.major === 'PPLG' ? 'RPL' : selectedStudent.major }}
             </span>
             <span class="text-xs font-mono text-[#86868b] font-medium">{{ selectedStudent.className }}</span>
           </div>
@@ -249,8 +249,8 @@ const students = ref([
     id: 4,
     name: 'Budi Santoso',
     nisn: '0061234567',
-    className: 'XII PPLG 1',
-    major: 'PPLG',
+    className: 'XII RPL 1',
+    major: 'RPL',
     majorBadge: 'bg-blue-50 text-blue-800 border border-blue-200',
     companyId: 1,
     company: 'PT Telkom Digital Solusi',
@@ -286,8 +286,8 @@ const students = ref([
     id: 5,
     name: 'Siti Fauziah',
     nisn: '0061234568',
-    className: 'XII PPLG 2',
-    major: 'PPLG',
+    className: 'XII RPL 2',
+    major: 'RPL',
     majorBadge: 'bg-blue-50 text-blue-800 border border-blue-200',
     companyId: 1,
     company: 'PT Telkom Digital Solusi',

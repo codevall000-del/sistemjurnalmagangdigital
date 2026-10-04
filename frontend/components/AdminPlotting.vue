@@ -19,8 +19,16 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-black/[0.04] text-[#1d1d1f] border border-black/[0.06]">
-          Mode: Dual-Panel Matching System
+        <button
+          type="button"
+          @click="activeMenu = 'diagram_relasi'"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#0071e3]/10 hover:bg-[#0071e3]/20 text-[#0071e3] border border-[#0071e3]/20 transition flex items-center gap-1.5 apple-press cursor-pointer"
+        >
+          <span class="material-symbols-outlined text-[15px]">account_tree</span>
+          <span>Buka Peta Relasi (Flowchart Draw.io)</span>
+        </button>
+        <span class="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-black/[0.04] text-[#1d1d1f] border border-black/[0.06] hidden sm:inline-block">
+          Dual-Panel Matching
         </span>
       </div>
     </div>
@@ -189,11 +197,11 @@
 import { ref, reactive } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { showToast } = useAppStore()
+const { showToast, activeMenu } = useAppStore()
 
 const students = ref([
-  { id: 4, name: 'Budi Santoso', nisn: '0061234567', major: 'PPLG', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
-  { id: 5, name: 'Siti Fauziah', nisn: '0061234568', major: 'PPLG', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
+  { id: 4, name: 'Budi Santoso', nisn: '0061234567', major: 'RPL', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
+  { id: 5, name: 'Siti Fauziah', nisn: '0061234568', major: 'RPL', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
   { id: 6, name: 'Ahmad Danu', nisn: '0061234569', major: 'Animasi', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150' },
   { id: 7, name: 'Putri Maharani', nisn: '0061234570', major: 'Animasi', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150' },
   { id: 8, name: 'Rizky Pratama', nisn: '0061234571', major: 'DKV', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150' },
@@ -203,7 +211,7 @@ const students = ref([
 const selectedStudent = ref(students.value[0])
 
 const companies = ref([
-  { id: 1, name: 'PT Telkom Digital Solusi (PPLG)', quota: 6, occupied: 2 },
+  { id: 1, name: 'PT Telkom Digital Solusi (RPL)', quota: 6, occupied: 2 },
   { id: 2, name: 'Studio Animasi Kinetik Digital (Animasi)', quota: 4, occupied: 2 },
   { id: 3, name: 'Pixel Kreatif Visual Agency (DKV)', quota: 5, occupied: 2 },
 ])

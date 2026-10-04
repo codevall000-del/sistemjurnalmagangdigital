@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] font-body text-[#1d1d1f] dark:text-[#f5f5f7] antialiased select-none transition-colors duration-350">
+  <div class="h-screen w-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] font-body text-[#1d1d1f] dark:text-[#f5f5f7] antialiased select-none transition-colors duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]">
     <!-- HALAMAN UTAMA: LOGIN PAGE (JIKA BELUM LOGIN) -->
     <LoginPage v-if="!isLoggedIn" />
 
@@ -9,9 +9,15 @@
       <DesktopSidebar class="no-print" />
 
       <!-- 2. VIEW (AREA KONTEN KANAN) - DENGAN macOS FROSTED TOP BAR -->
-      <div class="pl-[260px] flex-1 flex flex-col h-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] relative transition-colors duration-350">
-        <!-- Apple macOS Desktop Top Bar -->
-        <header class="h-14 bg-white/80 dark:bg-[#18181b]/85 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] z-40 px-6 flex items-center justify-between shrink-0 no-print">
+      <div
+        :class="isSidebarCollapsed ? 'pl-0' : 'pl-[260px]'"
+        class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] relative transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+      >
+        <!-- Apple macOS Desktop Top Bar (Disembunyikan pada Kanvas Penuh Diagram Relasi) -->
+        <header
+          v-if="activeMenu !== 'diagram_relasi'"
+          class="h-14 bg-white/80 dark:bg-[#18181b]/85 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] z-40 px-6 flex items-center justify-between shrink-0 no-print"
+        >
           <!-- Left: Breadcrumb Navigation & Progress Pill -->
           <div class="flex items-center gap-4">
             <div class="flex items-center gap-1.5 text-[#86868b] dark:text-[#98989f] text-[13px] font-medium">
@@ -40,19 +46,6 @@
 
             <!-- Quick Action Icons -->
             <div class="flex items-center gap-2 border-l border-black/[0.08] dark:border-white/[0.08] pl-3">
-              <!-- Quick Appearance Toggle Button -->
-              <button
-                @click="toggleTheme"
-                aria-label="Tampilan Mode Gelap / Terang"
-                class="w-7 h-7 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center text-[#86868b] hover:text-[#1d1d1f] dark:text-[#98989f] dark:hover:text-white transition-all apple-press cursor-pointer"
-                type="button"
-                :title="isDarkMode ? 'Beralih ke Mode Terang (Light Mode)' : 'Beralih ke Mode Gelap (Dark Mode)'"
-              >
-                <span class="material-symbols-outlined text-[16px] text-[#0071e3]">
-                  {{ isDarkMode ? 'light_mode' : 'dark_mode' }}
-                </span>
-              </button>
-
               <button
                 @click="openHelp"
                 aria-label="Bantuan"
@@ -66,23 +59,26 @@
               <button
                 @click="openNotifications"
                 aria-label="Notifikasi"
-                class="relative w-7 h-7 rounded-full bg-black/[0.04] hover:bg-black/[0.08] flex items-center justify-center text-[#86868b] hover:text-[#1d1d1f] transition-all apple-press cursor-pointer"
+                class="relative w-7 h-7 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center text-[#86868b] hover:text-[#1d1d1f] dark:text-[#98989f] dark:hover:text-white transition-all apple-press cursor-pointer"
                 :class="{
-                  'ring-2 ring-red-400 bg-red-50 text-red-600': currentRole === 'siswa' && journalUrgency === 'danger',
-                  'ring-1 ring-amber-400 bg-amber-50 text-amber-600': currentRole === 'siswa' && journalUrgency === 'warning'
+                  'ring-2 ring-red-400 bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400': hasActiveNotification && journalUrgency === 'danger',
+                  'ring-1 ring-amber-400 bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400': hasActiveNotification && journalUrgency === 'warning'
                 }"
                 type="button"
                 title="Notifikasi & Peringatan Sistem"
               >
                 <span class="material-symbols-outlined text-[16px]">notifications</span>
-                <span
-                  v-if="currentRole === 'siswa' && journalUrgency === 'danger'"
-                  class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#ff3b30] animate-ping"
-                ></span>
-                <span
-                  class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full"
-                  :class="currentRole === 'siswa' && journalUrgency === 'warning' ? 'bg-[#ff9500]' : 'bg-[#ff3b30]'"
-                ></span>
+                <!-- Indikator dot notifikasi hanya tampil jika benar-benar ada notifikasi/urgensi aktif -->
+                <template v-if="hasActiveNotification">
+                  <span
+                    v-if="journalUrgency === 'danger'"
+                    class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#ff3b30] animate-ping"
+                  ></span>
+                  <span
+                    class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full"
+                    :class="journalUrgency === 'warning' ? 'bg-[#ff9500]' : 'bg-[#ff3b30]'"
+                  ></span>
+                </template>
               </button>
 
               <!-- Apple User Profile Pill -->
@@ -113,7 +109,10 @@
         </header>
 
         <!-- View Area Content Scrollable -->
-        <main class="flex-1 overflow-y-auto px-7 py-6 bg-[#f5f5f7] dark:bg-[#121214] text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors duration-350">
+        <main
+          :class="activeMenu === 'diagram_relasi' ? 'p-0 overflow-hidden' : 'px-7 py-6 overflow-y-auto'"
+          class="flex-1 bg-[#f5f5f7] dark:bg-[#121214] text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+        >
           <!-- 1. MODUL SISWA VIEWS -->
           <template v-if="currentRole === 'siswa'">
             <SiswaDashboard v-if="activeMenu === 'dashboard'" />
@@ -142,6 +141,7 @@
             <AdminDashboard v-if="activeMenu === 'dashboard_admin'" />
             <AdminDataMaster v-else-if="['data_master_siswa', 'data_master_dudi', 'data_master_mentor', 'data_master_instansi', 'data_master_guru'].includes(activeMenu)" />
             <AdminPlotting v-else-if="activeMenu === 'plotting'" />
+            <AdminDiagramRelasi v-else-if="activeMenu === 'diagram_relasi'" />
             <AdminLaporan v-else-if="activeMenu === 'laporan'" />
           </template>
         </main>
@@ -193,19 +193,19 @@ const {
   activeMenu,
   isOnline,
   isSettingsModalOpen,
+  openSettings,
   notificationToast,
   showToast,
   journalUrgency,
   effectiveMinutesSinceTapOut,
-  isDarkMode,
-  toggleTheme
+  isSidebarCollapsed
 } = useAppStore()
 
-const openSettings = () => {
-  isSettingsModalOpen.value = true
-}
-
 const currentDate = ref('')
+
+const hasActiveNotification = computed(() => {
+  return currentRole.value === 'siswa' && journalUrgency.value !== 'none'
+})
 
 onMounted(() => {
   const now = new Date()
@@ -239,6 +239,7 @@ const activeMenuTitle = computed(() => {
     data_master_instansi: 'Data Master Tempat Magang & Pembimbing',
     data_master_guru: 'Data Master Guru',
     plotting: 'Plotting & Penempatan',
+    diagram_relasi: 'Diagram Relasi & Alur PKL',
     laporan: 'Laporan & Buku Jurnal Cetak'
   }
   return titles[activeMenu.value] || activeMenu.value

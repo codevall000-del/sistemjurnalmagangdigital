@@ -138,4 +138,31 @@ class Placement extends Model
             'late_tolerance_minutes' => $officeSchedule['late_tolerance_minutes'] ?? 15,
         ];
     }
+
+    /**
+     * Get the effective weekly schedule for this placement.
+     */
+    public function getEffectiveSchedule(): array
+    {
+        $company = $this->relationLoaded('company') ? $this->company : $this->company()->first();
+        $officeSchedule = $company ? $company->getEffectiveSchedule() : Company::getDefaultOfficeSchedule();
+
+        if (is_array($this->work_schedule) && !empty($this->work_schedule)) {
+            $days = $officeSchedule['days'] ?? [];
+            foreach ($this->work_schedule as $dayKey => $mode) {
+                if (isset($days[$dayKey])) {
+                    if ($mode === 'libur') {
+                        $days[$dayKey]['is_work_day'] = false;
+                        $days[$dayKey]['mode'] = 'libur';
+                    } else {
+                        $days[$dayKey]['is_work_day'] = true;
+                        $days[$dayKey]['mode'] = $mode;
+                    }
+                }
+            }
+            $officeSchedule['days'] = $days;
+        }
+
+        return $officeSchedule;
+    }
 }

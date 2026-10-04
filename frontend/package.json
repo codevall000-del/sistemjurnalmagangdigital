@@ -22,5 +22,10 @@
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^22.13.4",
     "@types/qrcode": "^1.5.5"
+  },
+  "optionalDependencies": {
+    "@oxc-parser/binding-win32-x64-msvc": "^0.143.0",
+    "@oxc-transform/binding-win32-x64-msvc": "^0.143.0",
+    "@rolldown/binding-win32-x64-msvc": "^1.2.11"
   }
 }

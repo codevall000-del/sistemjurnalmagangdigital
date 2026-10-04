@@ -139,7 +139,7 @@
                           {{ currentRole === 'siswa' ? 'Kelas & Konsentrasi' : 'Jabatan / Unit' }}
                         </span>
                         <span class="font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] text-[11px] block mt-0.5 truncate">
-                          {{ currentUser.class_name || 'XII PPLG 1' }}
+                          {{ currentUser.class_name || 'XII RPL 1' }}
                         </span>
                       </div>
                     </div>
@@ -152,7 +152,7 @@
                       </div>
                       <div class="flex items-center justify-between text-[10px] text-[#86868b] dark:text-[#98989f]">
                         <span>Pembimbing: <strong class="text-[#1d1d1f] dark:text-[#f5f5f7]">{{ currentUser.mentor_name || 'Hendra Wijaya, S.Kom' }}</strong></span>
-                        <span class="font-mono">PPLG Vokasi</span>
+                        <span class="font-mono">RPL Vokasi</span>
                       </div>
                     </div>
                   </div>
