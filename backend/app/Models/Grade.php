@@ -32,6 +32,21 @@ class Grade extends Model
         'finalized_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'mentor_score_average',
+        'mentor_notes',
+    ];
+
+    public function getMentorScoreAverageAttribute()
+    {
+        return $this->dudi_score_average;
+    }
+
+    public function getMentorNotesAttribute()
+    {
+        return $this->dudi_notes;
+    }
+
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');

@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('role')->default('siswa'); // siswa, dudi, guru, admin
+            $table->string('role')->default('siswa'); // siswa, mentor, guru, admin
             $table->string('nisn_nip')->nullable();
             $table->string('phone')->nullable();
+            $table->string('major')->nullable(); // PPLG, DKV, Animasi
+            $table->string('class_name')->nullable(); // e.g. XII PPLG 1
             $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

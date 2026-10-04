@@ -1,50 +1,63 @@
 <template>
   <div class="space-y-6 max-w-7xl mx-auto">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-200 no-print">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-black/[0.06] no-print">
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-          <span>📑 Laporan, Arsip &amp; Pratinjau Buku Jurnal Cetak</span>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-[#0071e3]/10 text-[#0071e3]">
+            Arsip &amp; Ekspor Dokumen
+          </span>
+          <span class="text-[#86868b]">•</span>
+          <span class="text-xs font-medium text-[#86868b]">SMKN 71 Jakarta</span>
+        </div>
+        <h2 class="text-2xl font-bold text-[#1d1d1f] tracking-tight flex items-center gap-2">
+          <span>Laporan &amp; Cetak Buku Jurnal</span>
         </h2>
-        <p class="text-xs text-slate-500 mt-1">
-          Penyusunan berkas laporan akhir PKL, arsip sertifikasi nilai, dan ekspor dokumen resmi.
+        <p class="text-xs text-[#86868b] mt-0.5">
+          Penyusunan berkas laporan akhir PKL, arsip sertifikasi nilai, dan ekspor dokumen resmi sekolah.
         </p>
       </div>
 
       <!-- Action Buttons: Export to PDF & Export to Excel -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2.5">
         <button
           @click="exportToExcel"
-          class="px-4 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
+          class="px-4 py-2 bg-black/[0.04] hover:bg-black/[0.07] text-[#1d1d1f] rounded-xl text-xs font-medium border border-black/[0.06] transition flex items-center gap-1.5 apple-press cursor-pointer"
         >
-          <span>📊</span> Export to Excel
+          <svg class="w-3.5 h-3.5 text-[#34c759]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>Export Excel</span>
         </button>
 
         <button
           @click="exportToPdf"
-          class="px-4 py-2 bg-[#244b78] hover:bg-[#1a3656] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
+          class="px-4 py-2 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-xl text-xs font-semibold shadow-[0_2px_8px_rgba(0,113,227,0.25)] transition flex items-center gap-1.5 apple-press cursor-pointer"
         >
-          <span>📄</span> Export to PDF (Cetak Dokumen)
+          <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          <span>Cetak Dokumen (PDF)</span>
         </button>
       </div>
     </div>
 
-    <!-- PANEL FILTER YANG SANGAT LENGKAP (TAHUN AJARAN, ANGKATAN, DUDI) -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4 no-print">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-        <span class="text-xs font-bold uppercase tracking-wider text-slate-800">
-          ⚙️ Panel Filter Arsip Dokumen
+    <!-- PANEL FILTER ARSIP DOKUMEN -->
+    <div class="bg-white border border-black/[0.05] rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-4 no-print">
+      <div class="flex items-center justify-between pb-3 border-b border-black/[0.06]">
+        <span class="text-xs font-semibold uppercase tracking-wider text-[#1d1d1f]">
+          Filter Parameter Berkas
         </span>
-        <span class="text-xs text-slate-500 font-mono">Ditemukan: {{ filteredReports.length }} Rekord</span>
+        <span class="text-xs text-[#86868b] font-mono">Ditemukan: {{ filteredReports.length }} Rekord</span>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
         <!-- 1. Filter Tahun Ajaran -->
         <div>
-          <label class="block font-semibold text-slate-700 mb-1.5">Tahun Ajaran</label>
+          <label class="block font-medium text-[#1d1d1f] mb-1.5">Tahun Ajaran</label>
           <select
             v-model="filters.academicYear"
-            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
+            class="w-full px-3 py-2 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer"
           >
             <option value="all">Semua Tahun Ajaran</option>
             <option value="2025/2026">2025/2026 (Aktif)</option>
@@ -55,10 +68,10 @@
 
         <!-- 2. Filter Angkatan -->
         <div>
-          <label class="block font-semibold text-slate-700 mb-1.5">Angkatan Siswa</label>
+          <label class="block font-medium text-[#1d1d1f] mb-1.5">Angkatan Siswa</label>
           <select
             v-model="filters.batch"
-            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
+            class="w-full px-3 py-2 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer"
           >
             <option value="all">Semua Angkatan</option>
             <option value="Angkatan 32">Angkatan 32</option>
@@ -67,14 +80,14 @@
           </select>
         </div>
 
-        <!-- 3. Filter Mitra DUDI -->
+        <!-- 3. Filter Tempat Magang -->
         <div>
-          <label class="block font-semibold text-slate-700 mb-1.5">Perusahaan Mitra (DUDI)</label>
+          <label class="block font-medium text-[#1d1d1f] mb-1.5">Tempat Magang (Instansi / Perusahaan)</label>
           <select
             v-model="filters.dudi"
-            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
+            class="w-full px-3 py-2 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer"
           >
-            <option value="all">Semua Perusahaan</option>
+            <option value="all">Semua Tempat Magang</option>
             <option value="PT Telkom Digital Solusi">PT Telkom Digital Solusi</option>
             <option value="PT Inovasi Media Kreatif">PT Inovasi Media Kreatif</option>
             <option value="Bank Mandiri IT Hub">Bank Mandiri IT Hub</option>
@@ -84,10 +97,10 @@
 
         <!-- 4. Filter Status Kelulusan -->
         <div>
-          <label class="block font-semibold text-slate-700 mb-1.5">Status Nilai PKL</label>
+          <label class="block font-medium text-[#1d1d1f] mb-1.5">Status Nilai PKL</label>
           <select
             v-model="filters.gradeStatus"
-            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
+            class="w-full px-3 py-2 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer"
           >
             <option value="all">Semua Status</option>
             <option value="completed">Sudah Final (Lengkap)</option>
@@ -97,16 +110,16 @@
       </div>
     </div>
 
-    <!-- AREA BAWAH: PRATINJAU BUKU JURNAL CETAK (PRINTABLE PREVIEW) -->
-    <div class="bg-white text-slate-900 rounded-2xl p-8 shadow-sm border border-slate-300 print:shadow-none print:border-none print:p-0">
+    <!-- AREA BAWAH: PRATINJAU DOKUMEN CETAK (Apple Document Canvas Style) -->
+    <div class="bg-white text-[#1d1d1f] rounded-2xl p-8 sm:p-12 shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-black/[0.06] print:shadow-none print:border-none print:p-0">
       <!-- Kop Surat Resmi Sekolah -->
-      <div class="flex items-center justify-between pb-4 border-b-2 border-slate-900 gap-4">
+      <div class="flex items-center justify-between pb-4 border-b-2 border-black/[0.8] gap-4">
         <img src="/images/logo-smkn71.png" alt="Logo SMKN 71" class="w-16 h-16 object-contain shrink-0" />
         <div class="flex-1 text-center space-y-1">
-          <h3 class="text-sm font-bold uppercase tracking-wider text-slate-800">PEMERINTAH PROVINSI DAERAH KHUSUS IBUKOTA JAKARTA</h3>
-          <h4 class="text-xs font-semibold uppercase text-slate-700">DINAS PENDIDIKAN</h4>
-          <h2 class="text-base font-black uppercase text-slate-950 tracking-tight">SMK NEGERI 71 JAKARTA</h2>
-          <p class="text-[10px] text-slate-600">
+          <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#1d1d1f]">PEMERINTAH PROVINSI DAERAH KHUSUS IBUKOTA JAKARTA</h3>
+          <h4 class="text-xs font-semibold uppercase text-[#1d1d1f]">DINAS PENDIDIKAN</h4>
+          <h2 class="text-base sm:text-lg font-black uppercase text-[#1d1d1f] tracking-tight">SMK NEGERI 71 JAKARTA</h2>
+          <p class="text-[10px] text-[#86868b]">
             Jl. Dr. KRT Radjiman Widyodiningrat, Cakung, Jakarta Timur • Website: smkn71jakarta.sch.id
           </p>
         </div>
@@ -115,45 +128,45 @@
 
       <!-- Judul Dokumen Cetak -->
       <div class="text-center my-6 space-y-1">
-        <h1 class="text-sm font-black uppercase tracking-wide text-slate-950 underline">
+        <h1 class="text-sm sm:text-base font-black uppercase tracking-wide text-[#1d1d1f] underline">
           BUKU REKAPITULASI JURNAL &amp; NILAI PRAKTIK KERJA LAPANGAN (PKL)
         </h1>
-        <p class="text-xs text-slate-600">
+        <p class="text-xs text-[#86868b]">
           Program Keahlian: Rekayasa Perangkat Lunak (RPL) • Tahun Ajaran: {{ filters.academicYear === 'all' ? '2025/2026' : filters.academicYear }}
         </p>
       </div>
 
       <!-- Tabel Pratinjau Buku Jurnal Cetak -->
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse border border-slate-300">
-          <thead class="bg-slate-100 text-slate-800 font-bold uppercase text-[10px]">
+        <table class="w-full text-left text-xs border-collapse border border-black/[0.15]">
+          <thead class="bg-black/[0.03] text-[#1d1d1f] font-bold uppercase text-[10px]">
             <tr>
-              <th class="border border-slate-300 py-2.5 px-3 text-center">No</th>
-              <th class="border border-slate-300 py-2.5 px-3">Nama Siswa</th>
-              <th class="border border-slate-300 py-2.5 px-3 text-center">NISN</th>
-              <th class="border border-slate-300 py-2.5 px-3">Perusahaan (DUDI)</th>
-              <th class="border border-slate-300 py-2.5 px-3 text-center">Kehadiran</th>
-              <th class="border border-slate-300 py-2.5 px-3 text-center">Jurnal ACC</th>
-              <th class="border border-slate-300 py-2.5 px-3 text-center">Nilai DUDI (60%)</th>
-              <th class="border border-slate-300 py-2.5 px-3 text-center">Nilai Sekolah (40%)</th>
-              <th class="border border-slate-300 py-2.5 px-3 text-center font-bold">Nilai Akhir</th>
-              <th class="border border-slate-300 py-2.5 px-3 text-center">Predikat</th>
-              <th class="border border-slate-300 py-2.5 px-3 text-center">Status QR</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center">No</th>
+              <th class="border border-black/[0.15] py-2.5 px-3">Nama Siswa</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center">NISN</th>
+              <th class="border border-black/[0.15] py-2.5 px-3">Tempat Magang</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center">Kehadiran</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center">Jurnal ACC</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center">Nilai Lapangan (60%)</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center">Nilai Sekolah (40%)</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center font-bold">Nilai Akhir</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center">Predikat</th>
+              <th class="border border-black/[0.15] py-2.5 px-3 text-center">Status QR</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-200 text-slate-800">
-            <tr v-for="(row, idx) in filteredReports" :key="row.id" class="hover:bg-slate-50">
-              <td class="border border-slate-300 py-2 px-3 text-center font-mono">{{ idx + 1 }}</td>
-              <td class="border border-slate-300 py-2 px-3 font-bold text-slate-900">{{ row.studentName }}</td>
-              <td class="border border-slate-300 py-2 px-3 font-mono text-center">{{ row.nisn }}</td>
-              <td class="border border-slate-300 py-2 px-3">{{ row.company }}</td>
-              <td class="border border-slate-300 py-2 px-3 text-center font-mono text-emerald-700 font-bold">{{ row.attendanceRate }}%</td>
-              <td class="border border-slate-300 py-2 px-3 text-center font-mono">{{ row.verifiedJournals }}</td>
-              <td class="border border-slate-300 py-2 px-3 text-center font-mono font-bold">{{ row.dudiGrade || '-' }}</td>
-              <td class="border border-slate-300 py-2 px-3 text-center font-mono font-bold">{{ row.schoolGrade || '-' }}</td>
-              <td class="border border-slate-300 py-2 px-3 text-center font-mono font-black text-slate-950">{{ row.finalGrade || '-' }}</td>
-              <td class="border border-slate-300 py-2 px-3 text-center font-bold text-[10px]">{{ row.predicate || '-' }}</td>
-              <td class="border border-slate-300 py-2 px-3 text-center font-mono text-[9px] text-emerald-700 font-semibold">
+          <tbody class="divide-y divide-black/[0.1] text-[#1d1d1f]">
+            <tr v-for="(row, idx) in filteredReports" :key="row.id" class="hover:bg-black/[0.015]">
+              <td class="border border-black/[0.15] py-2 px-3 text-center font-mono">{{ idx + 1 }}</td>
+              <td class="border border-black/[0.15] py-2 px-3 font-semibold text-[#1d1d1f]">{{ row.studentName }}</td>
+              <td class="border border-black/[0.15] py-2 px-3 font-mono text-center text-[#86868b]">{{ row.nisn }}</td>
+              <td class="border border-black/[0.15] py-2 px-3">{{ row.company }}</td>
+              <td class="border border-black/[0.15] py-2 px-3 text-center font-mono text-[#34c759] font-bold">{{ row.attendanceRate }}%</td>
+              <td class="border border-black/[0.15] py-2 px-3 text-center font-mono">{{ row.verifiedJournals }}</td>
+              <td class="border border-black/[0.15] py-2 px-3 text-center font-mono font-semibold">{{ row.dudiGrade || '-' }}</td>
+              <td class="border border-black/[0.15] py-2 px-3 text-center font-mono font-semibold">{{ row.schoolGrade || '-' }}</td>
+              <td class="border border-black/[0.15] py-2 px-3 text-center font-mono font-bold text-[#1d1d1f]">{{ row.finalGrade || '-' }}</td>
+              <td class="border border-black/[0.15] py-2 px-3 text-center font-semibold text-[10px]">{{ row.predicate || '-' }}</td>
+              <td class="border border-black/[0.15] py-2 px-3 text-center font-mono text-[9px] text-[#34c759] font-semibold">
                 {{ row.qrStatus }}
               </td>
             </tr>
@@ -162,21 +175,21 @@
       </div>
 
       <!-- Tanda Tangan Resmi Buku Jurnal PKL -->
-      <div class="grid grid-cols-2 gap-8 mt-10 pt-6 text-xs text-center text-slate-800">
+      <div class="grid grid-cols-2 gap-8 mt-10 pt-6 text-xs text-center text-[#1d1d1f]">
         <div>
           <p>Mengetahui,</p>
           <p class="font-bold">Kepala Program Keahlian RPL</p>
           <div class="h-16"></div>
-          <p class="font-bold underline">Ir. Bambang Hermanto, M.T</p>
-          <p class="font-mono text-[10px]">NIP. 19750810 199903 1 002</p>
+          <p class="font-bold underline">Administrator Sistem</p>
+          <p class="font-mono text-[10px] text-[#86868b]">NIP. 19800101 200501 1 001</p>
         </div>
 
         <div>
-          <p>Bandung, 27 September 2026</p>
-          <p class="font-bold">Kepala SMK Negeri 1 Industri</p>
+          <p>Jakarta, 27 September 2026</p>
+          <p class="font-bold">Kepala SMK Negeri 71 Jakarta</p>
           <div class="h-16"></div>
           <p class="font-bold underline">Dr. H. Ahmad Sudrajat, M.M.Pd</p>
-          <p class="font-mono text-[10px]">NIP. 19680315 199203 1 004</p>
+          <p class="font-mono text-[10px] text-[#86868b]">NIP. 19680315 199203 1 004</p>
         </div>
       </div>
     </div>
@@ -198,8 +211,8 @@ const filters = reactive({
 
 const reportsData = ref([
   {
-    id: 1,
-    studentName: 'Budi Santoso',
+    id: 4,
+    studentName: 'Siswa Magang',
     nisn: '0061234567',
     company: 'PT Telkom Digital Solusi',
     academicYear: '2025/2026',
@@ -209,54 +222,6 @@ const reportsData = ref([
     dudiGrade: '92.50',
     schoolGrade: '90.00',
     finalGrade: '91.50',
-    predicate: 'A (Amat Baik)',
-    qrStatus: 'VERIFIED',
-    gradeStatus: 'completed'
-  },
-  {
-    id: 2,
-    studentName: 'Siti Rahma',
-    nisn: '0061234568',
-    company: 'PT Telkom Digital Solusi',
-    academicYear: '2025/2026',
-    batch: 'Angkatan 32',
-    attendanceRate: 92.8,
-    verifiedJournals: 14,
-    dudiGrade: '88.00',
-    schoolGrade: '86.00',
-    finalGrade: '87.20',
-    predicate: 'B+ (Sangat Baik)',
-    qrStatus: 'VERIFIED',
-    gradeStatus: 'completed'
-  },
-  {
-    id: 3,
-    studentName: 'Rizky Pratama',
-    nisn: '0061234569',
-    company: 'PT Inovasi Media Kreatif',
-    academicYear: '2025/2026',
-    batch: 'Angkatan 32',
-    attendanceRate: 85.0,
-    verifiedJournals: 8,
-    dudiGrade: null,
-    schoolGrade: '78.00',
-    finalGrade: null,
-    predicate: null,
-    qrStatus: 'PENDING',
-    gradeStatus: 'pending'
-  },
-  {
-    id: 4,
-    studentName: 'Dewi Anggraeni',
-    nisn: '0061234570',
-    company: 'Bank Mandiri IT Hub',
-    academicYear: '2025/2026',
-    batch: 'Angkatan 32',
-    attendanceRate: 98.0,
-    verifiedJournals: 20,
-    dudiGrade: '95.00',
-    schoolGrade: '92.00',
-    finalGrade: '93.80',
     predicate: 'A (Amat Baik)',
     qrStatus: 'VERIFIED',
     gradeStatus: 'completed'
@@ -278,8 +243,7 @@ const exportToPdf = () => {
 }
 
 const exportToExcel = () => {
-  // Generate CSV data download
-  const headers = ['No', 'Nama Siswa', 'NISN', 'Perusahaan', 'Kehadiran (%)', 'Jurnal ACC', 'Nilai DUDI', 'Nilai Sekolah', 'Nilai Akhir', 'Predikat', 'Status QR']
+  const headers = ['No', 'Nama Siswa', 'NISN', 'Tempat Magang', 'Kehadiran (%)', 'Jurnal ACC', 'Nilai Lapangan', 'Nilai Sekolah', 'Nilai Akhir', 'Predikat', 'Status QR']
   const rows = filteredReports.value.map((r, i) => [
     i + 1,
     `"${r.studentName}"`,

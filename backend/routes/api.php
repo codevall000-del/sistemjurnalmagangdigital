@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SiswaController;
-use App\Http\Controllers\Api\DudiController;
+use App\Http\Controllers\Api\MentorController;
 use App\Http\Controllers\Api\GuruController;
 use App\Http\Controllers\Api\AdminController;
 
@@ -27,17 +27,42 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/logbooks', [SiswaController::class, 'getLogbooks']);
         Route::post('/logbooks', [SiswaController::class, 'storeLogbook']);
         Route::get('/placement', [SiswaController::class, 'getPlacementInfo']);
+        Route::post('/request-work-mode', [SiswaController::class, 'requestWorkMode']);
+        Route::get('/work-mode-requests', [SiswaController::class, 'getWorkModeRequests']);
     });
 
-    // 2. Modul Pembimbing Industri (DUDI)
+    // 2. Modul Pembimbing Lapangan (Instansi / Perusahaan)
+    Route::prefix('mentor')->group(function () {
+        Route::get('/dashboard', [MentorController::class, 'dashboard']);
+        Route::get('/students', [MentorController::class, 'getStudents']);
+        Route::get('/students/{id}/logbooks', [MentorController::class, 'getStudentLogbooks']);
+        Route::post('/logbooks/{id}/validate', [MentorController::class, 'validateLogbook']);
+        Route::get('/attendance-recap', [MentorController::class, 'getAttendanceRecap']);
+        Route::get('/work-mode-requests', [MentorController::class, 'getWorkModeRequests']);
+        Route::post('/work-mode-requests/{id}/review', [MentorController::class, 'reviewWorkModeRequest']);
+        Route::get('/students-schedules', [MentorController::class, 'getStudentsWithSchedules']);
+        Route::put('/placements/{id}/schedule', [MentorController::class, 'updateStudentSchedule']);
+        Route::get('/company-schedule', [MentorController::class, 'getCompanyOfficeSchedule']);
+        Route::put('/company-schedule', [MentorController::class, 'updateCompanyOfficeSchedule']);
+        Route::get('/evaluations', [MentorController::class, 'getEvaluations']);
+        Route::post('/evaluations', [MentorController::class, 'storeEvaluation']);
+    });
+
+    // Alias prefix dudi untuk kompatibilitas frontend lama
     Route::prefix('dudi')->group(function () {
-        Route::get('/dashboard', [DudiController::class, 'dashboard']);
-        Route::get('/students', [DudiController::class, 'getStudents']);
-        Route::get('/students/{id}/logbooks', [DudiController::class, 'getStudentLogbooks']);
-        Route::post('/logbooks/{id}/validate', [DudiController::class, 'validateLogbook']);
-        Route::get('/attendance-recap', [DudiController::class, 'getAttendanceRecap']);
-        Route::get('/evaluations', [DudiController::class, 'getEvaluations']);
-        Route::post('/evaluations', [DudiController::class, 'storeEvaluation']);
+        Route::get('/dashboard', [MentorController::class, 'dashboard']);
+        Route::get('/students', [MentorController::class, 'getStudents']);
+        Route::get('/students/{id}/logbooks', [MentorController::class, 'getStudentLogbooks']);
+        Route::post('/logbooks/{id}/validate', [MentorController::class, 'validateLogbook']);
+        Route::get('/attendance-recap', [MentorController::class, 'getAttendanceRecap']);
+        Route::get('/work-mode-requests', [MentorController::class, 'getWorkModeRequests']);
+        Route::post('/work-mode-requests/{id}/review', [MentorController::class, 'reviewWorkModeRequest']);
+        Route::get('/students-schedules', [MentorController::class, 'getStudentsWithSchedules']);
+        Route::put('/placements/{id}/schedule', [MentorController::class, 'updateStudentSchedule']);
+        Route::get('/company-schedule', [MentorController::class, 'getCompanyOfficeSchedule']);
+        Route::put('/company-schedule', [MentorController::class, 'updateCompanyOfficeSchedule']);
+        Route::get('/evaluations', [MentorController::class, 'getEvaluations']);
+        Route::post('/evaluations', [MentorController::class, 'storeEvaluation']);
     });
 
     // 3. Modul Guru Pembimbing

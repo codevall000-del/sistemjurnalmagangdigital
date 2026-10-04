@@ -15,9 +15,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // siswa, dudi, guru, admin
+        'role', // siswa, mentor (pembimbing lapangan), guru, admin
         'nisn_nip',
         'phone',
+        'major',
+        'class_name',
         'avatar',
     ];
 
@@ -37,6 +39,11 @@ class User extends Authenticatable
     public function studentPlacement()
     {
         return $this->hasOne(Placement::class, 'student_id');
+    }
+
+    public function mentorPlacements()
+    {
+        return $this->hasMany(Placement::class, 'dudi_mentor_id');
     }
 
     public function dudiPlacements()

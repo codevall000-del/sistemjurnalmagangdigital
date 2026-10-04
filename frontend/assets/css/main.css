@@ -7,11 +7,109 @@
     margin: 0;
     padding: 0;
     overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   body {
     @apply bg-surface text-on-surface font-body antialiased select-none;
   }
+}
+
+/* Apple Materials & Glassmorphism (Vibrancy) */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.apple-glass-subtle {
+  background: rgba(245, 245, 247, 0.82);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.apple-card {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px -4px rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.03);
+}
+
+/* Apple Tactile Spring Response (Principle 1 & 4 from Apple Design Skill) */
+.apple-press {
+  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1), opacity 120ms ease, background-color 120ms ease;
+}
+
+.apple-press:active {
+  transform: scale(0.97);
+}
+
+/* Urgent & Warning Alert Animations for Siswa Journal */
+@keyframes pulse-danger {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7), 0 4px 16px rgba(255, 59, 48, 0.4);
+  }
+  50% {
+    transform: scale(1.035);
+    box-shadow: 0 0 0 10px rgba(255, 59, 48, 0), 0 8px 24px rgba(255, 59, 48, 0.6);
+  }
+}
+
+.animate-pulse-danger {
+  animation: pulse-danger 1.3s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes pulse-glow-red {
+  0%, 100% {
+    opacity: 0.95;
+    border-color: rgba(255, 59, 48, 0.4);
+  }
+  50% {
+    opacity: 1;
+    border-color: rgba(255, 59, 48, 0.9);
+    box-shadow: 0 0 24px rgba(255, 59, 48, 0.2);
+  }
+}
+
+.animate-glow-danger {
+  animation: pulse-glow-red 2s ease-in-out infinite;
+}
+
+/* Apple Segmented Control Container & Active Pill */
+.apple-segmented-container {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 12px;
+  background-color: rgba(118, 118, 128, 0.12);
+  gap: 2px;
+}
+
+.apple-segmented-item {
+  border-radius: 9px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #86868b;
+  transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-segmented-item.active {
+  background-color: #ffffff;
+  color: #1d1d1f;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .material-symbols-outlined {
@@ -30,23 +128,26 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom desktop scrollbar - Field Verified Enterprise PKL */
+/* macOS refined thin translucent scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f8fafc;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(0, 0, 0, 0.18);
   border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(0, 0, 0, 0.35);
+  background-clip: padding-box;
 }
 
 /* Print styles for Laporan & Arsip PDF */
@@ -63,3 +164,461 @@
     display: block !important;
   }
 }
+
+/* ==========================================================================
+   APPLE DESIGN SYSTEM: LIGHT & DARK MODE ENGINE
+   Crafted with Apple HIG tokens, optical hierarchy & ergonomics (NO filter:invert).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. LIGHT MODE FOUNDATION (Guaranteed fallback, ignores OS media-query leak)
+   -------------------------------------------------------------------------- */
+html:not(.dark),
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html:not(.dark) body,
+html[data-theme="light"] body {
+  background-color: #f5f5f7 !important;
+  color: #1d1d1f !important;
+}
+
+/* Light Base Surfaces & Canvases */
+html:not(.dark) .bg-\[\#f5f5f7\],
+html[data-theme="light"] .bg-\[\#f5f5f7\],
+html:not(.dark) .bg-surface,
+html[data-theme="light"] .bg-surface {
+  background-color: #f5f5f7 !important;
+}
+
+html:not(.dark) .bg-\[\#fbfbfd\],
+html[data-theme="light"] .bg-\[\#fbfbfd\],
+html:not(.dark) .bg-\[\#fbfbfd\]\/90,
+html[data-theme="light"] .bg-\[\#fbfbfd\]\/90 {
+  background-color: #fbfbfd !important;
+}
+
+/* Light Cards and Elevated Panels */
+html:not(.dark) .bg-white,
+html[data-theme="light"] .bg-white,
+html:not(.dark) .apple-card,
+html[data-theme="light"] .apple-card {
+  background-color: #ffffff !important;
+  color: #1d1d1f !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 1px 3px 0 rgba(0, 0, 0, 0.02) !important;
+}
+
+html:not(.dark) .apple-card-interactive:hover,
+html[data-theme="light"] .apple-card-interactive:hover {
+  box-shadow: 0 8px 28px -4px rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Light Typography */
+html:not(.dark) .text-\[\#1d1d1f\],
+html[data-theme="light"] .text-\[\#1d1d1f\],
+html:not(.dark) .text-on-surface,
+html[data-theme="light"] .text-on-surface {
+  color: #1d1d1f !important;
+}
+
+html:not(.dark) .text-\[\#86868b\],
+html[data-theme="light"] .text-\[\#86868b\],
+html:not(.dark) .text-on-surface-variant,
+html[data-theme="light"] .text-on-surface-variant {
+  color: #86868b !important;
+}
+
+/* Light Form Inputs, Selects, and Textareas */
+html:not(.dark) input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]),
+html:not(.dark) textarea,
+html[data-theme="light"] textarea,
+html:not(.dark) select,
+html[data-theme="light"] select {
+  background-color: #f5f5f7 !important;
+  color: #1d1d1f !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+html:not(.dark) input::placeholder,
+html[data-theme="light"] input::placeholder,
+html:not(.dark) textarea::placeholder,
+html[data-theme="light"] textarea::placeholder {
+  color: #86868b !important;
+}
+
+html:not(.dark) input:focus,
+html[data-theme="light"] input:focus,
+html:not(.dark) textarea:focus,
+html[data-theme="light"] textarea:focus,
+html:not(.dark) select:focus,
+html[data-theme="light"] select:focus {
+  background-color: #ffffff !important;
+  border-color: #0071e3 !important;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15) !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. APPLE OBSIDIAN DARK MODE (NON-INVERSION)
+   -------------------------------------------------------------------------- */
+html.dark,
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html.dark body,
+html[data-theme="dark"] body {
+  background-color: #121214 !important;
+  color: #f5f5f7 !important;
+}
+
+/* Dark Base Surfaces & Canvases */
+html.dark .bg-\[\#f5f5f7\],
+html[data-theme="dark"] .bg-\[\#f5f5f7\],
+html.dark .bg-surface,
+html[data-theme="dark"] .bg-surface {
+  background-color: #121214 !important;
+}
+
+html.dark .bg-\[\#fbfbfd\],
+html[data-theme="dark"] .bg-\[\#fbfbfd\],
+html.dark .bg-\[\#fbfbfd\]\/90,
+html[data-theme="dark"] .bg-\[\#fbfbfd\]\/90 {
+  background-color: #18181b !important;
+}
+
+/* Dark Apple Cards and Elevated Panels */
+html.dark .bg-white,
+html[data-theme="dark"] .bg-white,
+html.dark .apple-card,
+html[data-theme="dark"] .apple-card {
+  background-color: #1c1c1e !important;
+  color: #f5f5f7 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3), 0 1px 3px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+html.dark .apple-card-interactive:hover,
+html[data-theme="dark"] .apple-card-interactive:hover {
+  box-shadow: 0 8px 28px -4px rgba(0, 0, 0, 0.5), 0 2px 6px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Nested Container Surfaces inside Cards */
+html.dark .bg-white .bg-\[\#f5f5f7\],
+html[data-theme="dark"] .bg-white .bg-\[\#f5f5f7\],
+html.dark .apple-card .bg-\[\#f5f5f7\],
+html[data-theme="dark"] .apple-card .bg-\[\#f5f5f7\],
+html.dark .bg-white .bg-slate-50,
+html[data-theme="dark"] .bg-white .bg-slate-50,
+html.dark .apple-card .bg-slate-50,
+html[data-theme="dark"] .apple-card .bg-slate-50,
+html.dark .bg-white .bg-gray-50,
+html[data-theme="dark"] .bg-white .bg-gray-50,
+html.dark .apple-card .bg-gray-50,
+html[data-theme="dark"] .apple-card .bg-gray-50 {
+  background-color: #26262a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Translucent Glassmorphism (Vibrancy) in Dark Mode */
+html.dark .bg-white\/80,
+html[data-theme="dark"] .bg-white\/80,
+html.dark .bg-white\/90,
+html[data-theme="dark"] .bg-white\/90,
+html.dark .bg-white\/70,
+html[data-theme="dark"] .bg-white\/70 {
+  background-color: rgba(28, 28, 30, 0.85) !important;
+}
+
+html.dark .bg-white\/50,
+html[data-theme="dark"] .bg-white\/50 {
+  background-color: rgba(24, 24, 27, 0.78) !important;
+}
+
+html.dark .apple-glass,
+html[data-theme="dark"] .apple-glass {
+  background: rgba(28, 28, 30, 0.8) !important;
+  backdrop-filter: blur(25px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(25px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .apple-glass-subtle,
+html[data-theme="dark"] .apple-glass-subtle {
+  background: rgba(22, 22, 25, 0.85) !important;
+  backdrop-filter: blur(25px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(25px) saturate(190%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Dark Mode Typography */
+html.dark .text-\[\#1d1d1f\],
+html[data-theme="dark"] .text-\[\#1d1d1f\],
+html.dark .text-on-surface,
+html[data-theme="dark"] .text-on-surface {
+  color: #f5f5f7 !important;
+}
+
+html.dark .text-\[\#86868b\],
+html[data-theme="dark"] .text-\[\#86868b\],
+html.dark .text-on-surface-variant,
+html[data-theme="dark"] .text-on-surface-variant {
+  color: #98989f !important;
+}
+
+/* Delicate Hairline Separators & Borders */
+html.dark .border-black\/\[0\.04\],
+html.dark .border-black\/\[0\.05\],
+html.dark .border-black\/\[0\.06\],
+html.dark .border-black\/\[0\.07\],
+html.dark .border-black\/\[0\.08\],
+html.dark .border-black\/\[0\.1\],
+html.dark .border-black\/\[0\.12\],
+html.dark .border-black\/\[0\.15\],
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html[data-theme="dark"] .border-black\/\[0\.04\],
+html[data-theme="dark"] .border-black\/\[0\.05\],
+html[data-theme="dark"] .border-black\/\[0\.06\],
+html[data-theme="dark"] .border-black\/\[0\.07\],
+html[data-theme="dark"] .border-black\/\[0\.08\],
+html[data-theme="dark"] .border-black\/\[0\.1\],
+html[data-theme="dark"] .border-black\/\[0\.12\],
+html[data-theme="dark"] .border-black\/\[0\.15\],
+html[data-theme="dark"] .border-slate-100,
+html[data-theme="dark"] .border-slate-200,
+html[data-theme="dark"] .border-gray-100,
+html[data-theme="dark"] .border-gray-200 {
+  border-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+html.dark .divide-black\/\[0\.05\] > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-black\/\[0\.06\] > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-black\/\[0\.08\] > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+html[data-theme="dark"] .divide-black\/\[0\.05\] > :not([hidden]) ~ :not([hidden]),
+html[data-theme="dark"] .divide-black\/\[0\.06\] > :not([hidden]) ~ :not([hidden]),
+html[data-theme="dark"] .divide-black\/\[0\.08\] > :not([hidden]) ~ :not([hidden]),
+html[data-theme="dark"] .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+html[data-theme="dark"] .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Subtle Translucent Chips, Buttons & Hovers */
+html.dark .bg-black\/\[0\.02\],
+html.dark .bg-black\/\[0\.03\],
+html.dark .bg-black\/\[0\.04\],
+html.dark .bg-black\/\[0\.05\],
+html.dark .bg-black\/\[0\.06\],
+html.dark .bg-black\/\[0\.08\],
+html[data-theme="dark"] .bg-black\/\[0\.02\],
+html[data-theme="dark"] .bg-black\/\[0\.03\],
+html[data-theme="dark"] .bg-black\/\[0\.04\],
+html[data-theme="dark"] .bg-black\/\[0\.05\],
+html[data-theme="dark"] .bg-black\/\[0\.06\],
+html[data-theme="dark"] .bg-black\/\[0\.08\] {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark .hover\:bg-black\/\[0\.04\]:hover,
+html.dark .hover\:bg-black\/\[0\.05\]:hover,
+html.dark .hover\:bg-black\/\[0\.06\]:hover,
+html.dark .hover\:bg-black\/\[0\.08\]:hover,
+html[data-theme="dark"] .hover\:bg-black\/\[0\.04\]:hover,
+html[data-theme="dark"] .hover\:bg-black\/\[0\.05\]:hover,
+html[data-theme="dark"] .hover\:bg-black\/\[0\.06\]:hover,
+html[data-theme="dark"] .hover\:bg-black\/\[0\.08\]:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark .hover\:text-\[\#1d1d1f\]:hover,
+html[data-theme="dark"] .hover\:text-\[\#1d1d1f\]:hover {
+  color: #ffffff !important;
+}
+
+/* Form Inputs, Selects, and Textareas */
+html.dark input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+html.dark textarea,
+html[data-theme="dark"] textarea,
+html.dark select,
+html[data-theme="dark"] select {
+  background-color: #26262a !important;
+  color: #f5f5f7 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark input::placeholder,
+html[data-theme="dark"] input::placeholder,
+html.dark textarea::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: #71717a !important;
+}
+
+html.dark input:focus,
+html[data-theme="dark"] input:focus,
+html.dark textarea:focus,
+html[data-theme="dark"] textarea:focus,
+html.dark select:focus,
+html[data-theme="dark"] select:focus {
+  background-color: #2c2c30 !important;
+  border-color: #0a84ff !important;
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.22) !important;
+}
+
+/* Tables in Dark Mode */
+html.dark table thead {
+  background-color: #1a1a1d !important;
+}
+
+html.dark table tbody tr.hover\:bg-black\/\[0\.02\]:hover,
+html.dark table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.035) !important;
+}
+
+/* Apple Segmented Controls */
+html.dark .apple-segmented-container {
+  background-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+html.dark .apple-segmented-item {
+  color: #98989f !important;
+}
+
+html.dark .apple-segmented-item.active {
+  background-color: #36363a !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Alert Text & Status Contrast Enhancements */
+html.dark .text-amber-950,
+html.dark .text-amber-900,
+html.dark .text-amber-800 {
+  color: #ffd60a !important;
+}
+
+html.dark .text-red-950,
+html.dark .text-red-900,
+html.dark .text-red-800 {
+  color: #ff6961 !important;
+}
+
+html.dark .text-green-950,
+html.dark .text-green-900,
+html.dark .text-green-800 {
+  color: #32d74b !important;
+}
+
+html.dark .text-blue-950,
+html.dark .text-blue-900,
+html.dark .text-blue-800 {
+  color: #64d2ff !important;
+}
+
+/* Modal Shadows in Dark Mode */
+html.dark .shadow-\[0_24px_60px_rgba\(0\,0\,0\,0\.18\)\],
+html.dark .shadow-\[0_20px_50px_rgba\(0\,0\,0\,0\.2\)\],
+html.dark .shadow-\[0_12px_40px_rgba\(0\,0\,0\,0\.06\)\] {
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Refined Dark Mode Scrollbars */
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================================================
+   Smooth Apple Fluid Theme Transition (Light <-> Dark)
+   ========================================================================== */
+/* Disable conflicting CSS transitions during View Transitions so snapshots are crisp & perfectly synced */
+html.view-transitioning,
+html.view-transitioning *,
+html.view-transitioning *::before,
+html.view-transitioning *::after {
+  transition: none !important;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(root) {
+  animation-name: apple-theme-fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: apple-theme-fade-in;
+}
+
+@keyframes apple-theme-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes apple-theme-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Global & Component Level Smooth Interpolation during Theme Toggle */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
+              color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              fill 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              stroke 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 350ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 350ms ease !important;
+  transition-delay: 0s !important;
+}
+
+/* Standalone container transitions */
+body,
+aside,
+header,
+main,
+nav,
+section,
+.apple-card,
+.apple-glass,
+.apple-glass-subtle {
+  transition: background-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 350ms cubic-bezier(0.16, 1, 0.3, 1),
+              color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Apple-grade Modal Card Pop & Backdrop Animations
+   ========================================================================== */
+@keyframes modalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-card-animate {
+  animation: modalPop 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+

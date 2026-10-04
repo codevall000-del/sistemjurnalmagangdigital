@@ -1,95 +1,95 @@
 <template>
-  <div class="flex flex-col w-full max-w-[1440px] mx-auto gap-space-xl">
+  <div class="flex flex-col w-full max-w-[1440px] mx-auto gap-6">
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
-        <div class="flex items-center gap-2 mb-1.5">
-          <span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Logbook Siswa</span>
-          <span class="w-1 h-1 rounded-full bg-outline"></span>
-          <span class="font-label-sm text-label-sm text-on-surface-variant">Sesi Semester Ganjil 2024 • SMKN 71 Jakarta</span>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-[11px] uppercase tracking-wider text-[#0071e3] font-semibold">Logbook Siswa</span>
+          <span class="w-1 h-1 rounded-full bg-[#86868b]"></span>
+          <span class="text-[11px] text-[#86868b]">Sesi Semester Ganjil 2024 • SMKN 71 Jakarta</span>
         </div>
-        <h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">Catatan Jurnal Harian</h1>
-        <p class="font-body-md text-body-md text-on-surface-variant mt-1 max-w-2xl leading-relaxed">
+        <h1 class="text-2xl sm:text-3xl text-[#1d1d1f] font-bold tracking-tight">Catatan Jurnal Harian</h1>
+        <p class="text-[13px] text-[#86868b] mt-1 max-w-2xl leading-relaxed">
           Dokumentasikan aktivitas harian, pembelajaran, kendala, dan bukti hasil pengerjaan magang secara terstruktur untuk validasi berkala mentor.
         </p>
       </div>
 
-      <div class="flex items-center gap-3 self-start md:self-auto shrink-0">
+      <div class="flex items-center gap-2.5 self-start md:self-auto shrink-0">
         <button
           @click="exportPdf"
-          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-lowest text-primary hover:bg-surface-container-low border border-outline-variant transition-colors shadow-sm font-headline-sm text-headline-sm"
+          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white text-[#1d1d1f] hover:bg-black/[0.03] border border-black/[0.08] transition-all shadow-xs text-[12px] font-semibold apple-press"
           type="button"
         >
-          <span class="material-symbols-outlined text-[19px] text-secondary">picture_as_pdf</span>
-          <span class="font-body-sm text-body-sm font-semibold">Export Rekap PDF</span>
+          <span class="material-symbols-outlined text-[18px] text-[#0071e3]">picture_as_pdf</span>
+          <span>Export Rekap PDF</span>
         </button>
         <button
           @click="focusForm"
-          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container transition-colors shadow-sm font-headline-sm text-headline-sm active:scale-95"
+          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0071e3] text-white hover:bg-[#0077ed] transition-all shadow-[0_2px_8px_rgba(0,113,227,0.25)] text-[12px] font-semibold apple-press"
           type="button"
         >
-          <span class="material-symbols-outlined text-[19px]">add_circle</span>
-          <span class="font-body-sm text-body-sm font-semibold">+ Tulis Entri Jurnal Baru</span>
+          <span class="material-symbols-outlined text-[18px]">add_circle</span>
+          <span>+ Tulis Entri Jurnal</span>
         </button>
       </div>
     </div>
 
-    <!-- 4 Stats Cards (Stitch Design) -->
+    <!-- 4 Stats Cards (Apple HIG Design) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+      <div class="bg-white p-4 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] flex items-center justify-between apple-press">
         <div class="flex flex-col">
-          <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Total Jam Tercatat</span>
-          <span class="font-headline-lg text-headline-lg text-primary font-bold mt-0.5">328 Jam</span>
-          <span class="font-label-sm text-label-sm text-secondary mt-1 font-medium">Target: 640 Jam (51.2%)</span>
+          <span class="text-[11px] text-[#86868b] font-medium">Total Jam Tercatat</span>
+          <span class="text-2xl text-[#1d1d1f] font-bold mt-0.5">328 Jam</span>
+          <span class="text-[11px] text-[#0071e3] mt-0.5 font-medium">Target: 640 Jam (51.2%)</span>
         </div>
-        <div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center text-primary border border-outline-variant">
-          <span class="material-symbols-outlined text-[24px]">schedule</span>
+        <div class="w-10 h-10 rounded-xl bg-[#0071e3]/10 flex items-center justify-center text-[#0071e3]">
+          <span class="material-symbols-outlined text-[22px]">schedule</span>
         </div>
       </div>
 
-      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+      <div class="bg-white p-4 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] flex items-center justify-between apple-press">
         <div class="flex flex-col">
-          <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Entri Disetujui</span>
-          <span class="font-headline-lg text-headline-lg text-primary font-bold mt-0.5">39 Hari</span>
-          <span class="font-label-sm text-label-sm text-secondary mt-1 font-medium">100% dari terverifikasi</span>
+          <span class="text-[11px] text-[#86868b] font-medium">Entri Disetujui</span>
+          <span class="text-2xl text-[#1d1d1f] font-bold mt-0.5">39 Hari</span>
+          <span class="text-[11px] text-[#34c759] mt-0.5 font-medium">100% dari terverifikasi</span>
         </div>
-        <div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary border border-outline-variant">
-          <span class="material-symbols-outlined text-[24px]">verified</span>
+        <div class="w-10 h-10 rounded-xl bg-[#34c759]/10 flex items-center justify-center text-[#248a3d]">
+          <span class="material-symbols-outlined text-[22px]">verified</span>
         </div>
       </div>
 
-      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+      <div class="bg-white p-4 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] flex items-center justify-between apple-press">
         <div class="flex flex-col">
-          <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Menunggu Evaluasi</span>
-          <span class="font-headline-lg text-headline-lg text-primary font-bold mt-0.5">2 Entri</span>
-          <span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Review: Sdr. Dimas (Mentor)</span>
+          <span class="text-[11px] text-[#86868b] font-medium">Menunggu Evaluasi</span>
+          <span class="text-2xl text-[#1d1d1f] font-bold mt-0.5">2 Entri</span>
+          <span class="text-[11px] text-[#ff9500] mt-0.5 font-medium">Review: Sdr. Dimas</span>
         </div>
-        <div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center text-on-surface-variant border border-outline-variant">
-          <span class="material-symbols-outlined text-[24px]">pending_actions</span>
+        <div class="w-10 h-10 rounded-xl bg-[#ff9500]/10 flex items-center justify-center text-[#b26a00]">
+          <span class="material-symbols-outlined text-[22px]">pending_actions</span>
         </div>
       </div>
 
-      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-outline-variant flex items-center justify-between">
+      <div class="bg-white p-4 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] flex items-center justify-between apple-press">
         <div class="flex flex-col">
-          <span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Status Draf Tersimpan</span>
-          <span class="font-headline-lg text-headline-lg text-primary font-bold mt-0.5">1 Draf</span>
-          <span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Update terakhir: Hari ini 11:20</span>
+          <span class="text-[11px] text-[#86868b] font-medium">Status Draf Tersimpan</span>
+          <span class="text-2xl text-[#1d1d1f] font-bold mt-0.5">1 Draf</span>
+          <span class="text-[11px] text-[#86868b] mt-0.5">Update: Hari ini 11:20</span>
         </div>
-        <div class="w-11 h-11 rounded-lg bg-surface-container-low flex items-center justify-center text-outline border border-outline-variant">
-          <span class="material-symbols-outlined text-[24px]">draft</span>
+        <div class="w-10 h-10 rounded-xl bg-black/[0.04] flex items-center justify-center text-[#86868b]">
+          <span class="material-symbols-outlined text-[22px]">draft</span>
         </div>
       </div>
     </div>
 
-    <!-- Filter & Search Toolbar (Stitch Design) -->
-    <div class="bg-surface-container-lowest p-3.5 rounded-xl shadow-sm border border-outline-variant flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-      <div class="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+    <!-- Filter & Search Toolbar (Apple HIG Design) -->
+    <div class="bg-white p-3 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+      <div class="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
         <!-- Search Input -->
         <div class="relative flex-1">
-          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[19px] text-outline">search</span>
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-[#86868b]">search</span>
           <input
             v-model="searchQuery"
-            class="w-full pl-10 pr-4 py-2 text-body-sm font-body-sm text-on-surface bg-surface-container-low rounded-lg placeholder-outline focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/25 outline-none transition-all border border-outline-variant/60"
+            class="w-full pl-9 pr-4 py-2 text-[13px] text-[#1d1d1f] bg-[#f5f5f7] rounded-xl placeholder-[#86868b] focus:bg-white focus:ring-4 focus:ring-[#0071e3]/15 focus:border-[#0071e3] outline-none transition-all border border-black/[0.06]"
             placeholder="Cari aktivitas, modul fitur, tiket, atau kendala..."
             type="text"
           />
@@ -97,51 +97,51 @@
 
         <!-- Filter Dropdowns -->
         <div class="flex items-center gap-2">
-          <div class="relative min-w-[170px]">
+          <div class="relative min-w-[160px]">
             <select
               v-model="statusFilter"
-              class="w-full appearance-none pl-3.5 pr-8 py-2 text-body-sm font-body-sm text-on-surface bg-surface-container-low rounded-lg focus:ring-2 focus:ring-secondary/25 outline-none cursor-pointer border border-outline-variant/60"
+              class="w-full appearance-none pl-3.5 pr-8 py-2 text-[12px] font-medium text-[#1d1d1f] bg-[#f5f5f7] rounded-xl focus:bg-white focus:ring-4 focus:ring-[#0071e3]/15 outline-none cursor-pointer border border-black/[0.06]"
             >
               <option value="all">Semua Status</option>
               <option value="approved">Disetujui Mentor</option>
               <option value="pending">Menunggu Review</option>
               <option value="draft">Draf Mandiri</option>
             </select>
-            <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+            <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[17px] text-[#86868b] pointer-events-none">expand_more</span>
           </div>
 
-          <div class="relative min-w-[170px]">
-            <div class="w-full flex items-center justify-between px-3.5 py-2 text-body-sm font-body-sm text-on-surface bg-surface-container-low rounded-lg cursor-pointer border border-outline-variant/60">
-              <div class="flex items-center gap-2 truncate">
-                <span class="material-symbols-outlined text-[17px] text-secondary">date_range</span>
+          <div class="relative min-w-[150px]">
+            <div class="w-full flex items-center justify-between px-3.5 py-2 text-[12px] font-medium text-[#1d1d1f] bg-[#f5f5f7] rounded-xl cursor-pointer border border-black/[0.06]">
+              <div class="flex items-center gap-1.5 truncate">
+                <span class="material-symbols-outlined text-[16px] text-[#0071e3]">date_range</span>
                 <span class="truncate">Oktober 2024</span>
               </div>
-              <span class="material-symbols-outlined text-[18px] text-outline">calendar_today</span>
+              <span class="material-symbols-outlined text-[16px] text-[#86868b]">calendar_today</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- View Switcher -->
+      <!-- Apple Segmented View Switcher -->
       <div class="flex items-center gap-2 pt-2 lg:pt-0 justify-end">
-        <span class="font-label-sm text-label-sm text-on-surface-variant hidden xl:inline">Tampilan:</span>
-        <div class="inline-flex p-1 bg-surface-container-low rounded-lg border border-outline-variant/60">
+        <span class="text-[11px] text-[#86868b] hidden xl:inline">Tampilan:</span>
+        <div class="apple-segmented-container">
           <button
             @click="currentView = 'split'"
-            :class="currentView === 'split' ? 'bg-surface-container-lowest text-primary shadow-xs font-semibold' : 'text-on-surface-variant hover:text-on-surface'"
-            class="px-2.5 py-1 rounded flex items-center gap-1 font-label-md text-label-md transition-all"
+            :class="currentView === 'split' ? 'active' : ''"
+            class="apple-segmented-item flex items-center gap-1.5 apple-press cursor-pointer"
             type="button"
           >
-            <span class="material-symbols-outlined text-[16px]">view_agenda</span>
+            <span class="material-symbols-outlined text-[15px]">view_agenda</span>
             <span>Split Kerja</span>
           </button>
           <button
             @click="currentView = 'calendar'"
-            :class="currentView === 'calendar' ? 'bg-surface-container-lowest text-primary shadow-xs font-semibold' : 'text-on-surface-variant hover:text-on-surface'"
-            class="px-2.5 py-1 rounded flex items-center gap-1 font-label-md text-label-md transition-all"
+            :class="currentView === 'calendar' ? 'active' : ''"
+            class="apple-segmented-item flex items-center gap-1.5 apple-press cursor-pointer"
             type="button"
           >
-            <span class="material-symbols-outlined text-[16px]">calendar_view_week</span>
+            <span class="material-symbols-outlined text-[15px]">calendar_view_week</span>
             <span>Kalender</span>
           </button>
         </div>
@@ -166,6 +166,36 @@
           </div>
           <div class="px-3 py-1 rounded-full bg-surface-container text-primary font-label-md text-label-md font-semibold border border-outline-variant">
             Wajib Dilaporkan
+          </div>
+        </div>
+
+        <!-- Urgency Alert Banner in Logbook Page -->
+        <div
+          v-if="journalUrgency !== 'none'"
+          class="mt-4 p-4 rounded-xl border flex items-start gap-3 transition-all"
+          :class="{
+            'bg-amber-500/10 border-amber-500/40 text-amber-950': journalUrgency === 'warning',
+            'bg-red-500/15 border-red-500/50 text-red-950 animate-glow-danger': journalUrgency === 'danger'
+          }"
+        >
+          <div
+            class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+            :class="journalUrgency === 'danger' ? 'bg-red-600 text-white animate-pulse-danger' : 'bg-amber-500 text-white'"
+          >
+            <span class="material-symbols-outlined text-[20px]">
+              {{ journalUrgency === 'danger' ? 'crisis_alert' : 'priority_high' }}
+            </span>
+          </div>
+          <div class="flex flex-col gap-0.5 min-w-0">
+            <span class="text-xs font-bold uppercase tracking-wider">
+              {{ journalUrgency === 'danger' ? '🚨 PERINGATAN DARURAT: Tap-Out Terancam Dianulir' : '⚠️ PERINGATAN: Selesaikan Jurnal Pasca Tap-Out' }}
+            </span>
+            <p class="text-[12px] leading-relaxed">
+              {{ journalUrgency === 'danger'
+                ? `Anda telah Tap-Out ${effectiveMinutesSinceTapOut} menit yang lalu (pukul ${attendanceState.checkOutTime || '17:00'} WIB) tanpa mengirimkan jurnal. Segera isi dan kirimkan formulir ini agar kehadiran Anda diverifikasi.`
+                : `Anda telah melakukan presensi pulang (Tap-Out) pada pukul ${attendanceState.checkOutTime || '17:00'} WIB. Lengkapi detail pengerjaan magang hari ini di bawah ini.`
+              }}
+            </p>
           </div>
         </div>
 
@@ -372,25 +402,34 @@
           </div>
 
           <!-- Bottom Action Bar -->
-          <div class="pt-4 mt-2 flex flex-col sm:flex-row items-center justify-between gap-3 bg-surface-container-low/50 -mx-6 -mb-6 p-6 rounded-b-2xl border-t border-outline-variant/60">
-            <div class="flex items-center gap-2 self-start sm:self-auto text-on-surface-variant">
-              <span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
-              <span class="font-label-sm text-label-sm">Draf otomatis tersimpan pada {{ lastAutoSaveTime }} WIB</span>
+          <div class="pt-4 mt-2 flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#f5f5f7] -mx-6 -mb-6 p-6 rounded-b-2xl border-t border-black/[0.05]">
+            <div class="flex items-center gap-2 self-start sm:self-auto text-[#86868b]">
+              <span class="material-symbols-outlined text-[16px] text-[#34c759]">check_circle</span>
+              <span class="text-[11px]">Draf otomatis tersimpan pada {{ lastAutoSaveTime }} WIB</span>
             </div>
-            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+            <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
               <button
                 @click="saveAsDraft"
-                class="flex-1 sm:flex-initial px-4 py-2.5 rounded-lg bg-surface-container-lowest text-primary hover:bg-surface-container text-body-sm font-body-sm font-semibold transition-colors shadow-xs border border-outline-variant"
+                class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-white text-[#1d1d1f] hover:bg-black/[0.04] text-[12px] font-semibold transition-all shadow-xs border border-black/[0.08] apple-press"
                 type="button"
               >
                 Simpan sebagai Draf
               </button>
               <button
-                class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-body-sm font-body-sm font-semibold shadow-sm transition-colors active:scale-95"
+                class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-white text-[12px] font-semibold transition-all apple-press cursor-pointer"
+                :class="{
+                  'bg-[#0071e3] hover:bg-[#0077ed] shadow-[0_2px_8px_rgba(0,113,227,0.25)]': journalUrgency === 'none',
+                  'bg-amber-500 hover:bg-amber-600 shadow-[0_4px_14px_rgba(245,158,11,0.35)] font-bold': journalUrgency === 'warning',
+                  'bg-red-600 hover:bg-red-700 shadow-[0_4px_20px_rgba(239,68,68,0.55)] animate-pulse-danger ring-2 ring-red-400 font-extrabold': journalUrgency === 'danger'
+                }"
                 type="submit"
               >
-                <span class="material-symbols-outlined text-[18px]">send</span>
-                <span>Kirim untuk Review</span>
+                <span class="material-symbols-outlined text-[17px]">
+                  {{ journalUrgency === 'danger' ? 'warning' : (journalUrgency === 'warning' ? 'priority_high' : 'send') }}
+                </span>
+                <span>
+                  {{ journalUrgency === 'danger' ? '⚠️ SEGERA KIRIM JURNAL (DARURAT)' : (journalUrgency === 'warning' ? 'Kirim Jurnal Hari Ini !' : 'Kirim untuk Review') }}
+                </span>
               </button>
             </div>
           </div>
@@ -401,25 +440,25 @@
       <section class="lg:col-span-5 flex flex-col gap-4">
         <div class="flex items-center justify-between pb-1">
           <div class="flex items-center gap-2">
-            <h2 class="font-headline-md text-headline-md text-primary font-bold">Riwayat Logbook</h2>
-            <span class="px-2 py-0.5 rounded-full bg-surface-container text-secondary font-label-md text-label-md font-semibold border border-outline-variant">
+            <h2 class="text-base font-bold text-[#1d1d1f]">Riwayat Logbook</h2>
+            <span class="px-2 py-0.5 rounded-full bg-[#0071e3]/10 text-[#0071e3] text-[11px] font-semibold">
               Pekan 8
             </span>
           </div>
-          <span class="font-label-sm text-label-sm text-on-surface-variant">{{ filteredLogs.length }} entri pekan ini</span>
+          <span class="text-[11px] text-[#86868b]">{{ filteredLogs.length }} entri pekan ini</span>
         </div>
 
-        <div class="flex flex-col gap-3.5">
+        <div class="flex flex-col gap-3">
           <article
             v-for="log in filteredLogs"
             :key="log.id"
             @click="selectLog(log)"
-            class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-outline-variant hover:shadow-md transition-shadow cursor-pointer flex flex-col gap-3"
+            class="bg-white rounded-2xl p-4.5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all cursor-pointer flex flex-col gap-2.5 apple-press"
           >
             <div class="flex items-start justify-between gap-2">
               <div class="flex flex-col">
-                <span class="font-label-sm text-label-sm text-on-surface-variant">{{ log.date }}</span>
-                <h3 class="font-headline-sm text-headline-sm text-primary font-semibold mt-0.5 line-clamp-1">
+                <span class="text-[11px] text-[#86868b] font-medium">{{ log.date }}</span>
+                <h3 class="text-[13px] text-[#1d1d1f] font-semibold mt-0.5 line-clamp-1">
                   {{ log.title }}
                 </h3>
               </div>
@@ -500,7 +539,15 @@
 import { ref, computed } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { showToast } = useAppStore()
+const {
+  showToast,
+  authToken,
+  attendanceState,
+  isTodayLogged,
+  journalUrgency,
+  effectiveMinutesSinceTapOut,
+  recordJournalSubmitted
+} = useAppStore()
 
 const formContainer = ref<HTMLElement | null>(null)
 const titleInput = ref<HTMLInputElement | null>(null)
@@ -641,7 +688,26 @@ const saveAsDraft = () => {
   showToast('Draf jurnal harian berhasil disimpan di perangkat!', 'success')
 }
 
-const handleSubmitEntry = () => {
+const handleSubmitEntry = async () => {
+  try {
+    const todayIso = new Date().toISOString().substring(0, 10)
+    await fetch('http://127.0.0.1:8000/api/siswa/logbooks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${authToken.value}`
+      },
+      body: JSON.stringify({
+        date: todayIso,
+        title: form.value.title,
+        activity_description: form.value.description
+      })
+    })
+  } catch (e) {
+    // fallback
+  }
+
   logsList.value.unshift({
     id: Date.now(),
     date: 'Rabu, 23 Okt 2024',
@@ -655,7 +721,7 @@ const handleSubmitEntry = () => {
     mentorInitials: 'DA'
   })
 
-  showToast('Catatan jurnal harian berhasil dikirim ke Pembimbing Industri!', 'success')
+  recordJournalSubmitted()
 }
 
 const selectLog = (log: typeof initialLogs[0]) => {

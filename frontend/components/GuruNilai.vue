@@ -1,12 +1,19 @@
 <template>
   <div class="space-y-6 max-w-7xl mx-auto">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-200">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-black/[0.06]">
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-          <span>🎓 Manajemen &amp; Kompilasi Nilai PKL</span>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-[#0071e3]/10 text-[#0071e3]">
+            Akademik PKL
+          </span>
+          <span class="text-[#86868b]">•</span>
+          <span class="text-xs font-medium text-[#86868b]">SMKN 71 Jakarta</span>
+        </div>
+        <h2 class="text-2xl font-bold text-[#1d1d1f] tracking-tight flex items-center gap-2">
+          <span>Manajemen &amp; Kompilasi Nilai PKL</span>
         </h2>
-        <p class="text-xs text-slate-500 mt-1">
+        <p class="text-xs text-[#86868b] mt-0.5">
           Kompilasi nilai industri, input evaluasi laporan sekolah, dan kalkulasi otomatis nilai akhir PKL.
         </p>
       </div>
@@ -14,81 +21,87 @@
       <div class="flex items-center gap-2">
         <button
           @click="saveAllScores"
-          class="px-4 py-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95"
+          class="px-4 py-2 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-xl text-xs font-semibold shadow-[0_2px_8px_rgba(0,113,227,0.25)] transition flex items-center gap-1.5 apple-press cursor-pointer"
         >
-          <span>💾</span> Simpan Semua Nilai Sekolah
+          <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+          </svg>
+          <span>Simpan Semua Nilai Sekolah</span>
         </button>
       </div>
     </div>
 
-    <!-- Formula Rumus Banner -->
-    <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-[#eef4fa] text-[#1e3a5f] border border-[#d0e1f3] flex items-center justify-center text-lg font-bold">
+    <!-- Formula Rumus Banner (Apple Style) -->
+    <div class="p-5 rounded-2xl bg-white border border-black/[0.05] shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-2xl bg-[#0071e3]/10 text-[#0071e3] flex items-center justify-center text-lg font-bold">
           🧮
         </div>
         <div>
-          <span class="text-xs font-bold text-slate-900">Standar Bobot Penilaian PKL Kurikulum Merdeka</span>
-          <p class="text-[11px] text-slate-500">
-            Nilai Akhir = <strong class="text-emerald-700">(60% × Nilai DUDI)</strong> + <strong class="text-[#1e3a5f]">(40% × Nilai Laporan Sekolah)</strong>
+          <span class="text-xs font-bold text-[#1d1d1f]">Standar Bobot Penilaian PKL Kurikulum Merdeka</span>
+          <p class="text-[11px] text-[#86868b] mt-0.5">
+            Nilai Akhir = <strong class="text-[#34c759]">(60% × Nilai Pembimbing Lapangan)</strong> + <strong class="text-[#0071e3]">(40% × Nilai Laporan Sekolah)</strong>
           </p>
         </div>
       </div>
 
-      <div class="flex items-center gap-4 text-xs font-mono text-slate-700">
-        <span class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200">KKM Minimal: 78.00</span>
-        <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">Terintegrasi QR DUDI</span>
+      <div class="flex items-center gap-2 text-xs font-mono">
+        <span class="px-2.5 py-1 rounded-full bg-black/[0.04] text-[#1d1d1f] font-medium">KKM Minimal: 78.00</span>
+        <span class="px-2.5 py-1 rounded-full bg-[#34c759]/10 text-[#34c759] font-semibold">✓ Terintegrasi QR Pembimbing Lapangan</span>
       </div>
     </div>
 
     <!-- TABEL KOMPILASI NILAI -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-      <div class="pb-4 mb-4 border-b border-slate-200 flex items-center justify-between">
-        <h3 class="text-sm font-bold text-slate-900">Tabel Kompilasi Nilai Siswa Binaan</h3>
-        <span class="text-xs text-slate-500 font-mono">4 Siswa Terdaftar</span>
+    <div class="bg-white border border-black/[0.05] rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+      <div class="pb-4 mb-4 border-b border-black/[0.05] flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-semibold text-[#1d1d1f] tracking-tight">Tabel Kompilasi Nilai Siswa Binaan</h3>
+          <p class="text-[11px] text-[#86868b] mt-0.5">Kombinasi skor pembimbing lapangan dan nilai laporan sekolah</p>
+        </div>
+        <span class="text-xs text-[#86868b] font-mono">{{ studentsScores.length }} Siswa Terdaftar</span>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-700">
-          <thead class="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200">
+        <table class="w-full text-left text-xs text-[#1d1d1f]">
+          <thead class="bg-black/[0.02] text-[#86868b] uppercase text-[10px] tracking-wider border-b border-black/[0.05] font-semibold">
             <tr>
-              <th class="py-3.5 px-4">Nama Siswa</th>
-              <th class="py-3.5 px-4">Perusahaan (DUDI)</th>
-              <th class="py-3.5 px-4 text-center">Nilai DUDI (60%)</th>
-              <th class="py-3.5 px-4 text-center">Nilai Laporan Sekolah (40%)</th>
-              <th class="py-3.5 px-4 text-center font-bold text-slate-900">Nilai Akhir PKL</th>
-              <th class="py-3.5 px-4 text-center">Predikat</th>
-              <th class="py-3.5 px-4 text-center">Aksi</th>
+              <th class="py-3 px-4 rounded-l-xl">Nama Siswa</th>
+              <th class="py-3 px-4">Tempat Magang</th>
+              <th class="py-3 px-4 text-center">Nilai Lapangan (60%)</th>
+              <th class="py-3 px-4 text-center">Nilai Laporan Sekolah (40%)</th>
+              <th class="py-3 px-4 text-center font-bold text-[#1d1d1f]">Nilai Akhir PKL</th>
+              <th class="py-3 px-4 text-center">Predikat</th>
+              <th class="py-3 px-4 text-center rounded-r-xl">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-200">
-            <tr v-for="student in studentsScores" :key="student.id" class="hover:bg-slate-50 transition">
+          <tbody class="divide-y divide-black/[0.04]">
+            <tr v-for="student in studentsScores" :key="student.id" class="hover:bg-black/[0.02] transition">
               <!-- Student -->
               <td class="py-3.5 px-4 whitespace-nowrap">
                 <div class="flex items-center gap-3">
-                  <img :src="student.avatar" class="w-8 h-8 rounded-lg object-cover border border-slate-200" />
+                  <img :src="student.avatar" class="w-9 h-9 rounded-xl object-cover border border-black/[0.06] shadow-xs" />
                   <div>
-                    <div class="font-bold text-slate-900">{{ student.name }}</div>
-                    <div class="text-[10px] text-slate-500 font-mono">NISN: {{ student.nisn }}</div>
+                    <div class="font-semibold text-[#1d1d1f]">{{ student.name }}</div>
+                    <div class="text-[10px] text-[#86868b] font-mono">NISN: {{ student.nisn }}</div>
                   </div>
                 </div>
               </td>
 
               <!-- Company -->
-              <td class="py-3.5 px-4 text-slate-700 whitespace-nowrap">
+              <td class="py-3.5 px-4 text-[#86868b] whitespace-nowrap font-medium">
                 {{ student.company }}
               </td>
 
-              <!-- NILAI DARI DUDI (OTOMATIS TERISI JIKA SUDAH INPUT DUDI) -->
+              <!-- NILAI DARI PEMBIMBING LAPANGAN -->
               <td class="py-3.5 px-4 text-center whitespace-nowrap">
-                <div v-if="student.dudiScore !== null">
-                  <span class="font-mono text-sm font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-                    {{ student.dudiScore.toFixed(2) }}
+                <div v-if="(student.mentorScore ?? student.dudiScore) !== null && (student.mentorScore ?? student.dudiScore) !== undefined">
+                  <span class="font-mono text-xs font-bold text-[#34c759] bg-[#34c759]/10 px-2.5 py-1 rounded-lg">
+                    {{ (student.mentorScore ?? student.dudiScore).toFixed(2) }}
                   </span>
-                  <span class="block text-[9px] text-emerald-700 mt-1 font-semibold">✓ Terverifikasi QR</span>
+                  <span class="block text-[9px] text-[#34c759] mt-1 font-semibold">✓ QR Validated</span>
                 </div>
-                <div v-else class="text-amber-800 font-mono text-[11px] italic bg-amber-50 px-2 py-1 rounded-lg border border-amber-200">
-                  ⏳ Menunggu DUDI
+                <div v-else class="text-[#ff9500] font-mono text-[11px] italic bg-[#ff9500]/10 px-2.5 py-1 rounded-lg">
+                  Menunggu Penilaian Lapangan
                 </div>
               </td>
 
@@ -102,9 +115,9 @@
                     max="100"
                     placeholder="0-100"
                     @input="recalculateFinalScore(student)"
-                    class="w-24 px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-center font-mono font-bold text-[#1e3a5f] text-xs focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm"
+                    class="w-20 px-2.5 py-1.5 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-center font-mono font-bold text-[#0071e3] text-xs transition"
                   />
-                  <span class="text-[11px] text-slate-500 font-mono">/ 100</span>
+                  <span class="text-[11px] text-[#86868b] font-mono">/ 100</span>
                 </div>
               </td>
 
@@ -112,11 +125,11 @@
               <td class="py-3.5 px-4 text-center whitespace-nowrap font-mono">
                 <span
                   v-if="student.finalScore !== null"
-                  class="text-base font-black text-slate-900 px-3 py-1 rounded-xl bg-slate-100 border border-slate-300 shadow-sm"
+                  class="text-sm font-bold text-[#1d1d1f] px-3 py-1 rounded-xl bg-black/[0.04] border border-black/[0.05]"
                 >
                   {{ student.finalScore.toFixed(2) }}
                 </span>
-                <span v-else class="text-slate-400 text-xs italic">
+                <span v-else class="text-[#86868b] text-xs italic">
                   Belum Lengkap
                 </span>
               </td>
@@ -125,19 +138,19 @@
               <td class="py-3.5 px-4 text-center whitespace-nowrap">
                 <span
                   v-if="student.predicate"
-                  :class="student.predicate.startsWith('A') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-[#eef4fa] text-[#1e3a5f] border-[#d0e1f3]'"
-                  class="px-2 py-0.5 rounded-full text-[10px] font-bold border"
+                  :class="student.predicate.startsWith('A') ? 'bg-[#34c759]/10 text-[#34c759]' : 'bg-[#0071e3]/10 text-[#0071e3]'"
+                  class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold"
                 >
                   {{ student.predicate }}
                 </span>
-                <span v-else class="text-slate-400 text-[10px]">-</span>
+                <span v-else class="text-[#86868b] text-[10px]">-</span>
               </td>
 
               <!-- Aksi -->
               <td class="py-3.5 px-4 text-center whitespace-nowrap">
                 <button
                   @click="saveSingleScore(student)"
-                  class="px-3 py-1 bg-white hover:bg-slate-100 text-slate-700 rounded-lg text-[11px] font-semibold border border-slate-300 shadow-sm transition active:scale-95"
+                  class="px-3 py-1 bg-black/[0.04] hover:bg-black/[0.08] text-[#1d1d1f] rounded-lg text-[11px] font-medium transition apple-press cursor-pointer"
                 >
                   Simpan
                 </button>
@@ -158,47 +171,14 @@ const { showToast } = useAppStore()
 
 const studentsScores = ref([
   {
-    id: 1,
-    name: 'Budi Santoso',
+    id: 4,
+    name: 'Siswa Magang',
     nisn: '0061234567',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
     company: 'PT Telkom Digital Solusi',
     dudiScore: 92.50,
     schoolScore: 90.00,
     finalScore: 91.50,
-    predicate: 'A (Amat Baik)'
-  },
-  {
-    id: 2,
-    name: 'Siti Rahma',
-    nisn: '0061234568',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-    company: 'PT Telkom Digital Solusi',
-    dudiScore: 88.00,
-    schoolScore: 86.00,
-    finalScore: 87.20,
-    predicate: 'B+ (Sangat Baik)'
-  },
-  {
-    id: 3,
-    name: 'Rizky Pratama',
-    nisn: '0061234569',
-    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150',
-    company: 'PT Inovasi Media Kreatif',
-    dudiScore: null,
-    schoolScore: 78.00,
-    finalScore: null,
-    predicate: null
-  },
-  {
-    id: 4,
-    name: 'Dewi Anggraeni',
-    nisn: '0061234570',
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
-    company: 'Bank Mandiri IT Hub',
-    dudiScore: 95.00,
-    schoolScore: 92.00,
-    finalScore: 93.80,
     predicate: 'A (Amat Baik)'
   }
 ])
@@ -210,8 +190,9 @@ const recalculateFinalScore = (student: any) => {
     return
   }
 
-  if (student.dudiScore !== null) {
-    const finalVal = (student.dudiScore * 0.6) + (student.schoolScore * 0.4)
+  const mentorScore = student.mentorScore ?? student.dudiScore
+  if (mentorScore !== null && mentorScore !== undefined) {
+    const finalVal = (mentorScore * 0.6) + (student.schoolScore * 0.4)
     student.finalScore = Math.round(finalVal * 100) / 100
 
     if (student.finalScore >= 90) student.predicate = 'A (Amat Baik)'

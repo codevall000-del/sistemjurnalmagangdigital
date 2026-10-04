@@ -1,18 +1,25 @@
 <template>
   <div class="space-y-6 max-w-7xl mx-auto">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-200">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-black/[0.06]">
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-          <span>🎯 Plotting &amp; Penempatan Siswa Magang</span>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-[#0071e3]/10 text-[#0071e3]">
+            Plotting &amp; Penempatan
+          </span>
+          <span class="text-[#86868b]">•</span>
+          <span class="text-xs font-medium text-[#86868b]">SMKN 71 Jakarta</span>
+        </div>
+        <h2 class="text-2xl font-bold text-[#1d1d1f] tracking-tight flex items-center gap-2">
+          <span>Penempatan Siswa Magang</span>
         </h2>
-        <p class="text-xs text-slate-500 mt-1">
+        <p class="text-xs text-[#86868b] mt-0.5">
           Antarmuka panel ganda untuk menjodohkan siswa dengan mitra industri dan guru pembimbing.
         </p>
       </div>
 
       <div class="flex items-center gap-2">
-        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#eef4fa] text-[#1e3a5f] border border-[#d0e1f3]">
+        <span class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-black/[0.04] text-[#1d1d1f] border border-black/[0.06]">
           Mode: Dual-Panel Matching System
         </span>
       </div>
@@ -21,49 +28,49 @@
     <!-- VIEW PANEL GANDA UNTUK MENJODOHKAN DATA -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <!-- PANEL KIRI (5 COLS): PILIH NAMA SISWA -->
-      <div class="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col">
-        <div class="pb-3 border-b border-slate-200 flex items-center justify-between">
+      <div class="lg:col-span-5 bg-white border border-black/[0.05] rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col">
+        <div class="pb-3 border-b border-black/[0.06] flex items-center justify-between">
           <div>
-            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <h3 class="text-sm font-semibold text-[#1d1d1f] flex items-center gap-2">
               <span>1️⃣ Panel Siswa</span>
             </h3>
-            <p class="text-[11px] text-slate-500">Pilih salah satu siswa di bawah:</p>
+            <p class="text-[11px] text-[#86868b]">Pilih siswa untuk dijodohkan:</p>
           </div>
-          <span class="text-xs font-mono text-slate-500">{{ students.length }} Siswa</span>
+          <span class="text-xs font-mono text-[#86868b]">{{ students.length }} Siswa</span>
         </div>
 
         <!-- Student Selectable List -->
-        <div class="mt-4 space-y-2 flex-1 overflow-y-auto max-h-[420px] pr-1">
+        <div class="mt-4 space-y-2 flex-1 overflow-y-auto max-h-[440px] pr-1">
           <div
             v-for="s in students"
             :key="s.id"
             @click="selectedStudent = s"
-            :class="selectedStudent.id === s.id ? 'bg-[#eef4fa] border-2 border-[#1e3a5f] text-slate-900 shadow-xs' : 'bg-white border border-slate-200 text-slate-800 hover:border-slate-300 hover:bg-slate-50'"
-            class="p-3.5 rounded-xl cursor-pointer transition flex items-center justify-between gap-3"
+            :class="selectedStudent.id === s.id ? 'bg-[#0071e3]/10 border border-[#0071e3]/30 shadow-xs' : 'bg-black/[0.02] border border-black/[0.04] hover:bg-black/[0.04]'"
+            class="p-3.5 rounded-2xl cursor-pointer transition flex items-center justify-between gap-3 apple-press"
           >
             <div class="flex items-center gap-3">
               <input
                 type="radio"
                 :checked="selectedStudent.id === s.id"
-                class="accent-[#1e3a5f] w-4 h-4 cursor-pointer"
+                class="accent-[#0071e3] w-4 h-4 cursor-pointer"
               />
-              <img :src="s.avatar" class="w-9 h-9 rounded-xl object-cover border border-slate-200" />
+              <img :src="s.avatar" class="w-9 h-9 rounded-xl object-cover border border-black/[0.06] shadow-xs" />
               <div>
-                <h4 class="text-xs font-bold text-slate-900">{{ s.name }}</h4>
-                <div class="text-[10px] text-slate-500 font-mono">NISN: {{ s.nisn }}</div>
+                <h4 class="text-xs font-semibold text-[#1d1d1f]">{{ s.name }}</h4>
+                <div class="text-[10px] text-[#86868b] font-mono">NISN: {{ s.nisn }} • {{ s.major }}</div>
               </div>
             </div>
 
             <div>
               <span
                 v-if="s.placementStatus === 'Sudah Terplotting'"
-                class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"
+                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#34c759]/10 text-[#34c759]"
               >
                 ✓ Terplotting
               </span>
               <span
                 v-else
-                class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200"
+                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#ff9500]/10 text-[#ff9500]"
               >
                 ⏳ Belum
               </span>
@@ -73,49 +80,49 @@
       </div>
 
       <!-- PANEL KANAN (7 COLS): PILIH NAMA GURU & DUDI LALU TETAPKAN PENEMPATAN -->
-      <div class="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
-        <div class="pb-3 border-b border-slate-200 flex items-center justify-between">
+      <div class="lg:col-span-7 bg-white border border-black/[0.05] rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-5">
+        <div class="pb-3 border-b border-black/[0.06] flex items-center justify-between">
           <div>
-            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <span>2️⃣ Panel Penjodohan Guru &amp; DUDI</span>
+            <h3 class="text-sm font-semibold text-[#1d1d1f] flex items-center gap-2">
+              <span>2️⃣ Panel Penjodohan Guru &amp; Pembimbing Lapangan</span>
             </h3>
-            <p class="text-[11px] text-slate-500">
-              Siswa terpilih: <strong class="text-[#1e3a5f]">{{ selectedStudent.name }}</strong>
+            <p class="text-[11px] text-[#86868b]">
+              Siswa terpilih: <strong class="text-[#0071e3]">{{ selectedStudent.name }}</strong>
             </p>
           </div>
-          <span class="text-xs font-mono font-bold text-[#1e3a5f]">Target Match</span>
+          <span class="text-xs font-mono font-medium text-[#0071e3]">Target Match</span>
         </div>
 
         <form @submit.prevent="handleAssignPlacement" class="space-y-4 text-xs">
-          <!-- 1. Perusahaan Mitra DUDI -->
+          <!-- 1. Tempat Magang / Instansi -->
           <div>
-            <label class="block font-semibold text-slate-700 mb-1.5">
-              Pilih Mitra Industri (Perusahaan DUDI) *
+            <label class="block font-medium text-[#1d1d1f] mb-1.5">
+              Pilih Tempat Magang (Instansi / Perusahaan) *
             </label>
             <select
               v-model="form.companyId"
               required
-              class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
+              class="w-full px-3.5 py-2.5 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer"
             >
-              <option value="" disabled>-- Pilih Perusahaan Industri --</option>
+              <option value="" disabled>-- Pilih Tempat Magang --</option>
               <option v-for="c in companies" :key="c.id" :value="c.id">
                 {{ c.name }} (Sisa Kuota: {{ c.quota - c.occupied }} Kursi)
               </option>
             </select>
           </div>
 
-          <!-- 2. Pembimbing DUDI & Guru Pembimbing -->
+          <!-- 2. Pembimbing Lapangan & Guru Pembimbing -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block font-semibold text-slate-700 mb-1.5">
-                Pilih Pembimbing Industri (DUDI) *
+              <label class="block font-medium text-[#1d1d1f] mb-1.5">
+                Pilih Pembimbing Lapangan *
               </label>
               <select
                 v-model="form.dudiMentorId"
                 required
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
+                class="w-full px-3.5 py-2.5 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer"
               >
-                <option value="" disabled>-- Pilih Mentor DUDI --</option>
+                <option value="" disabled>-- Pilih Pembimbing Lapangan --</option>
                 <option v-for="m in dudiMentors" :key="m.id" :value="m.id">
                   {{ m.name }} ({{ m.company }})
                 </option>
@@ -123,13 +130,13 @@
             </div>
 
             <div>
-              <label class="block font-semibold text-slate-700 mb-1.5">
+              <label class="block font-medium text-[#1d1d1f] mb-1.5">
                 Pilih Guru Pembimbing Sekolah *
               </label>
               <select
                 v-model="form.guruMentorId"
                 required
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm cursor-pointer"
+                class="w-full px-3.5 py-2.5 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer"
               >
                 <option value="" disabled>-- Pilih Guru Pembimbing --</option>
                 <option v-for="g in guruMentors" :key="g.id" :value="g.id">
@@ -142,21 +149,21 @@
           <!-- 3. Periode Tanggal Magang -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block font-semibold text-slate-700 mb-1.5">Tanggal Mulai Magang *</label>
+              <label class="block font-medium text-[#1d1d1f] mb-1.5">Tanggal Mulai Magang *</label>
               <input
                 v-model="form.startDate"
                 type="date"
                 required
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm"
+                class="w-full px-3.5 py-2.5 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition"
               />
             </div>
             <div>
-              <label class="block font-semibold text-slate-700 mb-1.5">Tanggal Selesai Magang *</label>
+              <label class="block font-medium text-[#1d1d1f] mb-1.5">Tanggal Selesai Magang *</label>
               <input
                 v-model="form.endDate"
                 type="date"
                 required
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f] shadow-sm"
+                class="w-full px-3.5 py-2.5 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition"
               />
             </div>
           </div>
@@ -166,7 +173,7 @@
             <button
               type="submit"
               :disabled="isAssigning"
-              class="w-full py-3.5 px-6 bg-[#1e3a5f] hover:bg-[#162d4a] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+              class="w-full py-3.5 px-6 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-xl text-xs font-semibold shadow-[0_2px_8px_rgba(0,113,227,0.25)] transition flex items-center justify-center gap-2 apple-press disabled:opacity-50 cursor-pointer"
             >
               <span v-if="isAssigning" class="animate-spin inline-block">⏳</span>
               <span>🔗 Tetapkan Penempatan</span>
@@ -185,37 +192,36 @@ import { useAppStore } from '~/composables/useAppStore'
 const { showToast } = useAppStore()
 
 const students = ref([
-  { id: 1, name: 'Budi Santoso', nisn: '0061234567', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
-  { id: 2, name: 'Siti Rahma', nisn: '0061234568', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
-  { id: 3, name: 'Rizky Pratama', nisn: '0061234569', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150' },
-  { id: 4, name: 'Dewi Anggraeni', nisn: '0061234570', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150' },
-  { id: 5, name: 'Fajar Nugraha', nisn: '0061234571', placementStatus: 'Belum Terplotting', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150' },
+  { id: 4, name: 'Budi Santoso', nisn: '0061234567', major: 'PPLG', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
+  { id: 5, name: 'Siti Fauziah', nisn: '0061234568', major: 'PPLG', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
+  { id: 6, name: 'Ahmad Danu', nisn: '0061234569', major: 'Animasi', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150' },
+  { id: 7, name: 'Putri Maharani', nisn: '0061234570', major: 'Animasi', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150' },
+  { id: 8, name: 'Rizky Pratama', nisn: '0061234571', major: 'DKV', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150' },
+  { id: 9, name: 'Jessica Tan', nisn: '0061234572', major: 'DKV', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150' },
 ])
 
 const selectedStudent = ref(students.value[0])
 
 const companies = ref([
-  { id: 1, name: 'PT Telkom Digital Solusi', quota: 6, occupied: 6 },
-  { id: 2, name: 'PT Inovasi Media Kreatif', quota: 4, occupied: 3 },
-  { id: 3, name: 'Bank Mandiri IT Hub Innovation', quota: 8, occupied: 7 },
-  { id: 4, name: 'CV Nusantara Studio Digital', quota: 4, occupied: 2 },
+  { id: 1, name: 'PT Telkom Digital Solusi (PPLG)', quota: 6, occupied: 2 },
+  { id: 2, name: 'Studio Animasi Kinetik Digital (Animasi)', quota: 4, occupied: 2 },
+  { id: 3, name: 'Pixel Kreatif Visual Agency (DKV)', quota: 5, occupied: 2 },
 ])
 
 const dudiMentors = ref([
-  { id: 1, name: 'Hendra Wijaya, S.Kom', company: 'PT Telkom Digital Solusi' },
-  { id: 2, name: 'Linda Kusuma, M.Ds', company: 'PT Inovasi Media Kreatif' },
-  { id: 3, name: 'Bagus Setiawan', company: 'CV Nusantara Studio' },
+  { id: 3, name: 'Hendra Wijaya, S.Kom', company: 'PT Telkom Digital Solusi' },
+  { id: 10, name: 'Raditya Pratama, S.Sn', company: 'Studio Animasi Kinetik' },
+  { id: 11, name: 'Maya Safitri, M.Ds', company: 'Pixel Kreatif Visual Agency' },
 ])
 
 const guruMentors = ref([
-  { id: 1, name: 'Dra. Nurul Hidayah, M.Pd' },
-  { id: 2, name: 'Ahmad Fauzi, S.Pd' },
+  { id: 2, name: 'Dra. Nurul Hidayah, M.Pd (Pembimbing Utama SMKN 71)' },
 ])
 
 const form = reactive({
   companyId: 1,
-  dudiMentorId: 1,
-  guruMentorId: 1,
+  dudiMentorId: 3,
+  guruMentorId: 2,
   startDate: '2026-07-01',
   endDate: '2026-11-27'
 })
@@ -227,7 +233,7 @@ const handleAssignPlacement = () => {
   setTimeout(() => {
     isAssigning.value = false
     selectedStudent.value.placementStatus = 'Sudah Terplotting'
-    showToast(`Penempatan untuk ${selectedStudent.value.name} berhasil ditetapkan! Surat tugas telah digenerate.`, 'success')
-  }, 700)
+    showToast(`Penempatan untuk ${selectedStudent.value.name} berhasil diperbarui secara online!`, 'success')
+  }, 500)
 }
 </script>

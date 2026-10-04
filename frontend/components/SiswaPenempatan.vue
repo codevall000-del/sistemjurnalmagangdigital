@@ -1,103 +1,103 @@
 <template>
-  <div class="flex flex-col w-full max-w-[1440px] mx-auto gap-space-xl">
+  <div class="flex flex-col w-full max-w-[1440px] mx-auto gap-6">
     <!-- Top Context & Header Action -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-space-lg">
-      <div class="flex flex-col gap-space-xs max-w-2xl">
-        <div class="flex items-center gap-space-xs">
-          <span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase tracking-wider font-semibold border border-secondary/30">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div class="flex flex-col gap-1 max-w-2xl">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-[#0071e3]/10 text-[#0071e3] text-[11px] uppercase tracking-wider font-semibold">
             Modul Pembimbingan
           </span>
-          <span class="text-outline">•</span>
-          <span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
-            <span class="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+          <span class="text-black/20">•</span>
+          <span class="text-[11px] text-[#86868b] flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px] text-[#0071e3]">verified_user</span>
             Akreditasi Vokasi SMKN 71 Jakarta
           </span>
         </div>
-        <h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">
+        <h1 class="text-2xl sm:text-3xl text-[#1d1d1f] font-bold tracking-tight">
           Bimbingan &amp; Catatan Mentor
         </h1>
-        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+        <p class="text-[13px] text-[#86868b] leading-relaxed">
           Ruang diskusi terarah, umpan balik performa berkala, dan rekap bimbingan akademik magang.
         </p>
       </div>
 
-      <div class="flex items-center flex-wrap gap-space-sm">
+      <div class="flex items-center flex-wrap gap-2.5">
         <button
           @click="downloadVerificationSheet"
-          class="inline-flex items-center gap-space-xs bg-surface-container hover:bg-surface-container-high text-primary px-space-md py-2.5 rounded-lg font-label-md text-label-md transition-all shadow-sm border border-outline-variant"
+          class="inline-flex items-center gap-1.5 bg-white hover:bg-black/[0.03] text-[#1d1d1f] px-3.5 py-2 rounded-xl text-[12px] font-semibold transition-all shadow-xs border border-black/[0.08] apple-press"
           type="button"
         >
-          <span class="material-symbols-outlined text-[18px]">cloud_download</span>
-          <span>Unduh Lembar Verifikasi Bimbingan</span>
+          <span class="material-symbols-outlined text-[17px] text-[#0071e3]">cloud_download</span>
+          <span>Unduh Lembar Verifikasi</span>
         </button>
         <button
           @click="isRequestModalOpen = true"
-          class="inline-flex items-center gap-space-xs bg-primary hover:bg-primary-container text-on-primary px-space-md py-2.5 rounded-lg font-headline-sm text-headline-sm transition-all shadow-sm active:scale-95"
+          class="inline-flex items-center gap-1.5 bg-[#0071e3] hover:bg-[#0077ed] text-white px-4 py-2 rounded-xl text-[12px] font-semibold transition-all shadow-[0_2px_8px_rgba(0,113,227,0.25)] active:scale-[0.98] apple-press cursor-pointer"
           type="button"
         >
-          <span class="material-symbols-outlined text-[18px]">add</span>
-          <span>Ajukan Sesi Bimbingan 1-on-1</span>
+          <span class="material-symbols-outlined text-[17px]">add</span>
+          <span>Ajukan Sesi Bimbingan</span>
         </button>
       </div>
     </div>
 
-    <!-- Dual Supervisor Overview Strip (Stitch Design) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+    <!-- Dual Supervisor Overview Strip (Apple HIG Design) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
       <!-- Industry Mentor Card -->
-      <div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm border border-outline-variant flex flex-col justify-between relative overflow-hidden group">
-        <div class="flex items-start justify-between gap-space-md">
-          <div class="flex gap-space-md">
+      <div class="lg:col-span-6 bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-between apple-press">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex gap-3.5">
             <div class="relative">
-              <div class="w-14 h-14 rounded-xl bg-surface-container flex items-center justify-center text-primary font-bold text-lg shadow-sm border border-outline-variant">
+              <div class="w-12 h-12 rounded-2xl bg-[#0071e3]/10 text-[#0071e3] flex items-center justify-center font-bold text-base shadow-xs border border-[#0071e3]/20">
                 DA
               </div>
-              <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-surface-container-lowest ring-1 ring-emerald-300"></span>
+              <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-[#34c759] rounded-full border-2 border-white"></span>
             </div>
             <div class="flex flex-col min-w-0">
-              <div class="inline-flex items-center gap-1.5 self-start px-2 py-0.5 rounded-full bg-surface-container-low text-secondary font-label-sm text-label-sm mb-1 border border-outline-variant/60 font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                Mentor Perusahaan
+              <div class="inline-flex items-center gap-1 self-start px-2 py-0.5 rounded-full bg-[#f5f5f7] text-[#0071e3] text-[10px] mb-1 font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#0071e3]"></span>
+                Mentor Industri
               </div>
-              <h2 class="font-headline-sm text-headline-sm text-on-surface truncate font-bold">Dimas Ardiansyah, S.T.</h2>
-              <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Tech Lead • PT Solusi Digital Pratama</p>
+              <h2 class="text-[14px] text-[#1d1d1f] truncate font-bold">Dimas Ardiansyah, S.T.</h2>
+              <p class="text-[12px] text-[#86868b] truncate">Tech Lead • PT Solusi Digital Pratama</p>
             </div>
           </div>
           <button
             @click="chatWithMentor('Dimas Ardiansyah')"
-            class="text-outline-variant hover:text-primary transition-colors cursor-pointer p-1"
+            class="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] text-[#86868b] hover:text-[#0071e3] transition-all flex items-center justify-center apple-press cursor-pointer"
             title="Kirim Pesan Chat"
             type="button"
           >
-            <span class="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
+            <span class="material-symbols-outlined text-[17px]">chat_bubble_outline</span>
           </button>
         </div>
-        <div class="mt-space-md pt-space-sm flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant border-t border-outline-variant/60">
-          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-secondary">domain</span> Divisi Frontend Architecture</span>
-          <span class="text-primary font-semibold">3 Sesi Selesai</span>
+        <div class="mt-4 pt-3 flex items-center justify-between text-[11px] text-[#86868b] border-t border-black/[0.05]">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px] text-[#0071e3]">domain</span> Divisi Frontend Architecture</span>
+          <span class="text-[#0071e3] font-semibold">3 Sesi Selesai</span>
         </div>
       </div>
 
       <!-- Academic Advisor Card -->
-      <div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm border border-outline-variant flex flex-col justify-between relative overflow-hidden group">
-        <div class="flex items-start justify-between gap-space-md">
-          <div class="flex gap-space-md">
+      <div class="lg:col-span-6 bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-between apple-press">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex gap-3.5">
             <div class="relative">
-              <div class="w-14 h-14 rounded-xl bg-surface-container flex items-center justify-center text-primary font-bold text-lg shadow-sm border border-outline-variant">
+              <div class="w-12 h-12 rounded-2xl bg-[#5e5ce6]/10 text-[#5e5ce6] flex items-center justify-center font-bold text-base shadow-xs border border-[#5e5ce6]/20">
                 NH
               </div>
-              <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-surface-container-lowest ring-1 ring-primary-fixed"></span>
+              <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-[#0071e3] rounded-full border-2 border-white"></span>
             </div>
             <div class="flex flex-col min-w-0">
-              <div class="inline-flex items-center gap-1.5 self-start px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm mb-1 border border-outline-variant/60 font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              <div class="inline-flex items-center gap-1 self-start px-2 py-0.5 rounded-full bg-[#f5f5f7] text-[#5e5ce6] text-[10px] mb-1 font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#5e5ce6]"></span>
                 Guru Pembimbing Sekolah
               </div>
-              <h2 class="font-headline-sm text-headline-sm text-on-surface truncate font-bold">Dra. Nurul Hidayah, M.Pd.</h2>
-              <p class="font-body-sm text-body-sm text-on-surface-variant truncate">Guru Pamong PKL • SMKN 71 Jakarta</p>
+              <h2 class="text-[14px] text-[#1d1d1f] truncate font-bold">Guru Pembimbing, M.Pd</h2>
+              <p class="text-[12px] text-[#86868b] truncate">Guru Pamong PKL • SMKN 71 Jakarta</p>
             </div>
           </div>
           <button
-            @click="chatWithMentor('Dra. Nurul Hidayah')"
+            @click="chatWithMentor('Guru Pembimbing')"
             class="text-outline-variant hover:text-primary transition-colors cursor-pointer p-1"
             title="Kirim Surel / Pesan"
             type="button"
@@ -106,7 +106,7 @@
           </button>
         </div>
         <div class="mt-space-md pt-space-sm flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant border-t border-outline-variant/60">
-          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">school</span> NIP: 198005122005012003</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">school</span> NIP: 198502142010011002</span>
           <span class="text-primary font-semibold">2 Sesi Evaluasi</span>
         </div>
       </div>
@@ -446,7 +446,7 @@
                   Sinkronisasi Silabus PKL &amp; Project Scope
                 </h4>
                 <p class="font-body-sm text-body-sm text-on-surface-variant">
-                  Pembimbing: <span class="font-medium text-on-surface">Dra. Nurul Hidayah &amp; Dimas Ardiansyah</span>
+                  Pembimbing: <span class="font-medium text-on-surface">Guru Pembimbing &amp; Pembimbing Industri</span>
                 </p>
                 <div class="mt-1 text-on-surface-variant font-body-sm text-body-sm bg-surface-container-low p-space-sm rounded-md border border-outline-variant/60">
                   “Penetapan 4 pilar kompetensi akademik yang dikonversikan ke dalam tugas harian industri.”
@@ -504,58 +504,70 @@
     </div>
 
     <!-- MODAL: AJUKAN SESI BIMBINGAN 1-ON-1 -->
-    <div
-      v-if="isRequestModalOpen"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
-    >
-      <div class="bg-surface-container-lowest rounded-2xl max-w-lg w-full p-6 shadow-xl border border-outline-variant flex flex-col gap-4">
-        <div class="flex items-center justify-between pb-3 border-b border-outline-variant/60">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-[22px] text-secondary">calendar_add_on</span>
-            <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Ajukan Sesi Bimbingan 1-on-1</h3>
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition-opacity duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-opacity duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="isRequestModalOpen"
+          class="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm select-none"
+          @click.self="isRequestModalOpen = false"
+        >
+          <div class="modal-card-animate bg-surface-container-lowest rounded-2xl max-w-lg w-full p-6 shadow-xl border border-outline-variant flex flex-col gap-4 select-auto">
+            <div class="flex items-center justify-between pb-3 border-b border-outline-variant/60">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[22px] text-secondary">calendar_add_on</span>
+                <h3 class="font-headline-sm text-headline-sm text-primary font-bold">Ajukan Sesi Bimbingan 1-on-1</h3>
+              </div>
+              <button @click="isRequestModalOpen = false" class="text-on-surface-variant hover:text-on-surface p-1 cursor-pointer">
+                <span class="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            <form @submit.prevent="submitBimbinganRequest" class="flex flex-col gap-4">
+              <div class="flex flex-col gap-1.5">
+                <label class="font-label-md text-label-md text-primary font-semibold">Tujuan Pembimbing</label>
+                <select v-model="requestForm.mentor" class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface text-body-sm font-body-sm rounded-lg border border-outline-variant/60 outline-none">
+                  <option value="mentor">Hendra Wijaya, S.Kom (Pembimbing Lapangan)</option>
+                  <option value="guru">Guru Pembimbing, M.Pd (Guru Pembimbing Sekolah)</option>
+                  <option value="both">Keduanya (Review Bersama)</option>
+                </select>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-1.5">
+                  <label class="font-label-md text-label-md text-primary font-semibold">Usulan Tanggal</label>
+                  <input v-model="requestForm.date" type="date" class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface text-body-sm font-body-sm rounded-lg border border-outline-variant/60 outline-none" required />
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="font-label-md text-label-md text-primary font-semibold">Usulan Waktu</label>
+                  <input v-model="requestForm.time" type="time" class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface text-body-sm font-body-sm rounded-lg border border-outline-variant/60 outline-none" required />
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="font-label-md text-label-md text-primary font-semibold">Topik Bahasan / Masalah Teknis</label>
+                <textarea v-model="requestForm.topic" rows="3" class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface text-body-sm font-body-sm rounded-lg border border-outline-variant/60 outline-none" placeholder="Tuliskan poin bahasan atau kendala arsitektur yang ingin dikonsultasikan..." required></textarea>
+              </div>
+
+              <div class="flex items-center justify-end gap-2 pt-3 border-t border-outline-variant/60">
+                <button @click="isRequestModalOpen = false" type="button" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface-variant text-body-sm font-body-sm font-semibold hover:bg-surface-container cursor-pointer">
+                  Batal
+                </button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-primary text-on-primary text-body-sm font-body-sm font-semibold hover:bg-primary-container shadow-sm cursor-pointer">
+                  Kirim Undangan Bimbingan
+                </button>
+              </div>
+            </form>
           </div>
-          <button @click="isRequestModalOpen = false" class="text-on-surface-variant hover:text-on-surface p-1">
-            <span class="material-symbols-outlined text-[20px]">close</span>
-          </button>
         </div>
-
-        <form @submit.prevent="submitBimbinganRequest" class="flex flex-col gap-4">
-          <div class="flex flex-col gap-1.5">
-            <label class="font-label-md text-label-md text-primary font-semibold">Tujuan Pembimbing</label>
-            <select v-model="requestForm.mentor" class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface text-body-sm font-body-sm rounded-lg border border-outline-variant/60 outline-none">
-              <option value="dudi">Dimas Ardiansyah, S.T. (Mentor Industri)</option>
-              <option value="guru">Dra. Nurul Hidayah, M.Pd. (Guru Pembimbing Sekolah)</option>
-              <option value="both">Keduanya (Review Bersama)</option>
-            </select>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div class="flex flex-col gap-1.5">
-              <label class="font-label-md text-label-md text-primary font-semibold">Usulan Tanggal</label>
-              <input v-model="requestForm.date" type="date" class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface text-body-sm font-body-sm rounded-lg border border-outline-variant/60 outline-none" required />
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label class="font-label-md text-label-md text-primary font-semibold">Usulan Waktu</label>
-              <input v-model="requestForm.time" type="time" class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface text-body-sm font-body-sm rounded-lg border border-outline-variant/60 outline-none" required />
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-1.5">
-            <label class="font-label-md text-label-md text-primary font-semibold">Topik Bahasan / Masalah Teknis</label>
-            <textarea v-model="requestForm.topic" rows="3" class="w-full px-3.5 py-2.5 bg-surface-container-low text-on-surface text-body-sm font-body-sm rounded-lg border border-outline-variant/60 outline-none" placeholder="Tuliskan poin bahasan atau kendala arsitektur yang ingin dikonsultasikan..." required></textarea>
-          </div>
-
-          <div class="flex items-center justify-end gap-2 pt-3 border-t border-outline-variant/60">
-            <button @click="isRequestModalOpen = false" type="button" class="px-4 py-2 rounded-lg bg-surface-container-low text-on-surface-variant text-body-sm font-body-sm font-semibold hover:bg-surface-container">
-              Batal
-            </button>
-            <button type="submit" class="px-4 py-2 rounded-lg bg-primary text-on-primary text-body-sm font-body-sm font-semibold hover:bg-primary-container shadow-sm">
-              Kirim Undangan Bimbingan
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -568,7 +580,7 @@ const { showToast } = useAppStore()
 const isRequestModalOpen = ref(false)
 
 const requestForm = ref({
-  mentor: 'dudi',
+  mentor: 'mentor',
   date: '',
   time: '14:00',
   topic: ''

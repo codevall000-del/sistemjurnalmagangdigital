@@ -17,7 +17,12 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $email = $request->email;
+        $user = User::where('email', $email)->first();
+        if (!$user && in_array($email, ['dudi@gmail.com', 'dudi2@gmail.com', 'dudi3@gmail.com'])) {
+            $mappedEmail = str_replace('dudi', 'mentor', $email);
+            $user = User::where('email', $mappedEmail)->first();
+        }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
@@ -38,6 +43,8 @@ class AuthController extends Controller
                 'role' => $user->role,
                 'nisn_nip' => $user->nisn_nip,
                 'phone' => $user->phone,
+                'major' => $user->major,
+                'class_name' => $user->class_name,
                 'avatar' => $user->avatar,
             ],
         ]);
@@ -46,7 +53,11 @@ class AuthController extends Controller
     public function demoSwitch(Request $request)
     {
         $role = $request->input('role', 'siswa');
-        $user = User::where('role', $role)->first();
+        if (in_array($role, ['mentor', 'dudi', 'pembimbing'])) {
+            $user = User::whereIn('role', ['mentor', 'dudi'])->first();
+        } else {
+            $user = User::where('role', $role)->first();
+        }
 
         if (!$user) {
             return response()->json(['success' => false, 'message' => 'Role tidak ditemukan'], 404);
@@ -64,6 +75,8 @@ class AuthController extends Controller
                 'role' => $user->role,
                 'nisn_nip' => $user->nisn_nip,
                 'phone' => $user->phone,
+                'major' => $user->major,
+                'class_name' => $user->class_name,
                 'avatar' => $user->avatar,
             ],
         ]);

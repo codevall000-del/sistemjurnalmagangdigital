@@ -3,10 +3,19 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: false },
   ssr: false, // SPA Mode optimal for desktop application UI
+  experimental: {
+    appManifest: false
+  },
 
   modules: [
     '@nuxtjs/tailwindcss'
   ],
+
+  tailwindcss: {
+    config: {
+      darkMode: 'class'
+    }
+  },
 
   css: [
     '~/assets/css/main.css'
@@ -14,11 +23,11 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'LogPKL Digital | Sistem Informasi Praktik Kerja Lapangan & Jurnal Magang',
+      title: 'EduAccess — SMKN 71 Jakarta',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Field Verified Enterprise PKL - Sistem Jurnal & Presensi Magang Digital Desktop App' }
+        { name: 'description', content: 'EduAccess - Portal Jurnal & Presensi Praktik Kerja Lapangan SMKN 71 Jakarta' }
       ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
