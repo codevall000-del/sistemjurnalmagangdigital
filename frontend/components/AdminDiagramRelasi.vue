@@ -151,15 +151,15 @@
         :style="{
           transform: `translate(${panX}px, ${panY}px) scale(${zoomScale})`,
           width: activeDiagramMode === 'pipeline' ? '1280px' : '1340px',
-          height: activeDiagramMode === 'pipeline' ? '650px' : '700px'
+          height: activeDiagramMode === 'pipeline' ? '680px' : '700px'
         }"
       >
         <!-- ======================================================== -->
         <!-- MODE A: PETA ALUR PENEMPATAN (FLOWCHART PIPELINE DRAW.IO) -->
         <!-- ======================================================== -->
-        <div v-if="activeDiagramMode === 'pipeline'" class="relative w-full h-full p-6 pt-4">
-          <!-- 4 Stage Column Header Pills (Clean & Perfectly Aligned Above Cards) -->
-          <div class="relative w-full h-10 mb-4">
+        <div v-if="activeDiagramMode === 'pipeline'" class="w-full h-full p-6 pt-4 flex flex-col">
+          <!-- 4 Stage Column Header Pills (Clean & Perfectly Aligned Above Columns) -->
+          <div class="relative w-full h-10 shrink-0 mb-3">
             <!-- Stage 1: Guru (x=40, w=240) -->
             <div class="absolute left-[40px] w-[240px] flex items-center justify-between px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-xs">
               <div class="flex items-center gap-1.5">
@@ -197,393 +197,396 @@
             </div>
           </div>
 
-          <!-- SVG CONNECTORS LAYER (Draw.io Smart Smooth Bezier Curves) -->
-          <svg class="absolute inset-0 w-full h-full pointer-events-none z-10">
-            <defs>
-              <marker id="arrow-default" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#86868b" opacity="0.6" />
-              </marker>
-              <marker id="arrow-pplg" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0071e3" />
-              </marker>
-              <marker id="arrow-animasi" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#a855f7" />
-              </marker>
-              <marker id="arrow-dkv" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f59e0b" />
-              </marker>
-              <filter id="glow-line" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3.5" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-            </defs>
+          <!-- DIAGRAM PIPELINE WORKSPACE (Unified Origin: SVG & Cards share the exact same 0,0 plane) -->
+          <div class="relative w-full h-[580px] shrink-0">
+            <!-- SVG CONNECTORS LAYER (Draw.io Smart Smooth Bezier Curves) -->
+            <svg class="absolute inset-0 w-full h-full pointer-events-none z-10">
+              <defs>
+                <marker id="arrow-default" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#86868b" opacity="0.6" />
+                </marker>
+                <marker id="arrow-pplg" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0071e3" />
+                </marker>
+                <marker id="arrow-animasi" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#a855f7" />
+                </marker>
+                <marker id="arrow-dkv" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f59e0b" />
+                </marker>
+                <filter id="glow-line" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3.5" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
 
-            <!-- Draw Clean, Flowing Connector Paths -->
-            <g v-for="edge in visiblePipelineEdges" :key="edge.id">
-              <!-- Glow shadow when active -->
-              <path
-                v-if="edge.isActive"
-                :d="edge.d"
-                fill="none"
-                :stroke="edge.color"
-                stroke-width="5"
-                stroke-opacity="0.3"
-                filter="url(#glow-line)"
-              />
-              <!-- Main connector path -->
-              <path
-                :d="edge.d"
-                fill="none"
-                :stroke="edge.isActive ? edge.color : '#86868b'"
-                :stroke-width="edge.isActive ? 2.5 : 1.5"
-                :stroke-opacity="edge.isActive ? 1 : 0.25"
-                :stroke-dasharray="edge.isActive && isPulseAnimationActive ? '6,4' : 'none'"
-                :class="{ 'animate-flow-dash': edge.isActive && isPulseAnimationActive }"
-                :marker-end="edge.isActive ? `url(#${edge.markerId})` : 'url(#arrow-default)'"
-              />
-            </g>
-          </svg>
+              <!-- Draw Clean, Flowing Connector Paths -->
+              <g v-for="edge in visiblePipelineEdges" :key="edge.id">
+                <!-- Glow shadow when active -->
+                <path
+                  v-if="edge.isActive"
+                  :d="edge.d"
+                  fill="none"
+                  :stroke="edge.color"
+                  stroke-width="5"
+                  stroke-opacity="0.3"
+                  filter="url(#glow-line)"
+                />
+                <!-- Main connector path -->
+                <path
+                  :d="edge.d"
+                  fill="none"
+                  :stroke="edge.isActive ? edge.color : '#86868b'"
+                  :stroke-width="edge.isActive ? 2.5 : 1.5"
+                  :stroke-opacity="edge.isActive ? 1 : 0.25"
+                  :stroke-dasharray="edge.isActive && isPulseAnimationActive ? '6,4' : 'none'"
+                  :class="{ 'animate-flow-dash': edge.isActive && isPulseAnimationActive }"
+                  :marker-end="edge.isActive ? `url(#${edge.markerId})` : 'url(#arrow-default)'"
+                />
+              </g>
+            </svg>
 
-          <!-- ABSOLUTE CLEAN NODES CANVAS (Structured Horizontal Parallel Rows) -->
-          <div class="relative w-full h-full z-20">
-            <!-- ===================== COLUMN 1: GURU PEMBIMBING (x=40, w=240) ===================== -->
-            <!-- Guru 1: Dra. Nurul Hidayah -->
-            <div
-              @click.stop="selectNode('guru', 2)"
-              :class="getNodeClasses('guru', 2)"
-              class="node-card absolute left-[40px] top-[100px] w-[240px] p-4 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <!-- Port Out (Right) -->
-              <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+            <!-- ABSOLUTE CLEAN NODES CANVAS (Structured Horizontal Parallel Rows) -->
+            <div class="absolute inset-0 w-full h-full z-20 pointer-events-none">
+              <!-- ===================== COLUMN 1: GURU PEMBIMBING (x=40, w=240) ===================== -->
+              <!-- Guru 1: Dra. Nurul Hidayah -->
+              <div
+                @click.stop="selectNode('guru', 2)"
+                :class="getNodeClasses('guru', 2)"
+                class="node-card pointer-events-auto absolute left-[40px] top-[80px] w-[240px] h-[120px] p-3.5 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex flex-col justify-between"
+              >
+                <!-- Port Out (Right) -->
+                <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
 
-              <div class="flex items-center gap-3">
-                <img :src="guruList[0].avatar" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 block w-fit mb-0.5">
-                    Pembimbing Utama
-                  </span>
-                  <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors">
-                    {{ guruList[0].name }}
-                  </h3>
-                  <p class="text-[10px] text-[#86868b] font-mono mt-0.5">NIP: {{ guruList[0].nip }}</p>
-                </div>
-              </div>
-              <div class="mt-3 pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
-                <span class="text-[#86868b]">Binaan:</span>
-                <span class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">3 Industri • 6 Siswa</span>
-              </div>
-            </div>
-
-            <!-- Guru 2: Bambang Irawan -->
-            <div
-              @click.stop="selectNode('guru', 12)"
-              :class="getNodeClasses('guru', 12)"
-              class="node-card absolute left-[40px] top-[360px] w-[240px] p-4 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-
-              <div class="flex items-center gap-3">
-                <img :src="guruList[1].avatar" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 block w-fit mb-0.5">
-                    Koordinator PPLG
-                  </span>
-                  <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors">
-                    {{ guruList[1].name }}
-                  </h3>
-                  <p class="text-[10px] text-[#86868b] font-mono mt-0.5">NIP: {{ guruList[1].nip }}</p>
-                </div>
-              </div>
-              <div class="mt-3 pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
-                <span class="text-[#86868b]">Pendamping:</span>
-                <span class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">PT Telkom Solusi</span>
-              </div>
-            </div>
-
-            <!-- ===================== COLUMN 2: MITRA TEMPAT PKL (x=360, w=250) ===================== -->
-            <!-- PT Telkom Digital Solusi (Row 1) -->
-            <div
-              @click.stop="selectNode('company', 1)"
-              :class="getNodeClasses('company', 1)"
-              class="node-card absolute left-[360px] top-[60px] w-[250px] p-4 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-blue-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-              <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-blue-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-
-              <div class="flex items-start gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg shrink-0">
-                  💻
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between gap-1 mb-0.5">
-                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-600">PPLG</span>
-                    <span class="text-[9px] font-mono text-[#86868b]">WFO &amp; WFH</span>
+                <div class="flex items-center gap-3">
+                  <img :src="guruList[0].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 block w-fit mb-0.5">
+                      Pembimbing Utama
+                    </span>
+                    <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
+                      {{ guruList[0].name }}
+                    </h3>
+                    <p class="text-[10px] text-[#86868b] font-mono mt-0.5">NIP: {{ guruList[0].nip }}</p>
                   </div>
-                  <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
-                    PT Telkom Digital Solusi
-                  </h3>
-                  <p class="text-[10px] text-[#86868b] mt-0.5 truncate">Software House &amp; Cloud</p>
+                </div>
+                <div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
+                  <span class="text-[#86868b]">Binaan:</span>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">3 Industri • 6 Siswa</span>
                 </div>
               </div>
-              <div class="mt-2.5 pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
-                <span class="text-[#86868b]">Kapasitas:</span>
-                <span class="font-bold text-[#0071e3] font-mono">2 / 6 Kursi Terisi</span>
-              </div>
-            </div>
 
-            <!-- Studio Animasi Kinetik Digital (Row 2) -->
-            <div
-              @click.stop="selectNode('company', 2)"
-              :class="getNodeClasses('company', 2)"
-              class="node-card absolute left-[360px] top-[250px] w-[250px] p-4 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-purple-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-              <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-purple-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+              <!-- Guru 2: Bambang Irawan -->
+              <div
+                @click.stop="selectNode('guru', 12)"
+                :class="getNodeClasses('guru', 12)"
+                class="node-card pointer-events-auto absolute left-[40px] top-[320px] w-[240px] h-[120px] p-3.5 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex flex-col justify-between"
+              >
+                <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
 
-              <div class="flex items-start gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-lg shrink-0">
-                  🎬
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between gap-1 mb-0.5">
-                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-600">Animasi</span>
-                    <span class="text-[9px] font-mono text-[#86868b]">Hybrid</span>
+                <div class="flex items-center gap-3">
+                  <img :src="guruList[1].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 block w-fit mb-0.5">
+                      Koordinator PPLG
+                    </span>
+                    <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
+                      {{ guruList[1].name }}
+                    </h3>
+                    <p class="text-[10px] text-[#86868b] font-mono mt-0.5">NIP: {{ guruList[1].nip }}</p>
                   </div>
-                  <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
-                    Studio Animasi Kinetik
-                  </h3>
-                  <p class="text-[10px] text-[#86868b] mt-0.5 truncate">3D Animation &amp; CGI Studio</p>
+                </div>
+                <div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
+                  <span class="text-[#86868b]">Pendamping:</span>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">PT Telkom Solusi</span>
                 </div>
               </div>
-              <div class="mt-2.5 pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
-                <span class="text-[#86868b]">Kapasitas:</span>
-                <span class="font-bold text-purple-600 font-mono">2 / 4 Kursi Terisi</span>
-              </div>
-            </div>
 
-            <!-- Pixel Kreatif Visual Agency (Row 3) -->
-            <div
-              @click.stop="selectNode('company', 3)"
-              :class="getNodeClasses('company', 3)"
-              class="node-card absolute left-[360px] top-[440px] w-[250px] p-4 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-amber-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-              <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-amber-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+              <!-- ===================== COLUMN 2: MITRA TEMPAT PKL (x=360, w=250) ===================== -->
+              <!-- PT Telkom Digital Solusi (Row 1) -->
+              <div
+                @click.stop="selectNode('company', 1)"
+                :class="getNodeClasses('company', 1)"
+                class="node-card pointer-events-auto absolute left-[360px] top-[40px] w-[250px] h-[120px] p-3.5 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex flex-col justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-blue-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+                <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-blue-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
 
-              <div class="flex items-start gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg shrink-0">
-                  🎨
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between gap-1 mb-0.5">
-                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600">DKV</span>
-                    <span class="text-[9px] font-mono text-[#86868b]">WFO &amp; WFA</span>
+                <div class="flex items-start gap-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg shrink-0">
+                    💻
                   </div>
-                  <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
-                    Pixel Kreatif Visual
-                  </h3>
-                  <p class="text-[10px] text-[#86868b] mt-0.5 truncate">Brand Identity &amp; UI/UX</p>
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
-                <span class="text-[#86868b]">Kapasitas:</span>
-                <span class="font-bold text-amber-600 font-mono">2 / 5 Kursi Terisi</span>
-              </div>
-            </div>
-
-            <!-- ===================== COLUMN 3: PEMBIMBING LAPANGAN (x=690, w=240) ===================== -->
-            <!-- Mentor 1: Hendra Wijaya (Row 1) -->
-            <div
-              @click.stop="selectNode('mentor', 3)"
-              :class="getNodeClasses('mentor', 3)"
-              class="node-card absolute left-[690px] top-[60px] w-[240px] p-4 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-              <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-
-              <div class="flex items-center gap-2.5">
-                <img :src="mentorList[0].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
-                    Mentor DUDI
-                  </span>
-                  <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
-                    {{ mentorList[0].name }}
-                  </h3>
-                  <p class="text-[10px] text-[#86868b] mt-0.5 truncate">{{ mentorList[0].division }}</p>
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
-                <span class="text-[#86868b]">Bimbingan:</span>
-                <span class="font-bold text-indigo-600 dark:text-indigo-400 font-mono">2 Siswa Aktif</span>
-              </div>
-            </div>
-
-            <!-- Mentor 2: Raditya Pratama (Row 2) -->
-            <div
-              @click.stop="selectNode('mentor', 10)"
-              :class="getNodeClasses('mentor', 10)"
-              class="node-card absolute left-[690px] top-[250px] w-[240px] p-4 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-              <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-
-              <div class="flex items-center gap-2.5">
-                <img :src="mentorList[1].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
-                    Mentor DUDI
-                  </span>
-                  <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
-                    {{ mentorList[1].name }}
-                  </h3>
-                  <p class="text-[10px] text-[#86868b] mt-0.5 truncate">{{ mentorList[1].division }}</p>
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
-                <span class="text-[#86868b]">Bimbingan:</span>
-                <span class="font-bold text-indigo-600 dark:text-indigo-400 font-mono">2 Siswa Aktif</span>
-              </div>
-            </div>
-
-            <!-- Mentor 3: Maya Safitri (Row 3) -->
-            <div
-              @click.stop="selectNode('mentor', 11)"
-              :class="getNodeClasses('mentor', 11)"
-              class="node-card absolute left-[690px] top-[440px] w-[240px] p-4 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-              <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
-
-              <div class="flex items-center gap-2.5">
-                <img :src="mentorList[2].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
-                    Mentor DUDI
-                  </span>
-                  <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
-                    {{ mentorList[2].name }}
-                  </h3>
-                  <p class="text-[10px] text-[#86868b] mt-0.5 truncate">{{ mentorList[2].division }}</p>
-                </div>
-              </div>
-              <div class="mt-2.5 pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
-                <span class="text-[#86868b]">Bimbingan:</span>
-                <span class="font-bold text-indigo-600 dark:text-indigo-400 font-mono">2 Siswa Aktif</span>
-              </div>
-            </div>
-
-            <!-- ===================== COLUMN 4: SISWA PESERTA PKL (x=1010, w=220) ===================== -->
-            <!-- Siswa 1: Budi Santoso (Row 1a) -->
-            <div
-              @click.stop="selectNode('siswa', 4)"
-              :class="getNodeClasses('siswa', 4)"
-              class="node-card absolute left-[1010px] top-[60px] w-[220px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-blue-500 border-2 border-white dark:border-[#1e1e22]"></div>
-              <div class="flex items-center gap-2.5">
-                <img :src="studentList[0].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[0].name }}</h4>
-                    <span class="text-[8.5px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-600 font-bold">WFO</span>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-1 mb-0.5">
+                      <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-600">PPLG</span>
+                      <span class="text-[9px] font-mono text-[#86868b]">WFO &amp; WFH</span>
+                    </div>
+                    <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
+                      PT Telkom Digital Solusi
+                    </h3>
+                    <p class="text-[10px] text-[#86868b] mt-0.5 truncate">Software House &amp; Cloud</p>
                   </div>
-                  <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[0].className }} • {{ studentList[0].nisn }}</p>
+                </div>
+                <div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
+                  <span class="text-[#86868b]">Kapasitas:</span>
+                  <span class="font-bold text-[#0071e3] font-mono">2 / 6 Kursi Terisi</span>
                 </div>
               </div>
-            </div>
 
-            <!-- Siswa 2: Siti Fauziah (Row 1b) -->
-            <div
-              @click.stop="selectNode('siswa', 5)"
-              :class="getNodeClasses('siswa', 5)"
-              class="node-card absolute left-[1010px] top-[138px] w-[220px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-blue-500 border-2 border-white dark:border-[#1e1e22]"></div>
-              <div class="flex items-center gap-2.5">
-                <img :src="studentList[1].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[1].name }}</h4>
-                    <span class="text-[8.5px] font-mono px-1 py-0.2 rounded bg-blue-500/10 text-blue-600 font-bold">WFH</span>
+              <!-- Studio Animasi Kinetik Digital (Row 2) -->
+              <div
+                @click.stop="selectNode('company', 2)"
+                :class="getNodeClasses('company', 2)"
+                class="node-card pointer-events-auto absolute left-[360px] top-[230px] w-[250px] h-[120px] p-3.5 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex flex-col justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-purple-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+                <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-purple-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+
+                <div class="flex items-start gap-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-lg shrink-0">
+                    🎬
                   </div>
-                  <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[1].className }} • {{ studentList[1].nisn }}</p>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-1 mb-0.5">
+                      <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-600">Animasi</span>
+                      <span class="text-[9px] font-mono text-[#86868b]">Hybrid</span>
+                    </div>
+                    <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
+                      Studio Animasi Kinetik
+                    </h3>
+                    <p class="text-[10px] text-[#86868b] mt-0.5 truncate">3D Animation &amp; CGI Studio</p>
+                  </div>
+                </div>
+                <div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
+                  <span class="text-[#86868b]">Kapasitas:</span>
+                  <span class="font-bold text-purple-600 font-mono">2 / 4 Kursi Terisi</span>
                 </div>
               </div>
-            </div>
 
-            <!-- Siswa 3: Ahmad Danu (Row 2a) -->
-            <div
-              @click.stop="selectNode('siswa', 6)"
-              :class="getNodeClasses('siswa', 6)"
-              class="node-card absolute left-[1010px] top-[250px] w-[220px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-purple-500 border-2 border-white dark:border-[#1e1e22]"></div>
-              <div class="flex items-center gap-2.5">
-                <img :src="studentList[2].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[2].name }}</h4>
-                    <span class="text-[8.5px] font-mono px-1 py-0.2 rounded bg-purple-500/10 text-purple-600 font-bold">WFA</span>
+              <!-- Pixel Kreatif Visual Agency (Row 3) -->
+              <div
+                @click.stop="selectNode('company', 3)"
+                :class="getNodeClasses('company', 3)"
+                class="node-card pointer-events-auto absolute left-[360px] top-[420px] w-[250px] h-[120px] p-3.5 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex flex-col justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-amber-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+                <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-amber-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+
+                <div class="flex items-start gap-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg shrink-0">
+                    🎨
                   </div>
-                  <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[2].className }} • {{ studentList[2].nisn }}</p>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-1 mb-0.5">
+                      <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600">DKV</span>
+                      <span class="text-[9px] font-mono text-[#86868b]">WFO &amp; WFA</span>
+                    </div>
+                    <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
+                      Pixel Kreatif Visual
+                    </h3>
+                    <p class="text-[10px] text-[#86868b] mt-0.5 truncate">Brand Identity &amp; UI/UX</p>
+                  </div>
+                </div>
+                <div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
+                  <span class="text-[#86868b]">Kapasitas:</span>
+                  <span class="font-bold text-amber-600 font-mono">2 / 5 Kursi Terisi</span>
                 </div>
               </div>
-            </div>
 
-            <!-- Siswa 4: Putri Maharani (Row 2b) -->
-            <div
-              @click.stop="selectNode('siswa', 7)"
-              :class="getNodeClasses('siswa', 7)"
-              class="node-card absolute left-[1010px] top-[328px] w-[220px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-purple-500 border-2 border-white dark:border-[#1e1e22]"></div>
-              <div class="flex items-center gap-2.5">
-                <img :src="studentList[3].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[3].name }}</h4>
-                    <span class="text-[8.5px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-600 font-bold">WFO</span>
+              <!-- ===================== COLUMN 3: PEMBIMBING LAPANGAN (x=690, w=240) ===================== -->
+              <!-- Mentor 1: Hendra Wijaya (Row 1) -->
+              <div
+                @click.stop="selectNode('mentor', 3)"
+                :class="getNodeClasses('mentor', 3)"
+                class="node-card pointer-events-auto absolute left-[690px] top-[40px] w-[240px] h-[120px] p-3.5 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex flex-col justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+                <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+
+                <div class="flex items-center gap-2.5">
+                  <img :src="mentorList[0].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
+                      Mentor DUDI
+                    </span>
+                    <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
+                      {{ mentorList[0].name }}
+                    </h3>
+                    <p class="text-[10px] text-[#86868b] mt-0.5 truncate">{{ mentorList[0].division }}</p>
                   </div>
-                  <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[3].className }} • {{ studentList[3].nisn }}</p>
+                </div>
+                <div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
+                  <span class="text-[#86868b]">Bimbingan:</span>
+                  <span class="font-bold text-indigo-600 dark:text-indigo-400 font-mono">2 Siswa Aktif</span>
                 </div>
               </div>
-            </div>
 
-            <!-- Siswa 5: Rizky Pratama (Row 3a) -->
-            <div
-              @click.stop="selectNode('siswa', 8)"
-              :class="getNodeClasses('siswa', 8)"
-              class="node-card absolute left-[1010px] top-[440px] w-[220px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-amber-500 border-2 border-white dark:border-[#1e1e22]"></div>
-              <div class="flex items-center gap-2.5">
-                <img :src="studentList[4].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[4].name }}</h4>
-                    <span class="text-[8.5px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-600 font-bold">WFO</span>
+              <!-- Mentor 2: Raditya Pratama (Row 2) -->
+              <div
+                @click.stop="selectNode('mentor', 10)"
+                :class="getNodeClasses('mentor', 10)"
+                class="node-card pointer-events-auto absolute left-[690px] top-[230px] w-[240px] h-[120px] p-3.5 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex flex-col justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+                <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+
+                <div class="flex items-center gap-2.5">
+                  <img :src="mentorList[1].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
+                      Mentor DUDI
+                    </span>
+                    <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
+                      {{ mentorList[1].name }}
+                    </h3>
+                    <p class="text-[10px] text-[#86868b] mt-0.5 truncate">{{ mentorList[1].division }}</p>
                   </div>
-                  <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[4].className }} • {{ studentList[4].nisn }}</p>
+                </div>
+                <div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
+                  <span class="text-[#86868b]">Bimbingan:</span>
+                  <span class="font-bold text-indigo-600 dark:text-indigo-400 font-mono">2 Siswa Aktif</span>
                 </div>
               </div>
-            </div>
 
-            <!-- Siswa 6: Jessica Tan (Row 3b) -->
-            <div
-              @click.stop="selectNode('siswa', 9)"
-              :class="getNodeClasses('siswa', 9)"
-              class="node-card absolute left-[1010px] top-[518px] w-[220px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group"
-            >
-              <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-amber-500 border-2 border-white dark:border-[#1e1e22]"></div>
-              <div class="flex items-center gap-2.5">
-                <img :src="studentList[5].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[5].name }}</h4>
-                    <span class="text-[8.5px] font-mono px-1 py-0.2 rounded bg-blue-500/10 text-blue-600 font-bold">WFH</span>
+              <!-- Mentor 3: Maya Safitri (Row 3) -->
+              <div
+                @click.stop="selectNode('mentor', 11)"
+                :class="getNodeClasses('mentor', 11)"
+                class="node-card pointer-events-auto absolute left-[690px] top-[420px] w-[240px] h-[120px] p-3.5 rounded-2xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex flex-col justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+                <div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white dark:border-[#1e1e22] shadow-sm"></div>
+
+                <div class="flex items-center gap-2.5">
+                  <img :src="mentorList[2].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
+                      Mentor DUDI
+                    </span>
+                    <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
+                      {{ mentorList[2].name }}
+                    </h3>
+                    <p class="text-[10px] text-[#86868b] mt-0.5 truncate">{{ mentorList[2].division }}</p>
                   </div>
-                  <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[5].className }} • {{ studentList[5].nisn }}</p>
+                </div>
+                <div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between text-[10.5px]">
+                  <span class="text-[#86868b]">Bimbingan:</span>
+                  <span class="font-bold text-indigo-600 dark:text-indigo-400 font-mono">2 Siswa Aktif</span>
+                </div>
+              </div>
+
+              <!-- ===================== COLUMN 4: SISWA PESERTA PKL (x=1010, w=220) ===================== -->
+              <!-- Siswa 1: Budi Santoso (Row 1a) -->
+              <div
+                @click.stop="selectNode('siswa', 4)"
+                :class="getNodeClasses('siswa', 4)"
+                class="node-card pointer-events-auto absolute left-[1010px] top-[35px] w-[220px] h-[54px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex items-center justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-blue-500 border-2 border-white dark:border-[#1e1e22]"></div>
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                  <img :src="studentList[0].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[0].name }}</h4>
+                      <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-600 font-bold shrink-0 ml-1">WFO</span>
+                    </div>
+                    <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[0].className }} • {{ studentList[0].nisn }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Siswa 2: Siti Fauziah (Row 1b) -->
+              <div
+                @click.stop="selectNode('siswa', 5)"
+                :class="getNodeClasses('siswa', 5)"
+                class="node-card pointer-events-auto absolute left-[1010px] top-[111px] w-[220px] h-[54px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex items-center justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-blue-500 border-2 border-white dark:border-[#1e1e22]"></div>
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                  <img :src="studentList[1].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[1].name }}</h4>
+                      <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-blue-500/10 text-blue-600 font-bold shrink-0 ml-1">WFH</span>
+                    </div>
+                    <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[1].className }} • {{ studentList[1].nisn }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Siswa 3: Ahmad Danu (Row 2a) -->
+              <div
+                @click.stop="selectNode('siswa', 6)"
+                :class="getNodeClasses('siswa', 6)"
+                class="node-card pointer-events-auto absolute left-[1010px] top-[225px] w-[220px] h-[54px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex items-center justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-purple-500 border-2 border-white dark:border-[#1e1e22]"></div>
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                  <img :src="studentList[2].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[2].name }}</h4>
+                      <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-purple-500/10 text-purple-600 font-bold shrink-0 ml-1">WFA</span>
+                    </div>
+                    <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[2].className }} • {{ studentList[2].nisn }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Siswa 4: Putri Maharani (Row 2b) -->
+              <div
+                @click.stop="selectNode('siswa', 7)"
+                :class="getNodeClasses('siswa', 7)"
+                class="node-card pointer-events-auto absolute left-[1010px] top-[301px] w-[220px] h-[54px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex items-center justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-purple-500 border-2 border-white dark:border-[#1e1e22]"></div>
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                  <img :src="studentList[3].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[3].name }}</h4>
+                      <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-600 font-bold shrink-0 ml-1">WFO</span>
+                    </div>
+                    <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[3].className }} • {{ studentList[3].nisn }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Siswa 5: Rizky Pratama (Row 3a) -->
+              <div
+                @click.stop="selectNode('siswa', 8)"
+                :class="getNodeClasses('siswa', 8)"
+                class="node-card pointer-events-auto absolute left-[1010px] top-[415px] w-[220px] h-[54px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex items-center justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-amber-500 border-2 border-white dark:border-[#1e1e22]"></div>
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                  <img :src="studentList[4].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[4].name }}</h4>
+                      <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-600 font-bold shrink-0 ml-1">WFO</span>
+                    </div>
+                    <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[4].className }} • {{ studentList[4].nisn }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Siswa 6: Jessica Tan (Row 3b) -->
+              <div
+                @click.stop="selectNode('siswa', 9)"
+                :class="getNodeClasses('siswa', 9)"
+                class="node-card pointer-events-auto absolute left-[1010px] top-[491px] w-[220px] h-[54px] p-2.5 rounded-xl bg-white dark:bg-[#1e1e22] border transition-all duration-200 cursor-pointer shadow-sm group flex items-center justify-between"
+              >
+                <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-amber-500 border-2 border-white dark:border-[#1e1e22]"></div>
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                  <img :src="studentList[5].avatar" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-black/[0.08]" />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <h4 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight truncate group-hover:text-[#0071e3] transition-colors">{{ studentList[5].name }}</h4>
+                      <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-blue-500/10 text-blue-600 font-bold shrink-0 ml-1">WFH</span>
+                    </div>
+                    <p class="text-[9.5px] text-[#86868b] font-mono mt-0.5 truncate">{{ studentList[5].className }} • {{ studentList[5].nisn }}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -593,8 +596,8 @@
         <!-- ======================================================== -->
         <!-- MODE B: SKEMA DATABASE RELASIONAL (ERD DRAW.IO VIEW)     -->
         <!-- ======================================================== -->
-        <div v-else class="relative w-full h-full p-6 pt-4">
-          <div class="flex items-center justify-between mb-4">
+        <div v-else class="w-full h-full p-6 pt-4 flex flex-col">
+          <div class="flex items-center justify-between mb-4 shrink-0">
             <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 shadow-xs">
               <span class="material-symbols-outlined text-[17px]">database</span>
               <span class="text-xs font-bold uppercase tracking-wider">Skema Basis Data Relasional EduAccess (SQLite / MariaDB)</span>
@@ -602,128 +605,131 @@
             <span class="text-xs text-[#86868b] font-mono">6 Entitas Tabel Inti • Foreign Key Relational Architecture</span>
           </div>
 
-          <!-- ERD SVG CONNECTORS -->
-          <svg class="absolute inset-0 w-full h-full pointer-events-none z-10">
-            <defs>
-              <marker id="erd-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0071e3" />
-              </marker>
-            </defs>
-            <path d="M 370 140 C 440 140, 440 220, 500 220" fill="none" stroke="#0071e3" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
-            <path d="M 370 410 C 440 410, 440 270, 500 270" fill="none" stroke="#34c759" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
-            <path d="M 760 240 C 830 240, 850 140, 920 140" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
-            <path d="M 760 280 C 830 280, 850 400, 920 400" fill="none" stroke="#ec4899" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
-            <path d="M 370 180 C 450 180, 840 550, 920 550" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
-          </svg>
+          <!-- ERD WORKSPACE (Unified Origin: SVG & Tables share exact same 0,0 box) -->
+          <div class="relative w-full h-[580px] shrink-0">
+            <!-- ERD SVG CONNECTORS -->
+            <svg class="absolute inset-0 w-full h-full pointer-events-none z-10">
+              <defs>
+                <marker id="erd-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0071e3" />
+                </marker>
+              </defs>
+              <path d="M 370 79 C 435 79, 435 210, 500 210" fill="none" stroke="#0071e3" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
+              <path d="M 370 379 C 435 379, 435 235, 500 235" fill="none" stroke="#34c759" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
+              <path d="M 760 210 C 840 210, 840 100, 920 100" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
+              <path d="M 760 235 C 840 235, 840 330, 920 330" fill="none" stroke="#ec4899" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
+              <path d="M 370 180 C 450 180, 840 530, 920 530" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#erd-arrow)" />
+            </svg>
 
-          <!-- ERD TABLES GRID (Structured 2-row layout) -->
-          <div class="relative w-full h-full z-20">
-            <!-- Table 1: USERS (x=60, y=40, w=310) -->
-            <div
-              @click.stop="selectErdTable('users')"
-              :class="selectedErdTable === 'users' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
-              class="absolute left-[60px] top-[40px] w-[310px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
-            >
-              <div class="bg-blue-600 text-white px-3.5 py-2 flex items-center justify-between">
-                <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">table_chart</span>users</span>
-                <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Master</span>
+            <!-- ERD TABLES GRID (Structured 2-row layout) -->
+            <div class="absolute inset-0 w-full h-full z-20 pointer-events-none">
+              <!-- Table 1: USERS (x=60, y=30, w=310) -->
+              <div
+                @click.stop="selectErdTable('users')"
+                :class="selectedErdTable === 'users' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
+                class="pointer-events-auto absolute left-[60px] top-[30px] w-[310px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
+              >
+                <div class="bg-blue-600 text-white px-3.5 py-2 flex items-center justify-between">
+                  <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">table_chart</span>users</span>
+                  <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Master</span>
+                </div>
+                <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+                  <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
+                  <div class="py-1 flex justify-between"><span>name</span><span class="text-[#86868b]">VARCHAR</span></div>
+                  <div class="py-1 flex justify-between"><span>email</span><span class="text-[#86868b]">VARCHAR UNIQUE</span></div>
+                  <div class="py-1 flex justify-between"><span>role</span><span class="text-[#86868b]">ENUM</span></div>
+                  <div class="py-1 flex justify-between"><span>nisn_nip</span><span class="text-[#86868b]">VARCHAR</span></div>
+                </div>
               </div>
-              <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
-                <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
-                <div class="py-1 flex justify-between"><span>name</span><span class="text-[#86868b]">VARCHAR</span></div>
-                <div class="py-1 flex justify-between"><span>email</span><span class="text-[#86868b]">VARCHAR UNIQUE</span></div>
-                <div class="py-1 flex justify-between"><span>role</span><span class="text-[#86868b]">ENUM</span></div>
-                <div class="py-1 flex justify-between"><span>nisn_nip</span><span class="text-[#86868b]">VARCHAR</span></div>
-              </div>
-            </div>
 
-            <!-- Table 2: PLACEMENTS (x=500, y=150, w=260) -->
-            <div
-              @click.stop="selectErdTable('placements')"
-              :class="selectedErdTable === 'placements' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
-              class="absolute left-[500px] top-[150px] w-[260px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
-            >
-              <div class="bg-indigo-600 text-white px-3.5 py-2 flex items-center justify-between">
-                <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">hub</span>placements</span>
-                <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Pivot Matching</span>
+              <!-- Table 2: PLACEMENTS (x=500, y=140, w=260) -->
+              <div
+                @click.stop="selectErdTable('placements')"
+                :class="selectedErdTable === 'placements' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
+                class="pointer-events-auto absolute left-[500px] top-[140px] w-[260px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
+              >
+                <div class="bg-indigo-600 text-white px-3.5 py-2 flex items-center justify-between">
+                  <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">hub</span>placements</span>
+                  <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Pivot Matching</span>
+                </div>
+                <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+                  <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
+                  <div class="py-1 flex justify-between text-indigo-600 font-semibold"><span>🔗 student_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
+                  <div class="py-1 flex justify-between text-indigo-600 font-semibold"><span>🔗 company_id</span><span class="text-[#86868b]">FK ➔ companies</span></div>
+                  <div class="py-1 flex justify-between text-indigo-600 font-semibold"><span>🔗 mentor_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
+                  <div class="py-1 flex justify-between text-indigo-600 font-semibold"><span>🔗 teacher_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
+                </div>
               </div>
-              <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
-                <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
-                <div class="py-1 flex justify-between text-indigo-600 font-semibold"><span>🔗 student_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
-                <div class="py-1 flex justify-between text-indigo-600 font-semibold"><span>🔗 company_id</span><span class="text-[#86868b]">FK ➔ companies</span></div>
-                <div class="py-1 flex justify-between text-indigo-600 font-semibold"><span>🔗 mentor_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
-                <div class="py-1 flex justify-between text-indigo-600 font-semibold"><span>🔗 teacher_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
-              </div>
-            </div>
 
-            <!-- Table 3: LOGBOOKS (x=920, y=40, w=270) -->
-            <div
-              @click.stop="selectErdTable('logbooks')"
-              :class="selectedErdTable === 'logbooks' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
-              class="absolute left-[920px] top-[40px] w-[270px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
-            >
-              <div class="bg-amber-600 text-white px-3.5 py-2 flex items-center justify-between">
-                <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">edit_note</span>logbooks</span>
-                <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">STAR Format</span>
+              <!-- Table 3: LOGBOOKS (x=920, y=30, w=270) -->
+              <div
+                @click.stop="selectErdTable('logbooks')"
+                :class="selectedErdTable === 'logbooks' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
+                class="pointer-events-auto absolute left-[920px] top-[30px] w-[270px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
+              >
+                <div class="bg-amber-600 text-white px-3.5 py-2 flex items-center justify-between">
+                  <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">edit_note</span>logbooks</span>
+                  <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">STAR Format</span>
+                </div>
+                <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+                  <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
+                  <div class="py-1 flex justify-between text-amber-600 font-semibold"><span>🔗 student_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
+                  <div class="py-1 flex justify-between"><span>situation, task</span><span class="text-[#86868b]">TEXT</span></div>
+                  <div class="py-1 flex justify-between"><span>action, result</span><span class="text-[#86868b]">TEXT</span></div>
+                </div>
               </div>
-              <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
-                <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
-                <div class="py-1 flex justify-between text-amber-600 font-semibold"><span>🔗 student_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
-                <div class="py-1 flex justify-between"><span>situation, task</span><span class="text-[#86868b]">TEXT</span></div>
-                <div class="py-1 flex justify-between"><span>action, result</span><span class="text-[#86868b]">TEXT</span></div>
-              </div>
-            </div>
 
-            <!-- Table 4: COMPANIES (x=60, y=330, w=310) -->
-            <div
-              @click.stop="selectErdTable('companies')"
-              :class="selectedErdTable === 'companies' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
-              class="absolute left-[60px] top-[330px] w-[310px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
-            >
-              <div class="bg-emerald-600 text-white px-3.5 py-2 flex items-center justify-between">
-                <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">domain</span>companies</span>
-                <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Mitra DUDI</span>
+              <!-- Table 4: COMPANIES (x=60, y=330, w=310) -->
+              <div
+                @click.stop="selectErdTable('companies')"
+                :class="selectedErdTable === 'companies' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
+                class="pointer-events-auto absolute left-[60px] top-[330px] w-[310px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
+              >
+                <div class="bg-emerald-600 text-white px-3.5 py-2 flex items-center justify-between">
+                  <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">domain</span>companies</span>
+                  <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Mitra DUDI</span>
+                </div>
+                <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+                  <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
+                  <div class="py-1 flex justify-between"><span>name</span><span class="text-[#86868b]">VARCHAR</span></div>
+                  <div class="py-1 flex justify-between"><span>quota</span><span class="text-[#86868b]">INT</span></div>
+                  <div class="py-1 flex justify-between"><span>radius_meters</span><span class="text-[#86868b]">INT</span></div>
+                </div>
               </div>
-              <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
-                <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
-                <div class="py-1 flex justify-between"><span>name</span><span class="text-[#86868b]">VARCHAR</span></div>
-                <div class="py-1 flex justify-between"><span>quota</span><span class="text-[#86868b]">INT</span></div>
-                <div class="py-1 flex justify-between"><span>radius_meters</span><span class="text-[#86868b]">INT</span></div>
-              </div>
-            </div>
 
-            <!-- Table 5: ATTENDANCES (x=920, y=280, w=270) -->
-            <div
-              @click.stop="selectErdTable('attendances')"
-              :class="selectedErdTable === 'attendances' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
-              class="absolute left-[920px] top-[280px] w-[270px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
-            >
-              <div class="bg-pink-600 text-white px-3.5 py-2 flex items-center justify-between">
-                <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">pin_drop</span>attendances</span>
-                <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">GPS</span>
+              <!-- Table 5: ATTENDANCES (x=920, y=260, w=270) -->
+              <div
+                @click.stop="selectErdTable('attendances')"
+                :class="selectedErdTable === 'attendances' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
+                class="pointer-events-auto absolute left-[920px] top-[260px] w-[270px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
+              >
+                <div class="bg-pink-600 text-white px-3.5 py-2 flex items-center justify-between">
+                  <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">pin_drop</span>attendances</span>
+                  <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">GPS</span>
+                </div>
+                <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+                  <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
+                  <div class="py-1 flex justify-between text-pink-600 font-semibold"><span>🔗 student_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
+                  <div class="py-1 flex justify-between"><span>check_in, out</span><span class="text-[#86868b]">TIME</span></div>
+                  <div class="py-1 flex justify-between"><span>work_mode</span><span class="text-[#86868b]">ENUM</span></div>
+                </div>
               </div>
-              <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
-                <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
-                <div class="py-1 flex justify-between text-pink-600 font-semibold"><span>🔗 student_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
-                <div class="py-1 flex justify-between"><span>check_in, out</span><span class="text-[#86868b]">TIME</span></div>
-                <div class="py-1 flex justify-between"><span>work_mode</span><span class="text-[#86868b]">ENUM</span></div>
-              </div>
-            </div>
 
-            <!-- Table 6: GRADES (x=920, y=470, w=270) -->
-            <div
-              @click.stop="selectErdTable('grades')"
-              :class="selectedErdTable === 'grades' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
-              class="absolute left-[920px] top-[470px] w-[270px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
-            >
-              <div class="bg-purple-600 text-white px-3.5 py-2 flex items-center justify-between">
-                <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">workspace_premium</span>grades</span>
-                <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Nilai &amp; QR</span>
-              </div>
-              <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
-                <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
-                <div class="py-1 flex justify-between text-purple-600 font-semibold"><span>🔗 student_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
-                <div class="py-1 flex justify-between"><span>final_score</span><span class="text-[#86868b]">DECIMAL</span></div>
+              <!-- Table 6: GRADES (x=920, y=460, w=270) -->
+              <div
+                @click.stop="selectErdTable('grades')"
+                :class="selectedErdTable === 'grades' ? 'ring-3 ring-[#0071e3]/40 border-[#0071e3] shadow-lg' : 'hover:border-[#0071e3]/40'"
+                class="pointer-events-auto absolute left-[920px] top-[460px] w-[270px] bg-white dark:bg-[#1e1e22] rounded-2xl border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden transition-all cursor-pointer"
+              >
+                <div class="bg-purple-600 text-white px-3.5 py-2 flex items-center justify-between">
+                  <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">workspace_premium</span>grades</span>
+                  <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Nilai &amp; QR</span>
+                </div>
+                <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
+                  <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
+                  <div class="py-1 flex justify-between text-purple-600 font-semibold"><span>🔗 student_id</span><span class="text-[#86868b]">FK ➔ users</span></div>
+                  <div class="py-1 flex justify-between"><span>final_score</span><span class="text-[#86868b]">DECIMAL</span></div>
+                </div>
               </div>
             </div>
           </div>
@@ -1155,24 +1161,24 @@ const visiblePipelineEdges = computed<PipelineEdge[]>(() => {
   const col3OutX = 930
   const col4InX = 1010
 
-  // Anchor Y-Centers of Cards:
-  // Guru: Dra Nurul (y=168), Bambang Irawan (y=428)
-  const guruYMap: Record<number, number> = { 2: 168, 12: 428 }
-  // Companies: Telkom (y=130), Kinetik (y=320), Pixel (y=510)
-  const companyYMap: Record<number, number> = { 1: 130, 2: 320, 3: 510 }
-  // Mentors: Hendra (y=130), Raditya (y=320), Maya (y=510)
-  const mentorYMap: Record<number, number> = { 3: 130, 10: 320, 11: 510 }
+  // Anchor Y-Centers of Cards (Center Y of 120px height cards is top + 60, student 54px is top + 27):
+  // Guru: Dra Nurul (top 80, y=140), Bambang Irawan (top 320, y=380)
+  const guruYMap: Record<number, number> = { 2: 140, 12: 380 }
+  // Companies: Telkom (top 40, y=100), Kinetik (top 230, y=290), Pixel (top 420, y=480)
+  const companyYMap: Record<number, number> = { 1: 100, 2: 290, 3: 480 }
+  // Mentors: Hendra (top 40, y=100), Raditya (top 230, y=290), Maya (top 420, y=480)
+  const mentorYMap: Record<number, number> = { 3: 100, 10: 290, 11: 480 }
   // Students:
-  // Row 1: Budi (y=91), Siti (y=169)
-  // Row 2: Danu (y=281), Putri (y=359)
-  // Row 3: Rizky (y=471), Jessica (y=549)
+  // Row 1: Budi (top 35, y=62), Siti (top 111, y=138)
+  // Row 2: Danu (top 225, y=252), Putri (top 301, y=328)
+  // Row 3: Rizky (top 415, y=442), Jessica (top 491, y=518)
   const studentYMap: Record<number, number> = {
-    4: 91,
-    5: 169,
-    6: 281,
-    7: 359,
-    8: 471,
-    9: 549
+    4: 62,
+    5: 138,
+    6: 252,
+    7: 328,
+    8: 442,
+    9: 518
   }
 
   // 1. Edges: Guru ➔ Perusahaan
@@ -1650,7 +1656,7 @@ function fitView() {
   const containerW = canvasContainerRef.value.clientWidth
   const containerH = canvasContainerRef.value.clientHeight
   const targetW = activeDiagramMode.value === 'pipeline' ? 1280 : 1340
-  const targetH = activeDiagramMode.value === 'pipeline' ? 650 : 700
+  const targetH = activeDiagramMode.value === 'pipeline' ? 680 : 700
 
   if (containerW <= 0 || containerH <= 0) return
 
