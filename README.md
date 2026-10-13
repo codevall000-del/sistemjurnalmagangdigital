@@ -10,7 +10,7 @@ Aplikasi ini mengadopsi standar tata letak desktop optimal:
 
 ## 🚀 Fitur & Modul Sesuai Spesifikasi
 
-### 1. Modul Siswa (SMKN 71 Jakarta: PPLG, DKV, Animasi)
+### 1. Modul Siswa (SMKN 71 Jakarta: RPL, DKV, Animasi)
 - **Dashboard Siswa:**
   - Hero Widget Interaktif **Presensi Digital Mandiri: Tap In & Tap Out**:
     - Jam digital realtime yang berdetak setiap detik (`WIB`).
@@ -51,7 +51,7 @@ Aplikasi ini mengadopsi standar tata letak desktop optimal:
 - **Dashboard Guru:**
   - **Seksi / Pengelompokan Berdasarkan Mitra Industri (PT):**
     - 1 Guru dapat membimbing lebih dari 5 siswa yang magang di berbagai PT berbeda tanpa kebingungan.
-    - Tab filter instan per PT: *Semua PT, PT Telkom Digital Solusi (PPLG), Studio Animasi Kinetik Digital (Animasi), Pixel Kreatif Visual Agency (DKV)*.
+    - Tab filter instan per PT: *Semua PT, PT Telkom Digital Solusi (RPL), Studio Animasi Kinetik Digital (Animasi), Pixel Kreatif Visual Agency (DKV)*.
     - Setiap seksi PT menampilkan profil industri, kontak Mentor Lapangan (WhatsApp langsung), dan grid kartu siswa binaan di PT tersebut.
   - **Peringatan Sistem Kritis (Red Alert):** Otomatis mendeteksi dan memperingatkan guru jika ada siswa yang tidak mengisi presensi maupun jurnal selama lebih dari 3 hari berturut-turut (misal siswa Rizky Pratama di Pixel Kreatif), disertai tombol hubungi siswa dan mentor PT.
   - Grafik keaktifan komparasi seluruh siswa binaan (kehadiran vs pengisian jurnal).
@@ -69,7 +69,7 @@ Aplikasi ini mengadopsi standar tata letak desktop optimal:
   - 4 Sub-Tabs: **👨‍🎓 Siswa-Siswi**, **🏢 Tempat Magang (Instansi / Perusahaan)**, **👔 Pembimbing Lapangan**, dan **👨‍🏫 Guru Pembimbing**.
   - **Pendaftaran Siswa Baru Terpadu (All-in-One Quick Enrollment):**
     - Admin dapat mendaftarkan siswa sekaligus memilih tempat magang, ATAU **menambahkan tempat magang baru secara langsung (inline) di form yang sama** tanpa harus bolak-balik halaman!
-  - Filter cepat jurusan (PPLG, Animasi, DKV) dan live search real-time.
+  - Filter cepat jurusan (RPL, Animasi, DKV) dan live search real-time.
 - **Plotting / Penempatan (Panel Ganda / Dual-Panel):**
   - **Panel Kiri:** Pilih nama siswa yang akan diplot.
   - **Panel Kanan:** Pilih tempat magang, pilih pembimbing lapangan, pilih guru pembimbing, tetapkan tanggal mulai & selesai magang, lalu klik tombol **`Tetapkan Penempatan`**.
@@ -185,18 +185,18 @@ Pada bagian paling atas Sidebar Kiri, terdapat **Simulasi Aktor Switcher** yang 
 
 ---
 
-## 🤖 Dukungan Antigravity AI & Portabilitas Lintas Perangkat
+## 🤖 Dukungan Hermes Agent & Portabilitas Workspace VPS
 
-Repositori ini sudah dilengkapi dengan **Project Skills** dan panduan instruksi otomatis untuk **Antigravity AI**:
+Repositori ini sudah dilengkapi dengan **Project Skills** dan panduan instruksi otomatis untuk **Hermes Agent**:
 - **`.agent/skills/jurnal-magang-project/SKILL.md`**: Skill sistem pakar yang memuat seluruh konteks teknis, arsitektur, dan protokol analisis proyek.
 - **`.agent/skills/apple-design/SKILL.md`**: Standar antarmuka desain fluid & interaktif Apple-style.
-- **`AGENTS.md` & `GEMINI.md`**: Aturan otomatisasi workspace yang langsung dibaca oleh Antigravity AI saat repo dibuka di device mana pun.
+- **`AGENTS.md`**: Aturan otomatisasi workspace yang langsung dibaca oleh Hermes Agent saat mengelola proyek ini.
 - **`backend/database/database.sqlite` & `backend/database/database.sql`**: Data bawaan lengkap (pre-seeded) siap uji coba tanpa perlu konfigurasi ulang.
 
-**Saat berpindah perangkat (laptop/PC baru):**
-1. Clone repositori ini (`git clone https://github.com/codevall000-del/sistemjurnalmagangdigital.git`).
-2. Buka di Antigravity AI / IDE.
-3. Berikan instruksi:
-   > *"Tolong analisis project ini dan jelaskan apa saja yang harus dilakukan."*
-4. Antigravity AI akan langsung memindai status kesehatan sistem, data, dan memberikan rekomendasi roadmap secara otomatis!
+**Pengelolaan Proyek Melalui Hermes Agent:**
+1. Proyek berjalan terpusat di VPS Codevall.
+2. Hermes Agent bertindak sebagai agent utama untuk audit fitur, verifikasi endpoint, penambahan modul, serta pengujian sistem.
+3. Berikan instruksi seperti:
+   > *"Perform"* atau *"Analisis project ini dan lanjutkan roadmap selanjutnya."*
+4. Hermes Agent akan langsung memindai status kesehatan sistem, data, dan mengeksekusi kebutuhan pengembangan secara otonom!
 

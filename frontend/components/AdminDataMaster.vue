@@ -37,13 +37,13 @@
           type="button"
         >
           <span>➕</span>
-          <span>{{ currentSubTab === 'siswa' ? 'Daftarkan Siswa & Penempatan' : (currentSubTab === 'company' ? 'Tambah Tempat Magang' : (currentSubTab === 'dudi' || currentSubTab === 'mentor' ? 'Tambah Pembimbing Lapangan' : 'Tambah Guru')) }}</span>
+          <span>{{ currentSubTab === 'siswa' ? 'Daftarkan Siswa & Penempatan' : (currentSubTab === 'company' ? 'Tambah Tempat Magang' : (currentSubTab === 'mentor' ? 'Tambah Pembimbing Lapangan (Mentor)' : 'Tambah Guru')) }}</span>
         </button>
       </div>
     </div>
 
-    <!-- 4 SUB-TABS: SISWA, TEMPAT MAGANG, PEMBIMBING LAPANGAN, GURU (Apple Segmented Control) -->
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <!-- 4 TABS KATEGORI DATA MASTER (Apple Segmented Style) -->
+    <div class="bg-white border border-black/[0.05] rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-4">
       <div class="apple-segmented-container overflow-x-auto">
         <button
           type="button"
@@ -52,7 +52,7 @@
           class="apple-segmented-item flex items-center gap-1.5 whitespace-nowrap"
         >
           <span>👨‍🎓</span>
-          <span>Siswa ({{ studentsList.length }})</span>
+          <span>Siswa Binaan ({{ studentsList.length }})</span>
         </button>
 
         <button
@@ -67,12 +67,12 @@
 
         <button
           type="button"
-          @click="currentSubTab = 'dudi'"
-          :class="{ active: currentSubTab === 'dudi' || currentSubTab === 'mentor' }"
+          @click="currentSubTab = 'mentor'"
+          :class="{ active: currentSubTab === 'mentor' }"
           class="apple-segmented-item flex items-center gap-1.5 whitespace-nowrap"
         >
           <span>👔</span>
-          <span>Pembimbing Lapangan ({{ dudiList.length }})</span>
+          <span>Pembimbing Lapangan / Mentor ({{ mentorList.length }})</span>
         </button>
 
         <button
@@ -146,9 +146,9 @@
                 <div class="flex items-center gap-1.5">
                   <span
                     class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase"
-                    :class="(item.major === 'RPL' || item.major === 'PPLG') ? 'bg-[#0071e3]/10 text-[#0071e3]' : (item.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
+                    :class="item.major === 'RPL' ? 'bg-[#0071e3]/10 text-[#0071e3]' : (item.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
                   >
-                    {{ item.major === 'PPLG' ? 'RPL' : item.major }}
+                    {{ item.major }}
                   </span>
                   <span class="text-[11px] font-mono text-[#86868b] font-medium">{{ item.className }}</span>
                 </div>
@@ -256,7 +256,7 @@
       </div>
     </div>
 
-    <!-- 3. TABEL GURU ATAU DUDI -->
+    <!-- 3. TABEL GURU ATAU MENTOR LAPANGAN -->
     <div v-else class="bg-white border border-black/[0.05] rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-[#1d1d1f]">
@@ -635,12 +635,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { showToast, authToken } = useAppStore()
+const { showToast, authToken, ensureAuthToken } = useAppStore()
 
-const currentSubTab = ref<'siswa' | 'company' | 'dudi' | 'guru'>('siswa')
+const currentSubTab = ref<'siswa' | 'company' | 'mentor' | 'guru'>('siswa')
 const searchQuery = ref('')
 const selectedMajorFilter = ref('all')
 
@@ -687,8 +687,8 @@ const companiesList = ref([
   { id: 3, name: 'Pixel Kreatif Visual Agency', icon: '🎨', sector: 'Branding & UI/UX (DKV)', address: 'Jl. Pemuda No. 65, Rawamangun, Jakarta Timur', quota: 5, placementsCount: 2, workModes: 'WFO, WFA', radius: 150 },
 ])
 
-// Data Pembimbing Lapangan
-const dudiList = ref([
+// Data Pembimbing Lapangan (Mentor)
+const mentorList = ref([
   { id: 3, name: 'Hendra Wijaya, S.Kom', idNumber: 'ID-TELKOM-8821', email: 'mentor@gmail.com', phone: '0812-0000-0003', extraInfo: 'PT Telkom Digital Solusi', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150' },
   { id: 10, name: 'Raditya Pratama, S.Sn', idNumber: 'ID-KINETIK-104', email: 'mentor2@gmail.com', phone: '0812-0000-0021', extraInfo: 'Studio Animasi Kinetik Digital', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150' },
   { id: 11, name: 'Maya Safitri, M.Ds', idNumber: 'ID-PIXEL-332', email: 'mentor3@gmail.com', phone: '0812-0000-0031', extraInfo: 'Pixel Kreatif Visual Agency', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150' },
@@ -700,17 +700,109 @@ const guruList = ref([
   { id: 12, name: 'Bambang Irawan, S.Kom', idNumber: '198803152012011003', email: 'bambang.guru@gmail.com', phone: '0812-0000-0012', extraInfo: 'Pembimbing RPL & Game', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150' },
 ])
 
+const fetchMasterData = async () => {
+  try {
+    const token = await ensureAuthToken()
+    // Fetch students
+    const resSiswa = await fetch('/jurnalmagangdigital/api/admin/master-data?role=siswa', {
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+    })
+    if (resSiswa.ok) {
+      const dataSiswa = await resSiswa.json()
+      if (dataSiswa.users && Array.isArray(dataSiswa.users)) {
+        studentsList.value = dataSiswa.users.map((u: any) => ({
+          id: u.id,
+          name: u.name,
+          idNumber: u.nisn_nip || '-',
+          major: u.major || 'RPL',
+          className: u.class_name || 'XII RPL 1',
+          email: u.email,
+          phone: u.phone || '-',
+          company: u.student_placement?.company?.name || 'Belum Terplotting',
+          dudiMentor: u.student_placement?.dudi_mentor?.name || '-',
+          teacherMentor: u.student_placement?.teacher_mentor?.name || '-',
+          workMode: (u.student_placement?.default_work_mode || 'wfo').toUpperCase(),
+          avatar: u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'
+        }))
+      }
+    }
+
+    // Fetch companies
+    const resComp = await fetch('/jurnalmagangdigital/api/admin/master-data?role=company', {
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+    })
+    if (resComp.ok) {
+      const dataComp = await resComp.json()
+      if (dataComp.companies && Array.isArray(dataComp.companies)) {
+        companiesList.value = dataComp.companies.map((c: any) => ({
+          id: c.id,
+          name: c.name,
+          icon: c.sector?.includes('Animasi') ? '🎬' : (c.sector?.includes('DKV') ? '🎨' : '💻'),
+          sector: c.sector || 'Teknologi & Industri Kreatif',
+          address: c.address || 'DKI Jakarta',
+          quota: c.quota || 5,
+          placementsCount: c.placements_count || 0,
+          workModes: (c.allowed_work_modes || 'WFO, WFH').toUpperCase(),
+          radius: c.radius_meters || 150
+        }))
+      }
+    }
+
+    // Fetch mentors
+    const resMentor = await fetch('/jurnalmagangdigital/api/admin/master-data?role=mentor', {
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+    })
+    if (resMentor.ok) {
+      const dataMentor = await resMentor.json()
+      if (dataMentor.users && Array.isArray(dataMentor.users)) {
+        mentorList.value = dataMentor.users.map((m: any) => ({
+          id: m.id,
+          name: m.name,
+          idNumber: m.nisn_nip || 'ID-MENTOR',
+          email: m.email,
+          phone: m.phone || '-',
+          extraInfo: m.class_name || 'Mentor Lapangan',
+          avatar: m.avatar || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150'
+        }))
+      }
+    }
+
+    // Fetch gurus
+    const resGuru = await fetch('/jurnalmagangdigital/api/admin/master-data?role=guru', {
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+    })
+    if (resGuru.ok) {
+      const dataGuru = await resGuru.json()
+      if (dataGuru.users && Array.isArray(dataGuru.users)) {
+        guruList.value = dataGuru.users.map((g: any) => ({
+          id: g.id,
+          name: g.name,
+          idNumber: g.nisn_nip || 'NIP-GURU',
+          email: g.email,
+          phone: g.phone || '-',
+          extraInfo: g.class_name || 'Guru Pembimbing Sekolah',
+          avatar: g.avatar || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150'
+        }))
+      }
+    }
+  } catch (e) {}
+}
+
+onMounted(() => {
+  fetchMasterData()
+})
+
 const activeDisplayList = computed(() => {
   let list: any[] = []
   if (currentSubTab.value === 'siswa') {
     list = studentsList.value
     if (selectedMajorFilter.value !== 'all') {
-      list = list.filter(s => s.major === selectedMajorFilter.value || (selectedMajorFilter.value === 'RPL' && s.major === 'PPLG'))
+      list = list.filter(s => s.major === selectedMajorFilter.value)
     }
   } else if (currentSubTab.value === 'company') {
     list = companiesList.value
-  } else if (currentSubTab.value === 'dudi') {
-    list = dudiList.value
+  } else if (currentSubTab.value === 'mentor') {
+    list = mentorList.value
   } else {
     list = guruList.value
   }
@@ -767,21 +859,36 @@ const handleDelete = (item: any) => {
   showDeleteConfirm.value = true
 }
 
-const confirmDelete = () => {
+const confirmDelete = async () => {
   if (!itemToDelete.value) return
   const item = itemToDelete.value
+  const role = currentSubTab.value
+  try {
+    const token = await ensureAuthToken()
+    await fetch(`/jurnalmagangdigital/api/admin/master-data/${item.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ role })
+    })
+  } catch (e) {}
+
   if (currentSubTab.value === 'siswa') {
     studentsList.value = studentsList.value.filter(s => s.id !== item.id)
   } else if (currentSubTab.value === 'company') {
     companiesList.value = companiesList.value.filter(c => c.id !== item.id)
-  } else if (currentSubTab.value === 'dudi') {
-    dudiList.value = dudiList.value.filter(d => d.id !== item.id)
+  } else if (currentSubTab.value === 'mentor') {
+    mentorList.value = mentorList.value.filter(d => d.id !== item.id)
   } else {
     guruList.value = guruList.value.filter(g => g.id !== item.id)
   }
-  showToast(`Data ${item.name} berhasil dihapus dari sistem.`, 'info')
+  showToast(`Data ${item.name} berhasil dihapus dari database.`, 'info')
   showDeleteConfirm.value = false
   itemToDelete.value = null
+  fetchMasterData()
 }
 
 const handleSaveManual = async () => {
@@ -798,7 +905,7 @@ const handleSaveManual = async () => {
     // TAMBAH DATA BARU
     if (currentSubTab.value === 'siswa') {
       let assignedCompany = 'PT Telkom Digital Solusi'
-      let dudi = 'Hendra Wijaya, S.Kom'
+      let mentor = 'Hendra Wijaya, S.Kom'
 
       if (isCreatingNewCompanyInline.value && formData.value.newCompanyName) {
         const newCompId = Date.now()
@@ -814,14 +921,14 @@ const handleSaveManual = async () => {
           workModes: formData.value.workMode.toUpperCase(),
           radius: 150
         })
-        dudi = 'Pembimbing Lapangan Baru'
+        mentor = 'Pembimbing Lapangan Baru'
       } else if (formData.value.companyId) {
         const found = companiesList.value.find(c => c.id === formData.value.companyId)
         if (found) {
           assignedCompany = found.name
           found.placementsCount = (found.placementsCount || 0) + 1
-          if (found.id === 2) dudi = 'Raditya Pratama, S.Sn'
-          else if (found.id === 3) dudi = 'Maya Safitri, M.Ds'
+          if (found.id === 2) mentor = 'Raditya Pratama, S.Sn'
+          else if (found.id === 3) mentor = 'Maya Safitri, M.Ds'
         }
       }
 
@@ -834,7 +941,7 @@ const handleSaveManual = async () => {
         email: formData.value.email,
         phone: formData.value.phone,
         company: assignedCompany,
-        dudiMentor: dudi,
+        dudiMentor: mentor,
         teacherMentor: formData.value.teacherMentor,
         workMode: formData.value.workMode.toUpperCase(),
         avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'
@@ -842,7 +949,7 @@ const handleSaveManual = async () => {
       studentsList.value.unshift(newStudent)
 
       try {
-        await fetch('http://127.0.0.1:8000/api/admin/master-data', {
+        await fetch('/jurnalmagangdigital/api/admin/master-data', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -880,8 +987,8 @@ const handleSaveManual = async () => {
       }
       companiesList.value.push(newCompany)
       showToast(`Tempat PKL ${newCompany.name} berhasil ditambahkan!`, 'success')
-    } else if (currentSubTab.value === 'dudi') {
-      dudiList.value.push({
+    } else if (currentSubTab.value === 'mentor') {
+      mentorList.value.push({
         id: Date.now(),
         name: formData.value.name,
         idNumber: formData.value.idNumber,
@@ -890,7 +997,7 @@ const handleSaveManual = async () => {
         extraInfo: 'Mitra Industri Baru',
         avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150'
       })
-      showToast(`Mentor Industri ${formData.value.name} berhasil ditambahkan!`, 'success')
+      showToast(`Mentor Lapangan ${formData.value.name} berhasil ditambahkan!`, 'success')
     } else {
       guruList.value.push({
         id: Date.now(),

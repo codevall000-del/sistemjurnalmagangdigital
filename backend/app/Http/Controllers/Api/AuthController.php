@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -19,12 +19,12 @@ class AuthController extends Controller
 
         $email = $request->email;
         $user = User::where('email', $email)->first();
-        if (!$user && in_array($email, ['dudi@gmail.com', 'dudi2@gmail.com', 'dudi3@gmail.com'])) {
+        if (! $user && in_array($email, ['dudi@gmail.com', 'dudi2@gmail.com', 'dudi3@gmail.com'])) {
             $mappedEmail = str_replace('dudi', 'mentor', $email);
             $user = User::where('email', $mappedEmail)->first();
         }
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['Kredensial yang diberikan tidak cocok dengan data kami.'],
             ]);
@@ -59,7 +59,7 @@ class AuthController extends Controller
             $user = User::where('role', $role)->first();
         }
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['success' => false, 'message' => 'Role tidak ditemukan'], 404);
         }
 
@@ -99,7 +99,7 @@ class AuthController extends Controller
 
         $user = $request->user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (! Hash::check($request->current_password, $user->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Password saat ini tidak sesuai.',

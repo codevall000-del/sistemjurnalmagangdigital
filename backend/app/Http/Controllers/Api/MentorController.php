@@ -3,21 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Placement;
-use App\Models\Logbook;
 use App\Models\Attendance;
-use App\Models\Grade;
-use App\Models\Notification;
-use App\Models\WorkModeRequest;
 use App\Models\Company;
+use App\Models\Grade;
+use App\Models\Logbook;
+use App\Models\Notification;
+use App\Models\Placement;
+use App\Models\User;
+use App\Models\WorkModeRequest;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class MentorController extends Controller
 {
     public function dashboard(Request $request)
     {
+        $this->autoApproveOldPendingLogbooks();
+
         $user = $request->user();
 
         // Get all students mentored by this Pembimbing Lapangan
@@ -31,7 +33,9 @@ class MentorController extends Controller
 
         foreach ($placements as $p) {
             $student = $p->student;
-            if (!$student) continue;
+            if (! $student) {
+                continue;
+            }
 
             $studentIds[] = $student->id;
 
@@ -74,12 +78,17 @@ class MentorController extends Controller
             ->where('status', 'pending')
             ->count();
 
+        $pendingDisputesCount = Attendance::whereIn('student_id', $studentIds)
+            ->where('dispute_status', 'pending')
+            ->count();
+
         return response()->json([
             'success' => true,
             'students' => $students,
             'total_active_students' => count($students),
             'total_pending_validations' => $totalPendingAll,
             'total_pending_requests' => $pendingRequestsCount,
+            'total_pending_disputes' => $pendingDisputesCount,
         ]);
     }
 
@@ -113,6 +122,8 @@ class MentorController extends Controller
 
     public function getStudentLogbooks(Request $request, $studentId)
     {
+        $this->autoApproveOldPendingLogbooks();
+
         $student = User::findOrFail($studentId);
         $logbooks = Logbook::with('validator:id,name')
             ->where('student_id', $studentId)
@@ -124,6 +135,90 @@ class MentorController extends Controller
             'student' => $student,
             'logbooks' => $logbooks,
         ]);
+    }
+
+    public function batchValidateLogbooks(Request $request)
+    {
+        $request->validate([
+            'logbook_ids' => 'required|array',
+            'logbook_ids.*' => 'exists:logbooks,id',
+            'status' => 'required|in:diacc,revisi',
+            'feedback_note' => 'nullable|string',
+        ]);
+
+        $user = $request->user();
+        $ids = $request->logbook_ids;
+        $status = $request->status;
+        $note = $request->feedback_note ?? ($status === 'diacc' ? 'Disetujui secara kolektif (Batch ACC) oleh Pembimbing Lapangan.' : 'Perlu revisi secara kolektif.');
+
+        $updatedCount = Logbook::whereIn('id', $ids)->update([
+            'status' => $status,
+            'feedback_note' => $note,
+            'validated_by' => $user->id,
+            'validated_at' => Carbon::now(),
+        ]);
+
+        $logbooks = Logbook::whereIn('id', $ids)->get();
+        $studentIds = $logbooks->pluck('student_id')->unique();
+        foreach ($studentIds as $sId) {
+            Notification::create([
+                'user_id' => $sId,
+                'title' => 'Logbook Disetujui Kolektif (Batch)',
+                'message' => 'Pembimbing Lapangan telah menyetujui jurnal harian Anda secara kolektif.',
+                'type' => 'success',
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "Berhasil memvalidasi {$updatedCount} jurnal sekaligus.",
+            'updated_count' => $updatedCount,
+        ]);
+    }
+
+    public function reviewAttendanceDispute(Request $request, $attendanceId)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'notes' => 'nullable|string',
+        ]);
+
+        $attendance = Attendance::findOrFail($attendanceId);
+        $user = $request->user();
+
+        $isApproved = $request->status === 'approved';
+        $attendance->update([
+            'dispute_status' => $request->status,
+            'is_within_radius' => $isApproved ? true : $attendance->is_within_radius,
+            'dispute_resolved_by' => $user->id,
+            'dispute_resolved_at' => Carbon::now(),
+            'notes' => ($attendance->notes ? $attendance->notes.' | ' : '').($isApproved ? 'Sanggahan GPS Diterima' : 'Sanggahan GPS Ditolak').($request->notes ? ": {$request->notes}" : ''),
+        ]);
+
+        Notification::create([
+            'user_id' => $attendance->student_id,
+            'title' => 'Status Sanggahan Presensi GPS: '.($isApproved ? 'Disetujui' : 'Ditolak'),
+            'message' => "Permohonan sanggahan presensi Anda tanggal {$attendance->date->format('d/m/Y')} ".($isApproved ? 'telah disetujui oleh Pembimbing.' : 'ditolak.'),
+            'type' => $isApproved ? 'success' : 'danger',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sanggahan presensi berhasil '.($isApproved ? 'disetujui' : 'ditolak').'.',
+            'attendance' => $attendance,
+        ]);
+    }
+
+    protected function autoApproveOldPendingLogbooks()
+    {
+        Logbook::where('status', 'menunggu')
+            ->where('date', '<=', Carbon::today()->subDays(7)->format('Y-m-d'))
+            ->update([
+                'status' => 'diacc',
+                'is_auto_approved' => true,
+                'feedback_note' => 'Disetujui Otomatis Sistem (SLA Batas Waktu 7 Hari)',
+                'validated_at' => Carbon::now(),
+            ]);
     }
 
     public function validateLogbook(Request $request, $logbookId)
@@ -149,14 +244,14 @@ class MentorController extends Controller
 
         Notification::create([
             'user_id' => $logbook->student_id,
-            'title' => 'Status Logbook: ' . ($request->status === 'diacc' ? 'Disetujui' : 'Perlu Revisi'),
-            'message' => 'Jurnal Anda untuk tanggal ' . $logbook->date->format('d/m/Y') . ' ' . $actionText . '. Catatan: ' . ($request->feedback_note ?? '-'),
+            'title' => 'Status Logbook: '.($request->status === 'diacc' ? 'Disetujui' : 'Perlu Revisi'),
+            'message' => 'Jurnal Anda untuk tanggal '.$logbook->date->format('d/m/Y').' '.$actionText.'. Catatan: '.($request->feedback_note ?? '-'),
             'type' => $type,
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Jurnal berhasil ' . ($request->status === 'diacc' ? 'di-ACC' : 'ditolak/diminta revisi') . '.',
+            'message' => 'Jurnal berhasil '.($request->status === 'diacc' ? 'di-ACC' : 'ditolak/diminta revisi').'.',
             'logbook' => $logbook,
         ]);
     }
@@ -171,7 +266,7 @@ class MentorController extends Controller
         $studentIds = $placements->pluck('student_id')->filter()->toArray();
 
         $today = Carbon::today()->format('Y-m-d');
-        $attendances = Attendance::with('student:id,name,nisn_nip,avatar,class_name')
+        $attendances = Attendance::with(['student:id,name,nisn_nip,avatar,class_name,major', 'disputeResolver:id,name'])
             ->whereIn('student_id', $studentIds)
             ->where('date', $today)
             ->get();
@@ -226,8 +321,8 @@ class MentorController extends Controller
         $statusText = $request->status === 'approved' ? 'disetujui' : 'ditolak';
         Notification::create([
             'user_id' => $req->student_id,
-            'title' => 'Permohonan Mode Kerja ' . ucfirst($statusText),
-            'message' => "Permohonan mode kerja " . strtoupper($req->requested_mode) . " Anda untuk tanggal {$req->date->format('d/m/Y')} telah {$statusText} oleh Pembimbing Lapangan. Catatan: " . ($notes ?? '-'),
+            'title' => 'Permohonan Mode Kerja '.ucfirst($statusText),
+            'message' => 'Permohonan mode kerja '.strtoupper($req->requested_mode)." Anda untuk tanggal {$req->date->format('d/m/Y')} telah {$statusText} oleh Pembimbing Lapangan. Catatan: ".($notes ?? '-'),
             'type' => $request->status === 'approved' ? 'success' : 'warning',
         ]);
 
@@ -248,6 +343,7 @@ class MentorController extends Controller
 
         $data = $placements->map(function ($p) {
             $effective = $p->getEffectiveSchedule();
+
             return [
                 'placement_id' => $p->id,
                 'student_id' => $p->student ? $p->student->id : null,
@@ -256,7 +352,7 @@ class MentorController extends Controller
                 'avatar' => $p->student ? $p->student->avatar : null,
                 'class_name' => $p->student ? $p->student->class_name : '-',
                 'company_name' => $p->company ? $p->company->name : '-',
-                'has_custom_schedule' => !empty($p->work_schedule),
+                'has_custom_schedule' => ! empty($p->work_schedule),
                 'schedule' => $effective,
             ];
         });
@@ -310,7 +406,7 @@ class MentorController extends Controller
         $placement = Placement::where('dudi_mentor_id', $user->id)->first();
         $company = $placement ? $placement->company : null;
 
-        if (!$company) {
+        if (! $company) {
             $company = Company::first();
         }
 
@@ -331,11 +427,11 @@ class MentorController extends Controller
         $placement = Placement::where('dudi_mentor_id', $user->id)->first();
         $company = $placement ? $placement->company : null;
 
-        if (!$company) {
+        if (! $company) {
             $company = Company::first();
         }
 
-        if (!$company) {
+        if (! $company) {
             return response()->json(['success' => false, 'message' => 'Data tempat magang tidak ditemukan.'], 404);
         }
 
@@ -345,7 +441,7 @@ class MentorController extends Controller
         ]);
 
         $scheduleData = $request->input('schedule') ?? $request->input('office_schedule');
-        if (!$scheduleData) {
+        if (! $scheduleData) {
             return response()->json(['success' => false, 'message' => 'Jadwal kantor wajib diisi.'], 422);
         }
 
@@ -451,14 +547,14 @@ class MentorController extends Controller
         }
 
         // Generate unique QR verification hash
-        $qrHash = 'PKL-VERIFY-' . strtoupper(substr(md5($student->id . $avg . time()), 0, 16));
+        $qrHash = 'PKL-VERIFY-'.strtoupper(substr(md5($student->id.$avg.time()), 0, 16));
         $grade->qr_code_hash = $qrHash;
         $grade->save();
 
         Notification::create([
             'user_id' => $student->id,
             'title' => 'Nilai PKL Pembimbing Lapangan Telah Difinalisasi',
-            'message' => 'Pembimbing Lapangan telah menyelesaikan rubrik evaluasi dan memfinalisasi nilai rata-rata Tempat Magang Anda (' . $avg . ').',
+            'message' => 'Pembimbing Lapangan telah menyelesaikan rubrik evaluasi dan memfinalisasi nilai rata-rata Tempat Magang Anda ('.$avg.').',
             'type' => 'success',
         ]);
 

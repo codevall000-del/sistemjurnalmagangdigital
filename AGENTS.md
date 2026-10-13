@@ -1,12 +1,12 @@
-# AGENTS.md — Antigravity & AI Assistant Project Instructions
+# AGENTS.md — Hermes Agent Project Instructions
 
 Selamat datang di repositori **EduAccess (Sistem Jurnal & Presensi Magang PKL Digital SMKN 71 Jakarta)**.
-File ini adalah instruksi operasional untuk Antigravity AI dan AI assistant lainnya saat membuka atau menganalisis project ini di komputer/device mana pun.
+File ini adalah instruksi operasional untuk Hermes Agent sebagai agen utama saat mengelola, menganalisis, atau mengembangkan project ini di VPS Codevall.
 
 ---
 
 ## 📌 Ringkasan Eksekutif Proyek
-- **Domain:** Sistem Informasi Jurnal & Presensi PKL Digital SMKN 71 Jakarta (Jurusan PPLG, DKV, Animasi).
+- **Domain:** Sistem Informasi Jurnal & Presensi PKL Digital SMKN 71 Jakarta (Jurusan RPL, DKV, Animasi).
 - **Tech Stack:**
   - **Backend:** Laravel 11/12 REST API, Laravel Sanctum, SQLite (default & pre-seeded) / MySQL.
   - **Frontend:** Nuxt 3 (Vue 3, TypeScript, Tailwind CSS, Desktop SPA Layout, Pinia/State via `frontend/composables/useAppStore.ts`).
@@ -23,10 +23,10 @@ Semua akun menggunakan password: **`12345678`**
 
 | Aktor | Email | Nama | Instansi / Jurusan | Fitur Utama |
 |---|---|---|---|---|
-| **Siswa** | `siswa@gmail.com` | Budi Santoso | PT Telkom Digital Solusi (PPLG) | Tap In/Out GPS Geofence (Haversine), Jurnal STAR + Kompresi Foto, Pengajuan Mode Kerja (WFH/WFA), Digital ID Card |
+| **Siswa** | `siswa@gmail.com` | Budi Santoso | PT Telkom Digital Solusi (RPL) | Tap In/Out GPS Geofence (Haversine), Jurnal STAR + Kompresi Foto, Pengajuan Mode Kerja (WFH/WFA), Digital ID Card |
 | **Pembimbing Lapangan (Mentor)** | `mentor@gmail.com` | Hendra Wijaya, S.Kom | PT Telkom Digital Solusi | Split-screen validasi jurnal (ACC/Revisi), Rekap presensi, Jam kantor & approval WFH, Evaluasi 4 aspek & QR Sertifikat |
-| **Guru Pembimbing** | `guru@gmail.com` | Dra. Nurul Hidayah, M.Pd | Pembimbing RPL/PPLG | Tab filter per PT Mitra, Red Alert (>3 hari alfa/tanpa jurnal), Action WhatsApp, Kompilasi nilai akhir |
-| **Admin / Kaprog** | `admin@gmail.com` | Ir. Bambang Hermanto, M.T | Kaprog PPLG | Macro statistics, All-in-One Quick Enrollment, Plotting dual-panel, Diagram Relasi Interaktif (Alur Penempatan & ERD Skema), Cetak buku jurnal format Dinas |
+| **Guru Pembimbing** | `guru@gmail.com` | Dra. Nurul Hidayah, M.Pd | Pembimbing RPL | Tab filter per PT Mitra, Red Alert (>3 hari alfa/tanpa jurnal), Action WhatsApp, Kompilasi nilai akhir |
+| **Admin / Kaprog** | `admin@gmail.com` | Ir. Bambang Hermanto, M.T | Kaprog RPL | Macro statistics, All-in-One Quick Enrollment, Plotting dual-panel, Diagram Relasi Interaktif (Alur Penempatan & ERD Skema), Cetak buku jurnal format Dinas |
 
 > *Tips UI: Terdapat juga **Role Switcher** di bagian paling atas Sidebar Kiri untuk berganti peran secara instan tanpa perlu logout/login manual.*
 

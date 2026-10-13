@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Placement extends Model
 {
@@ -22,6 +22,8 @@ class Placement extends Model
         'default_work_mode',
         'work_schedule',
         'status',
+        'relocation_reason',
+        'previous_placement_id',
     ];
 
     protected $casts = [
@@ -33,6 +35,11 @@ class Placement extends Model
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');
+    }
+
+    public function previousPlacement()
+    {
+        return $this->belongsTo(Placement::class, 'previous_placement_id');
     }
 
     public function company()
@@ -90,7 +97,7 @@ class Placement extends Model
         $officeSchedule = $company ? $company->getEffectiveSchedule() : Company::getDefaultOfficeSchedule();
 
         // 2a. Check special holidays
-        if (!empty($officeSchedule['special_holidays'])) {
+        if (! empty($officeSchedule['special_holidays'])) {
             foreach ($officeSchedule['special_holidays'] as $h) {
                 if (isset($h['date']) && $h['date'] === $formattedDate) {
                     return [
@@ -105,7 +112,7 @@ class Placement extends Model
 
         // 2b. Check weekly day in office schedule
         $dayConfig = $officeSchedule['days'][$dayKey] ?? null;
-        $isHoliday = $dayConfig && isset($dayConfig['is_work_day']) ? !$dayConfig['is_work_day'] : in_array($dayKey, ['saturday', 'sunday']);
+        $isHoliday = $dayConfig && isset($dayConfig['is_work_day']) ? ! $dayConfig['is_work_day'] : in_array($dayKey, ['saturday', 'sunday']);
 
         if ($isHoliday) {
             return [
@@ -147,7 +154,7 @@ class Placement extends Model
         $company = $this->relationLoaded('company') ? $this->company : $this->company()->first();
         $officeSchedule = $company ? $company->getEffectiveSchedule() : Company::getDefaultOfficeSchedule();
 
-        if (is_array($this->work_schedule) && !empty($this->work_schedule)) {
+        if (is_array($this->work_schedule) && ! empty($this->work_schedule)) {
             $days = $officeSchedule['days'] ?? [];
             foreach ($this->work_schedule as $dayKey => $mode) {
                 if (isset($days[$dayKey])) {

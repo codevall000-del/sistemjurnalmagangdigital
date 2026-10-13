@@ -542,6 +542,8 @@ import { useAppStore } from '~/composables/useAppStore'
 const {
   showToast,
   authToken,
+  currentUser,
+  ensureAuthToken,
   attendanceState,
   isTodayLogged,
   journalUrgency,
@@ -682,16 +684,73 @@ const previewFile = (file: { name: string; size: string }) => {
   showToast(`Membuka pratinjau dokumen: ${file.name}`, 'info')
 }
 
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    try {
+      const saved = localStorage.getItem('eduaccess_logbook_draft')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (parsed.form && (parsed.form.title || parsed.form.description)) {
+          form.value = { ...form.value, ...parsed.form }
+          if (parsed.timestamp) {
+            lastAutoSaveTime.value = parsed.timestamp
+          }
+          showToast('Draf jurnal yang belum terkirim berhasil dipulihkan otomatis.', 'info')
+        }
+      }
+    } catch (e) {}
+  }
+  fetchLogbooks()
+})
+
+const fetchLogbooks = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/siswa/logbooks', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      const logs = data.all || data.this_week || []
+      if (Array.isArray(logs) && logs.length > 0) {
+        logsList.value = logs.map((l: any) => ({
+          id: l.id,
+          date: new Date(l.date).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }),
+          title: l.title,
+          desc: l.activity_description,
+          hours: '8 Jam Kerja',
+          attachmentsCount: l.photo_url ? 1 : 0,
+          status: l.status === 'diacc' ? 'approved' : (l.status === 'revisi' ? 'revision' : 'pending'),
+          statusLabel: l.status === 'diacc' ? 'Disetujui' : (l.status === 'revisi' ? 'Perlu Revisi' : 'Menunggu Review'),
+          mentorName: l.validator?.name || currentUser.value.mentor_name || 'Hendra Wijaya, S.Kom',
+          mentorInitials: (l.validator?.name || 'HW').split(' ').map((n: string) => n[0]).join('').substring(0, 2)
+        }))
+      }
+    }
+  } catch (e) {}
+}
+
 const saveAsDraft = () => {
   const now = new Date()
   lastAutoSaveTime.value = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`
-  showToast('Draf jurnal harian berhasil disimpan di perangkat!', 'success')
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem('eduaccess_logbook_draft', JSON.stringify({
+        form: form.value,
+        timestamp: lastAutoSaveTime.value
+      }))
+    } catch (e) {}
+  }
+  showToast('✓ Draf jurnal harian berhasil disimpan di perangkat!', 'success')
 }
 
 const handleSubmitEntry = async () => {
   try {
     const todayIso = new Date().toISOString().substring(0, 10)
-    await fetch('http://127.0.0.1:8000/api/siswa/logbooks', {
+    await fetch('/jurnalmagangdigital/api/siswa/logbooks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -708,20 +767,32 @@ const handleSubmitEntry = async () => {
     // fallback
   }
 
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem('eduaccess_logbook_draft')
+    } catch (e) {}
+  }
+
+  const now = new Date()
+  const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']
+  const formattedToday = `${dayNames[now.getDay()]}, ${now.getDate()} ${monthNames[now.getMonth()]} ${now.getFullYear()}`
+
   logsList.value.unshift({
     id: Date.now(),
-    date: 'Rabu, 23 Okt 2024',
+    date: formattedToday,
     title: form.value.title,
     desc: form.value.description,
     hours: '8 Jam Kerja',
     attachmentsCount: attachments.value.length,
     status: 'pending',
     statusLabel: 'Menunggu Review',
-    mentorName: 'Bpk. Dimas Ardiansyah',
-    mentorInitials: 'DA'
+    mentorName: currentUser.value.mentor_name || 'Hendra Wijaya, S.Kom',
+    mentorInitials: 'HW'
   })
 
   recordJournalSubmitted()
+  showToast('✓ Jurnal harian berhasil dikirim ke Pembimbing Lapangan!', 'success')
 }
 
 const selectLog = (log: typeof initialLogs[0]) => {
@@ -729,6 +800,122 @@ const selectLog = (log: typeof initialLogs[0]) => {
 }
 
 const exportPdf = () => {
-  showToast('Mempersiapkan berkas rekapitulasi PDF Jurnal Magang SMKN 71...', 'success')
+  if (typeof window === 'undefined') return
+  const printWin = window.open('', '_blank', 'width=900,height=800')
+  if (!printWin) {
+    showToast('Mohon izinkan pop-up jendela peramban untuk mencetak rekapitulasi PDF.', 'warning')
+    return
+  }
+
+  const entriesHtml = logsList.value.map((l: any, i: number) => `
+    <tr>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; text-align: center;">${i + 1}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; white-space: nowrap;">${l.date}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; font-weight: bold;">${l.title}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; font-size: 11px;">${l.desc}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; text-align: center;">${l.hours}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; text-align: center;">
+        <span style="display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; background: ${l.status === 'approved' ? '#dcfce7; color: #166534' : '#fef9c3; color: #854d0e'};">
+          ${l.statusLabel}
+        </span>
+      </td>
+    </tr>
+  `).join('')
+
+  printWin.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Rekapitulasi Jurnal PKL SMKN 71 Jakarta - ${currentUser.value.name}</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #111827; padding: 24px; line-height: 1.5; }
+          .kop { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #111827; padding-bottom: 12px; margin-bottom: 16px; }
+          .kop-text { text-align: center; flex: 1; }
+          .kop-title { font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0; }
+          .kop-sub { font-size: 12px; margin: 2px 0; color: #374151; }
+          .kop-address { font-size: 11px; margin: 0; color: #4b5563; }
+          .info-table { width: 100%; font-size: 12px; margin-bottom: 16px; border-collapse: collapse; }
+          .info-table td { padding: 4px 6px; }
+          .table-main { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+          .table-main th { background: #f3f4f6; padding: 8px 10px; border: 1px solid #d1d5db; font-weight: 700; text-align: center; }
+          .ttd-container { display: flex; justify-content: space-between; margin-top: 40px; font-size: 12px; page-break-inside: avoid; }
+          .ttd-box { text-align: center; width: 220px; }
+          @media print {
+            body { padding: 0; }
+            button { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div style="text-align: right; margin-bottom: 12px;">
+          <button onclick="window.print()" style="padding: 8px 16px; background: #0071e3; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">Cetak / Simpan PDF</button>
+        </div>
+        <div class="kop">
+          <div class="kop-text">
+            <h1 class="kop-title">Pemerintah Provinsi Daerah Khusus Ibukota Jakarta<br>Dinas Pendidikan - SMK Negeri 71 Jakarta</h1>
+            <p class="kop-sub">Program Keahlian: Rekayasa Perangkat Lunak (RPL), Desain Komunikasi Visual (DKV), Animasi</p>
+            <p class="kop-address">Jl. Raden Saleh II No. 45, Senen, Jakarta Pusat • Telp: (021) 390-1234 • Website: smkn71jakarta.sch.id</p>
+          </div>
+        </div>
+        <h2 style="text-align: center; font-size: 14px; font-weight: 700; text-transform: uppercase; margin: 16px 0 8px 0; letter-spacing: 0.5px;">Buku Jurnal Kegiatan Praktik Kerja Lapangan (PKL)</h2>
+        <table class="info-table">
+          <tr>
+            <td style="width: 140px; font-weight: 600;">Nama Siswa</td>
+            <td>: ${currentUser.value.name}</td>
+            <td style="width: 140px; font-weight: 600;">Mitra Tempat PKL</td>
+            <td>: ${currentUser.value.company_name || 'PT Telkom Digital Solusi'}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">NISN / Kelas</td>
+            <td>: ${currentUser.value.nisn_nip || '0061234567'} / ${currentUser.value.class_name || 'XII RPL 1'}</td>
+            <td style="font-weight: 600;">Pembimbing Lapangan</td>
+            <td>: ${currentUser.value.mentor_name || 'Hendra Wijaya, S.Kom'}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Konsentrasi Keahlian</td>
+            <td>: ${currentUser.value.major || 'RPL'}</td>
+            <td style="font-weight: 600;">Guru Pembimbing</td>
+            <td>: Dra. Nurul Hidayah, M.Pd</td>
+          </tr>
+        </table>
+        <table class="table-main">
+          <thead>
+            <tr>
+              <th style="width: 35px;">No</th>
+              <th style="width: 110px;">Tanggal</th>
+              <th style="width: 180px;">Judul Pekerjaan</th>
+              <th>Deskripsi Aktivitas & Kompetensi</th>
+              <th style="width: 80px;">Durasi</th>
+              <th style="width: 95px;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${entriesHtml}
+          </tbody>
+        </table>
+        <div class="ttd-container">
+          <div class="ttd-box">
+            <p>Mengetahui,<br>Pembimbing Lapangan (Mentor)</p>
+            <div style="height: 60px;"></div>
+            <p style="font-weight: 700; text-decoration: underline;">${currentUser.value.mentor_name || 'Hendra Wijaya, S.Kom'}</p>
+            <p style="font-size: 11px; color: #6b7280; margin-top: -6px;">Mentor Industri Mitra</p>
+          </div>
+          <div class="ttd-box">
+            <p>Jakarta, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>Siswa Praktikan</p>
+            <div style="height: 60px;"></div>
+            <p style="font-weight: 700; text-decoration: underline;">${currentUser.value.name}</p>
+            <p style="font-size: 11px; color: #6b7280; margin-top: -6px;">NISN. ${currentUser.value.nisn_nip || '0061234567'}</p>
+          </div>
+          <div class="ttd-box">
+            <p>Menyetujui,<br>Guru Pembimbing Sekolah</p>
+            <div style="height: 60px;"></div>
+            <p style="font-weight: 700; text-decoration: underline;">Dra. Nurul Hidayah, M.Pd</p>
+            <p style="font-size: 11px; color: #6b7280; margin-top: -6px;">NIP. 197508122003122002</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `)
+  printWin.document.close()
 }
 </script>

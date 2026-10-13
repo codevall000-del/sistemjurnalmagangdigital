@@ -1506,7 +1506,7 @@ const resetScheduleToDefault = () => {
 // Fetch API Data
 const fetchCompanySchedule = async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/mentor/company-schedule', {
+    const res = await fetch('/jurnalmagangdigital/api/mentor/company-schedule', {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${authToken.value}`
@@ -1568,7 +1568,7 @@ const saveCompanySchedule = async () => {
       apply_to_all_students: true
     }
 
-    const res = await fetch('http://127.0.0.1:8000/api/mentor/company-schedule', {
+    const res = await fetch('/jurnalmagangdigital/api/mentor/company-schedule', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -1605,7 +1605,7 @@ const saveCompanySchedule = async () => {
 
 const fetchRecap = async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/mentor/attendance-recap', {
+    const res = await fetch('/jurnalmagangdigital/api/mentor/attendance-recap', {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${authToken.value}`
@@ -1624,7 +1624,7 @@ const fetchRecap = async () => {
 
 const fetchRequests = async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/mentor/work-mode-requests', {
+    const res = await fetch('/jurnalmagangdigital/api/mentor/work-mode-requests', {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${authToken.value}`
@@ -1653,7 +1653,7 @@ const fetchRequests = async () => {
 
 const fetchSchedules = async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/mentor/students-schedules', {
+    const res = await fetch('/jurnalmagangdigital/api/mentor/students-schedules', {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${authToken.value}`
@@ -1684,7 +1684,7 @@ const fetchSchedules = async () => {
 
 const reviewRequest = async (id: number, status: 'approved' | 'rejected') => {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/mentor/work-mode-requests/${id}/review`, {
+    const res = await fetch(`/jurnalmagangdigital/api/mentor/work-mode-requests/${id}/review`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1711,7 +1711,7 @@ const reviewRequest = async (id: number, status: 'approved' | 'rejected') => {
 
 const saveSchedule = async (item: any) => {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/mentor/placements/${item.placement_id}/schedule`, {
+    const res = await fetch(`/jurnalmagangdigital/api/mentor/placements/${item.placement_id}/schedule`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

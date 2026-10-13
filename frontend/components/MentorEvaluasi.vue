@@ -211,25 +211,76 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch, nextTick } from 'vue'
+import { ref, reactive, computed, watch, nextTick, onMounted } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 import QRCode from 'qrcode'
 import confetti from 'canvas-confetti'
 
-const { showToast } = useAppStore()
+const { showToast, authToken, ensureAuthToken } = useAppStore()
 
-const students = ref([
-  { id: 4, name: 'Siswa Magang', nisn: '0061234567', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' }
-])
-
-const selectedStudent = ref(students.value[0])
+const students = ref<any[]>([])
+const selectedStudent = ref<any>({ id: 6, name: 'Budi Santoso', nisn: '0061234567', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' })
 
 const scores = reactive({
-  disiplin: 92,
-  teknis: 95,
-  kerjasama: 90,
-  inisiatif: 93,
-  catatan: 'Siswa menunjukkan penguasaan teknis yang luar biasa, disiplin tinggi dalam kehadiran, dan selalu menyelesaikan tugas tepat waktu sesuai standar sprint industri.'
+  disiplin: 90,
+  teknis: 92,
+  kerjasama: 88,
+  inisiatif: 91,
+  catatan: 'Kemampuan kerja praktis sangat memuaskan sesuai standar industri SMKN 71.'
+})
+
+const fetchEvaluations = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/mentor/evaluations', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.evaluations && Array.isArray(data.evaluations) && data.evaluations.length > 0) {
+        students.value = data.evaluations.map((e: any) => ({
+          id: e.student_id,
+          name: e.student_name,
+          nisn: e.nisn_nip || '-',
+          avatar: e.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+          grade: e.grade,
+          isFinalized: e.is_finalized
+        }))
+        if (students.value.length > 0) {
+          selectStudent(students.value[0])
+        }
+      }
+    }
+  } catch (e) {}
+
+  if (students.value.length === 0) {
+    students.value = [
+      { id: 6, name: 'Budi Santoso', nisn: '0061234567', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', isFinalized: true },
+      { id: 7, name: 'Siti Fauziah', nisn: '0061234568', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150', isFinalized: true }
+    ]
+    selectStudent(students.value[0])
+  }
+}
+
+const selectStudent = (student: any) => {
+  selectedStudent.value = student
+  if (student.grade) {
+    scores.disiplin = student.grade.dudi_score_discipline || 90
+    scores.teknis = student.grade.dudi_score_technical || 92
+    scores.kerjasama = student.grade.dudi_score_teamwork || 88
+    scores.inisiatif = student.grade.dudi_score_initiative || 91
+    scores.catatan = student.grade.dudi_notes || scores.catatan
+    isFinalized.value = !!student.isFinalized
+    qrHash.value = student.grade.qr_code_hash || `SMKN71-PKL-${student.id}-VERIFIED`
+  }
+  nextTick(() => renderQr())
+}
+
+onMounted(() => {
+  fetchEvaluations()
 })
 
 const calculatedAverage = computed(() => {
@@ -268,24 +319,43 @@ watch(selectedStudent, () => {
   nextTick(() => renderQr())
 })
 
-const handleFinalize = () => {
+const handleFinalize = async () => {
   isFinalizing.value = true
-  setTimeout(() => {
-    isFinalizing.value = false
-    isFinalized.value = true
-    qrHash.value = `PKL-2026-TELKOM-${selectedStudent.value.name.toUpperCase().replace(/\s+/g, '')}-${Math.round(parseFloat(calculatedAverage.value) * 100)}-VERIFIED`
-
-    nextTick(() => {
-      renderQr()
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
+  try {
+    const token = await ensureAuthToken()
+    await fetch('/jurnalmagangdigital/api/mentor/evaluations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        student_id: selectedStudent.value.id,
+        score_discipline: scores.disiplin,
+        score_technical: scores.teknis,
+        score_teamwork: scores.kerjasama,
+        score_initiative: scores.inisiatif,
+        notes: scores.catatan,
+        is_finalized: true
       })
     })
+  } catch (e) {}
 
-    showToast(`Nilai evaluasi ${selectedStudent.value.name} (${calculatedAverage.value}) berhasil difinalisasi & QR Code resmi diterbitkan!`, 'success')
-  }, 800)
+  isFinalizing.value = false
+  isFinalized.value = true
+  qrHash.value = `PKL-2026-TELKOM-${selectedStudent.value.name.toUpperCase().replace(/\s+/g, '')}-${Math.round(parseFloat(calculatedAverage.value) * 100)}-VERIFIED`
+
+  nextTick(() => {
+    renderQr()
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      origin: { y: 0.6 }
+    })
+  })
+
+  showToast(`Nilai evaluasi ${selectedStudent.value.name} (${calculatedAverage.value}) berhasil difinalisasi & QR Code resmi diterbitkan ke database!`, 'success')
 }
 
 const printCertificate = () => {

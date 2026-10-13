@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
+use App\Models\Company;
+use App\Models\Logbook;
+use App\Models\Notification;
+use App\Models\Placement;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Company;
-use App\Models\Placement;
-use App\Models\Logbook;
-use App\Models\Attendance;
-use App\Models\Grade;
 
 class AdminController extends Controller
 {
@@ -89,9 +89,9 @@ class AdminController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('nisn_nip', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('nisn_nip', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
@@ -215,7 +215,7 @@ class AdminController extends Controller
             $company = Company::findOrFail($id);
             $company->update($request->only([
                 'name', 'sector', 'address', 'phone', 'email', 'website', 'quota',
-                'latitude', 'longitude', 'radius_meters', 'allowed_work_modes'
+                'latitude', 'longitude', 'radius_meters', 'allowed_work_modes',
             ]));
 
             return response()->json([
@@ -229,7 +229,7 @@ class AdminController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|email|unique:users,email,'.$id,
             'nisn_nip' => 'nullable|string',
             'phone' => 'nullable|string',
         ]);
@@ -238,8 +238,12 @@ class AdminController extends Controller
         $user->email = $request->email;
         $user->nisn_nip = $request->nisn_nip;
         $user->phone = $request->phone;
-        if ($request->filled('major')) $user->major = $request->major;
-        if ($request->filled('class_name')) $user->class_name = $request->class_name;
+        if ($request->filled('major')) {
+            $user->major = $request->major;
+        }
+        if ($request->filled('class_name')) {
+            $user->class_name = $request->class_name;
+        }
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
@@ -259,6 +263,7 @@ class AdminController extends Controller
         if ($request->input('role') === 'company') {
             $company = Company::findOrFail($id);
             $company->delete();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Data perusahaan mitra berhasil dihapus.',
@@ -281,7 +286,9 @@ class AdminController extends Controller
 
         $imported = 0;
         foreach ($rows as $row) {
-            if (empty($row['email']) || empty($row['name'])) continue;
+            if (empty($row['email']) || empty($row['name'])) {
+                continue;
+            }
 
             User::updateOrCreate(
                 ['email' => $row['email']],
@@ -341,6 +348,15 @@ class AdminController extends Controller
 
         $mentorId = $request->mentor_id ?? $request->dudi_mentor_id;
 
+        $existingPlacement = Placement::where('student_id', $request->student_id)->first();
+        $defaultSchedule = [
+            'monday' => 'wfo',
+            'tuesday' => 'wfo',
+            'wednesday' => 'wfo',
+            'thursday' => 'wfo',
+            'friday' => 'wfh',
+        ];
+
         $placement = Placement::updateOrCreate(
             ['student_id' => $request->student_id],
             [
@@ -351,13 +367,7 @@ class AdminController extends Controller
                 'end_date' => $request->end_date,
                 'academic_year' => $request->academic_year ?? '2025/2026',
                 'batch' => $request->batch ?? 'Angkatan 32',
-                'work_schedule' => $request->work_schedule ?? ($placement->work_schedule ?? [
-                    'monday' => 'wfo',
-                    'tuesday' => 'wfo',
-                    'wednesday' => 'wfo',
-                    'thursday' => 'wfo',
-                    'friday' => 'wfh',
-                ]),
+                'work_schedule' => $request->work_schedule ?? ($existingPlacement?->work_schedule ?? $defaultSchedule),
                 'status' => 'active',
             ]
         );
@@ -401,8 +411,8 @@ class AdminController extends Controller
                 'mentor' => $p->dudiMentor ? $p->dudiMentor->name : '-',
                 'dudi_mentor' => $p->dudiMentor ? $p->dudiMentor->name : '-',
                 'teacher_mentor' => $p->teacherMentor ? $p->teacherMentor->name : '-',
-                'period' => $p->start_date->format('d/m/Y') . ' - ' . $p->end_date->format('d/m/Y'),
-                'attendance_total' => $presentAtt . '/' . $totalAtt,
+                'period' => $p->start_date->format('d/m/Y').' - '.$p->end_date->format('d/m/Y'),
+                'attendance_total' => $presentAtt.'/'.$totalAtt,
                 'verified_journals' => $totalJournals,
                 'mentor_grade' => $grade ? $grade->dudi_score_average : '-',
                 'dudi_grade' => $grade ? $grade->dudi_score_average : '-',
@@ -427,6 +437,59 @@ class AdminController extends Controller
                 'batches' => $batches,
                 'companies' => $companies,
             ],
+        ]);
+    }
+
+    public function relocatePlacement(Request $request, $placementId)
+    {
+        $request->validate([
+            'new_company_id' => 'required|exists:companies,id',
+            'relocation_reason' => 'required|string|min:3',
+            'new_dudi_mentor_id' => 'nullable|exists:users,id',
+            'new_teacher_mentor_id' => 'nullable|exists:users,id',
+            'effective_date' => 'nullable|date',
+        ]);
+
+        $placement = Placement::findOrFail($placementId);
+        $effectiveDate = $request->effective_date ? Carbon::parse($request->effective_date) : Carbon::today();
+
+        // 1. Mark existing placement as relocated
+        $placement->update([
+            'status' => 'relocated',
+            'end_date' => $effectiveDate->copy()->subDay()->format('Y-m-d'),
+            'relocation_reason' => $request->relocation_reason,
+        ]);
+
+        // 2. Create new active placement
+        $newPlacement = Placement::create([
+            'student_id' => $placement->student_id,
+            'company_id' => $request->new_company_id,
+            'dudi_mentor_id' => $request->new_dudi_mentor_id,
+            'teacher_mentor_id' => $request->new_teacher_mentor_id ?? $placement->teacher_mentor_id,
+            'start_date' => $effectiveDate->format('Y-m-d'),
+            'end_date' => Carbon::parse($placement->end_date)->gt($effectiveDate) ? $placement->end_date : $effectiveDate->copy()->addMonths(3)->format('Y-m-d'),
+            'academic_year' => $placement->academic_year,
+            'batch' => $placement->batch,
+            'default_work_mode' => 'wfo',
+            'work_schedule' => $placement->work_schedule,
+            'status' => 'active',
+            'previous_placement_id' => $placement->id,
+            'relocation_reason' => $request->relocation_reason,
+        ]);
+
+        // Notification to student
+        Notification::create([
+            'user_id' => $placement->student_id,
+            'title' => 'Relokasi Tempat Magang Berhasil',
+            'message' => 'Anda telah dialihkan ke mitra industri baru: '.($newPlacement->company?->name ?? 'Mitra Baru').". Alasan: {$request->relocation_reason}",
+            'type' => 'info',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Siswa berhasil direlokasi ke tempat magang baru tanpa menghapus data sebelumnya.',
+            'new_placement' => $newPlacement->load(['company', 'dudiMentor', 'teacherMentor']),
+            'old_placement' => $placement,
         ]);
     }
 }

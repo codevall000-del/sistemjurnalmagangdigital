@@ -5,7 +5,7 @@ description: Expert system guide and analysis runbook for Sistem Jurnal Magang D
 
 # Sistem Jurnal Magang Digital (EduAccess SMKN 71 Jakarta)
 
-Skill ini dirancang agar Antigravity AI di komputer/device mana pun dapat langsung memahami arsitektur, data, alur bisnis 4 aktor, skema database, status fitur, dan langkah-langkah yang harus dilakukan untuk proyek ini hanya dengan satu perintah analisis.
+Skill ini dirancang agar Hermes Agent di lingkungan VPS Codevall maupun komputer mana pun dapat langsung memahami arsitektur, data, alur bisnis 4 aktor, skema database, status fitur, dan langkah-langkah yang harus dilakukan untuk proyek ini hanya dengan satu perintah analisis.
 
 ---
 
@@ -13,7 +13,7 @@ Skill ini dirancang agar Antigravity AI di komputer/device mana pun dapat langsu
 
 - **Nama Aplikasi:** EduAccess — Sistem Informasi Jurnal & Presensi PKL Digital SMKN 71 Jakarta.
 - **Jurusan Sasaran:** 
-  - **PPLG** (Pengembangan Perangkat Lunak & Gim)
+  - **RPL** (Rekayasa Perangkat Lunak)
   - **DKV** (Desain Komunikasi Visual)
   - **Animasi**
 - **Arsitektur:** Fullstack Desktop-first Web Application
@@ -97,7 +97,7 @@ Skill ini dirancang agar Antigravity AI di komputer/device mana pun dapat langsu
 3. **Seeders:**
    - `backend/database/seeders/DatabaseSeeder.php`: Membangun ulang seluruh skema, data user, company, placement, attendance, logbook, grade, schedule, dan mock request.
 4. **Tabel-Tabel Kunci:**
-   - `users`: id, name, email, password, role (`siswa`, `dudi`, `guru`, `admin`), nis, nip, phone, avatar, department (`PPLG`, `Animasi`, `DKV`).
+   - `users`: id, name, email, password, role (`siswa`, `dudi`, `guru`, `admin`), nis, nip, phone, avatar, department (`RPL`, `Animasi`, `DKV`).
    - `companies`: id, name, address, latitude, longitude, radius_meters, work_start_time, work_end_time, work_days.
    - `placements`: id, student_id, company_id, mentor_id, teacher_id, start_date, end_date, status.
    - `attendances`: id, student_id, date, check_in, check_out, status, work_mode, latitude, longitude, distance_meters, is_within_radius, notes.
@@ -111,10 +111,10 @@ Skill ini dirancang agar Antigravity AI di komputer/device mana pun dapat langsu
 
 | Peran | Email | Nama | Perusahaan / Departemen |
 |---|---|---|---|
-| **Siswa** | `siswa@gmail.com` | Budi Santoso | PT Telkom Digital Solusi (PPLG) |
+| **Siswa** | `siswa@gmail.com` | Budi Santoso | PT Telkom Digital Solusi (RPL) |
 | **Pembimbing Lapangan** | `mentor@gmail.com` | Hendra Wijaya, S.Kom | PT Telkom Digital Solusi |
-| **Guru Pembimbing** | `guru@gmail.com` | Dra. Nurul Hidayah, M.Pd | Pembimbing Jurusan RPL/PPLG |
-| **Admin / Kaprog** | `admin@gmail.com` | Ir. Bambang Hermanto, M.T | Kaprog PPLG SMKN 71 Jakarta |
+| **Guru Pembimbing** | `guru@gmail.com` | Dra. Nurul Hidayah, M.Pd | Pembimbing Jurusan RPL |
+| **Admin / Kaprog** | `admin@gmail.com` | Ir. Bambang Hermanto, M.T | Kaprog RPL SMKN 71 Jakarta |
 
 *Catatan: Pada UI aplikasi, terdapat juga **Role Switcher** di bagian paling atas Sidebar Kiri untuk berpindah peran secara instan.*
 
@@ -122,7 +122,7 @@ Skill ini dirancang agar Antigravity AI di komputer/device mana pun dapat langsu
 
 ## 📋 Protokol Eksekusi & Analisis (Kata Kunci Utama: "Perform")
 
-Ketika user memberikan perintah **`Perform`** (atau variasi seperti *"analisis project ini"*, *"cek kondisi project"*, atau *"apa saja yang harus dilakukan"*), Antigravity AI harus langsung melakukan tahapan berikut:
+Ketika user memberikan perintah **`Perform`** (atau variasi seperti *"analisis project ini"*, *"cek kondisi project"*, atau *"apa saja yang harus dilakukan"*), Hermes Agent harus langsung melakukan tahapan berikut:
 
 ### Langkah 1: Pengecekan Lingkungan & Servis
 Jalankan verifikasi status:

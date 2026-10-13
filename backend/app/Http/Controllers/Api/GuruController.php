@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Placement;
-use App\Models\Logbook;
 use App\Models\Attendance;
 use App\Models\Grade;
+use App\Models\Logbook;
+use App\Models\Notification;
+use App\Models\Placement;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class GuruController extends Controller
 {
@@ -35,13 +36,15 @@ class GuruController extends Controller
 
         foreach ($placements as $p) {
             $student = $p->student;
-            if (!$student) continue;
+            if (! $student) {
+                continue;
+            }
 
             $comp = $p->company;
             $compId = $comp ? $comp->id : 0;
             $compName = $comp ? $comp->name : 'Belum Terplotting';
 
-            if (!isset($companiesMap[$compId])) {
+            if (! isset($companiesMap[$compId])) {
                 $companiesMap[$compId] = [
                     'id' => $compId,
                     'name' => $compName,
@@ -193,7 +196,7 @@ class GuruController extends Controller
             $search = $request->search;
             $query->whereHas('student', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('nisn_nip', 'like', "%{$search}%");
+                    ->orWhere('nisn_nip', 'like', "%{$search}%");
             });
         }
 
@@ -253,12 +256,13 @@ class GuruController extends Controller
 
         $compilation = $placements->map(function ($p) {
             $student = $p->student;
-            $grade = $student->grade;
+            $grade = $student ? $student->grade : null;
 
             return [
                 'student_id' => $student->id,
                 'student_name' => $student->name,
                 'nisn_nip' => $student->nisn_nip,
+                'major' => $student->major ?? 'RPL',
                 'avatar' => $student->avatar,
                 'company_name' => $p->company ? $p->company->name : '-',
                 'mentor_score_average' => $grade ? $grade->dudi_score_average : null,
@@ -266,6 +270,10 @@ class GuruController extends Controller
                 'dudi_score_average' => $grade ? $grade->dudi_score_average : null,
                 'is_mentor_finalized' => $grade ? $grade->is_finalized : false,
                 'is_dudi_finalized' => $grade ? $grade->is_finalized : false,
+                'school_score_report' => $grade ? $grade->school_score_report : null,
+                'school_score_presentation' => $grade ? $grade->school_score_presentation : null,
+                'school_score_competence' => $grade ? $grade->school_score_competence : null,
+                'school_notes' => $grade ? $grade->school_notes : null,
                 'school_report_score' => $grade ? $grade->school_report_score : null,
                 'final_score' => $grade ? $grade->final_score : null,
                 'qr_code_hash' => $grade ? $grade->qr_code_hash : null,
@@ -281,27 +289,115 @@ class GuruController extends Controller
     public function updateSchoolReportScore(Request $request, $studentId)
     {
         $request->validate([
-            'school_report_score' => 'required|numeric|min:0|max:100',
+            'school_score_report' => 'nullable|numeric|min:0|max:100',
+            'school_score_presentation' => 'nullable|numeric|min:0|max:100',
+            'school_score_competence' => 'nullable|numeric|min:0|max:100',
+            'school_notes' => 'nullable|string',
+            'school_report_score' => 'nullable|numeric|min:0|max:100',
         ]);
 
         $student = User::findOrFail($studentId);
         $grade = Grade::firstOrNew(['student_id' => $student->id]);
 
-        $grade->school_report_score = $request->school_report_score;
+        $scoreReport = $request->input('school_score_report');
+        $scorePresentation = $request->input('school_score_presentation');
+        $scoreCompetence = $request->input('school_score_competence');
+
+        if ($scoreReport !== null || $scorePresentation !== null || $scoreCompetence !== null) {
+            $rep = (float) ($scoreReport ?? 80);
+            $pres = (float) ($scorePresentation ?? 80);
+            $comp = (float) ($scoreCompetence ?? 80);
+            $calculatedSchool = round(($rep * 0.35) + ($pres * 0.35) + ($comp * 0.30), 2);
+
+            $grade->school_score_report = $scoreReport;
+            $grade->school_score_presentation = $scorePresentation;
+            $grade->school_score_competence = $scoreCompetence;
+            $grade->school_notes = $request->school_notes;
+            $grade->school_report_score = $calculatedSchool;
+        } elseif ($request->filled('school_report_score')) {
+            $grade->school_report_score = $request->school_report_score;
+        }
 
         // Auto-calculate final grade: (Nilai Pembimbing Lapangan 60% + Nilai Sekolah 40%)
         if ($grade->dudi_score_average !== null && $grade->dudi_score_average > 0) {
-            $grade->final_score = round(($grade->dudi_score_average * 0.6) + ($request->school_report_score * 0.4), 2);
+            $grade->final_score = round(($grade->dudi_score_average * 0.6) + ($grade->school_report_score * 0.4), 2);
         } else {
-            $grade->final_score = $request->school_report_score;
+            $grade->final_score = $grade->school_report_score;
         }
 
         $grade->save();
 
         return response()->json([
             'success' => true,
-            'message' => 'Nilai Laporan Sekolah berhasil disimpan dan Nilai Akhir PKL telah dikalkulasi.',
+            'message' => 'Nilai Laporan & Sidang Sekolah berhasil disimpan dan Nilai Akhir PKL telah dikalkulasi.',
             'grade' => $grade,
+        ]);
+    }
+
+    public function storeAdvisoryNote(Request $request, $studentId)
+    {
+        $request->validate([
+            'note' => 'required|string|min:3',
+            'logbook_id' => 'nullable|exists:logbooks,id',
+        ]);
+
+        $student = User::findOrFail($studentId);
+        $user = $request->user();
+
+        if ($request->logbook_id) {
+            $logbook = Logbook::where('id', $request->logbook_id)
+                ->where('student_id', $student->id)
+                ->firstOrFail();
+
+            $logbook->update([
+                'teacher_note' => $request->note,
+                'teacher_noted_at' => Carbon::now(),
+            ]);
+        }
+
+        Notification::create([
+            'user_id' => $student->id,
+            'title' => 'Catatan Pembimbingan dari Guru ('.$user->name.')',
+            'message' => $request->note,
+            'type' => 'info',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Catatan pembimbingan guru berhasil dikirimkan ke siswa.',
+        ]);
+    }
+
+    public function reviewAttendanceDispute(Request $request, $attendanceId)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'notes' => 'nullable|string',
+        ]);
+
+        $attendance = Attendance::findOrFail($attendanceId);
+        $user = $request->user();
+
+        $isApproved = $request->status === 'approved';
+        $attendance->update([
+            'dispute_status' => $request->status,
+            'is_within_radius' => $isApproved ? true : $attendance->is_within_radius,
+            'dispute_resolved_by' => $user->id,
+            'dispute_resolved_at' => Carbon::now(),
+            'notes' => ($attendance->notes ? $attendance->notes.' | ' : '').($isApproved ? 'Sanggahan GPS Disetujui Guru' : 'Sanggahan GPS Ditolak Guru').($request->notes ? ": {$request->notes}" : ''),
+        ]);
+
+        Notification::create([
+            'user_id' => $attendance->student_id,
+            'title' => 'Status Sanggahan Presensi GPS: '.($isApproved ? 'Disetujui Guru' : 'Ditolak Guru'),
+            'message' => "Permohonan sanggahan presensi Anda tanggal {$attendance->date->format('d/m/Y')} ".($isApproved ? 'telah disetujui oleh Guru Pembimbing.' : 'ditolak oleh Guru Pembimbing.'),
+            'type' => $isApproved ? 'success' : 'danger',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sanggahan presensi berhasil '.($isApproved ? 'disetujui' : 'ditolak').' oleh Guru Pembimbing.',
+            'attendance' => $attendance,
         ]);
     }
 }

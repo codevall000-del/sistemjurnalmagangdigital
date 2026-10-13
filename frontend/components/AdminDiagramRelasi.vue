@@ -1,14 +1,24 @@
 <template>
   <div class="h-full w-full flex flex-col overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] select-none">
     <!-- 1. UNIFIED SINGLE TOP NAVBAR (macOS Frosted Glassmorphism Strip - Height 56px) -->
-    <header class="h-14 px-5 bg-white/85 dark:bg-[#18181b]/90 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between shrink-0 z-30 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
+    <header class="h-14 px-3 sm:px-5 bg-white/85 dark:bg-[#18181b]/90 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between shrink-0 z-30 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
       <!-- Left: Breadcrumb & Apple Segmented Control & Status -->
-      <div class="flex items-center gap-3 shrink-0">
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <!-- Mobile Menu Toggle -->
+        <button
+          @click="toggleSidebarCollapse"
+          type="button"
+          class="lg:hidden p-1.5 -ml-1 rounded-xl text-[#1d1d1f] dark:text-[#f5f5f7] hover:bg-black/[0.05] dark:hover:bg-white/[0.08] apple-press flex items-center justify-center cursor-pointer shrink-0"
+          title="Buka Menu"
+        >
+          <span class="material-symbols-outlined text-[20px]">menu</span>
+        </button>
+
         <!-- Breadcrumb Navigation -->
-        <div class="flex items-center gap-1.5 text-[#86868b] dark:text-[#98989f] text-[13px] font-medium mr-1">
-          <span class="hover:text-[#1d1d1f] dark:hover:text-white transition-colors cursor-pointer" @click="activeMenu = 'dashboard_admin'">EduAccess</span>
-          <span class="material-symbols-outlined text-[15px] opacity-60">chevron_right</span>
-          <span class="text-[#1d1d1f] dark:text-[#f5f5f7] font-semibold">Diagram Relasi PKL</span>
+        <div class="flex items-center gap-1.5 text-[#86868b] dark:text-[#98989f] text-[13px] font-medium mr-1 truncate">
+          <span class="hover:text-[#1d1d1f] dark:hover:text-white transition-colors cursor-pointer hidden sm:inline" @click="activeMenu = 'dashboard_admin'">EduAccess</span>
+          <span class="material-symbols-outlined text-[15px] opacity-60 hidden sm:inline">chevron_right</span>
+          <span class="text-[#1d1d1f] dark:text-[#f5f5f7] font-semibold truncate">Diagram Relasi</span>
         </div>
 
         <!-- Apple Segmented Mode Switcher -->
@@ -49,7 +59,7 @@
             class="w-full appearance-none pl-3 pr-7 py-1.5 bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.06] text-[#1d1d1f] dark:text-[#f5f5f7] border border-black/[0.06] dark:border-white/[0.08] rounded-xl text-xs font-semibold cursor-pointer transition focus:ring-2 focus:ring-[#0071e3]/30 truncate"
           >
             <option value="all">Semua Jurusan</option>
-            <option value="PPLG">PPLG (Software)</option>
+            <option value="RPL">RPL (Software)</option>
             <option value="Animasi">Animasi (3D)</option>
             <option value="DKV">DKV (Creative)</option>
           </select>
@@ -128,11 +138,15 @@
     <!-- 2. CANVAS WORKSPACE (Draw.io Infinite Pan & Zoom Stage) -->
     <div
       ref="canvasContainerRef"
-      class="flex-1 relative overflow-hidden cursor-grab active:cursor-grabbing"
+      class="flex-1 relative overflow-hidden cursor-grab active:cursor-grabbing touch-none"
       @mousedown="startPan"
       @mousemove="handlePan"
       @mouseup="stopPan"
       @mouseleave="stopPan"
+      @touchstart.passive="startTouchPan"
+      @touchmove.prevent="handleTouchPan"
+      @touchend="stopPan"
+      @touchcancel="stopPan"
       @wheel.prevent="handleWheelZoom"
     >
       <!-- Draw.io Grid Background Styling -->
@@ -178,11 +192,11 @@
               <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-blue-500/20 font-bold">Industri</span>
             </div>
 
-            <!-- Stage 3: Pembimbing DUDI (x=690, w=240) -->
+            <!-- Stage 3: Pembimbing Lapangan (Mentor) (x=690, w=240) -->
             <div class="absolute left-[690px] w-[240px] flex items-center justify-between px-3 py-1.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shadow-xs">
               <div class="flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[16px]">supervisor_account</span>
-                <span class="text-[11px] font-bold uppercase tracking-wider">3. Pembimbing DUDI</span>
+                <span class="text-[11px] font-bold uppercase tracking-wider">3. Mentor Lapangan</span>
               </div>
               <span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-indigo-500/20 font-bold">Mentor</span>
             </div>
@@ -205,7 +219,7 @@
                 <marker id="arrow-default" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                   <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#86868b" opacity="0.6" />
                 </marker>
-                <marker id="arrow-pplg" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <marker id="arrow-rpl" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
                   <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0071e3" />
                 </marker>
                 <marker id="arrow-animasi" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
@@ -288,7 +302,7 @@
                   <img :src="guruList[1].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
                   <div class="flex-1 min-w-0">
                     <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 block w-fit mb-0.5">
-                      Koordinator PPLG
+                      Koordinator RPL
                     </span>
                     <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
                       {{ guruList[1].name }}
@@ -318,7 +332,7 @@
                   </div>
                   <div class="flex-1 min-w-0">
                     <div class="flex items-center justify-between gap-1 mb-0.5">
-                      <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-600">PPLG</span>
+                      <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-600">RPL</span>
                       <span class="text-[9px] font-mono text-[#86868b]">WFO &amp; WFH</span>
                     </div>
                     <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
@@ -407,7 +421,7 @@
                   <img :src="mentorList[0].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
                   <div class="flex-1 min-w-0">
                     <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
-                      Mentor DUDI
+                      Mentor Lapangan
                     </span>
                     <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
                       {{ mentorList[0].name }}
@@ -434,7 +448,7 @@
                   <img :src="mentorList[1].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
                   <div class="flex-1 min-w-0">
                     <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
-                      Mentor DUDI
+                      Mentor Lapangan
                     </span>
                     <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
                       {{ mentorList[1].name }}
@@ -461,7 +475,7 @@
                   <img :src="mentorList[2].avatar" class="w-10 h-10 rounded-xl object-cover shrink-0 border border-black/[0.08]" />
                   <div class="flex-1 min-w-0">
                     <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 block w-fit mb-0.5">
-                      Mentor DUDI
+                      Mentor Lapangan
                     </span>
                     <h3 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight group-hover:text-[#0071e3] transition-colors truncate">
                       {{ mentorList[2].name }}
@@ -687,7 +701,7 @@
               >
                 <div class="bg-emerald-600 text-white px-3.5 py-2 flex items-center justify-between">
                   <span class="font-mono font-bold text-xs flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">domain</span>companies</span>
-                  <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Mitra DUDI</span>
+                  <span class="text-[9px] bg-white/20 px-1.5 py-0.2 rounded font-mono">Mitra Industri</span>
                 </div>
                 <div class="p-3 font-mono text-[10.5px] divide-y divide-black/[0.04] dark:divide-white/[0.04]">
                   <div class="py-1 flex justify-between text-[#0071e3] font-bold"><span>🔑 id</span><span class="text-[#86868b]">BIGINT (PK)</span></div>
@@ -903,7 +917,8 @@ const {
   currentUser,
   openSettings,
   isSidebarCollapsed,
-  toggleSidebarCollapse
+  toggleSidebarCollapse,
+  ensureAuthToken
 } = useAppStore()
 
 // State Canvas View
@@ -944,7 +959,7 @@ const guruList = ref([
     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
     assignedCompaniesCount: 3,
     assignedStudentsCount: 6,
-    majors: ['PPLG', 'Animasi', 'DKV']
+    majors: ['RPL', 'Animasi', 'DKV']
   },
   {
     id: 12,
@@ -952,11 +967,11 @@ const guruList = ref([
     nip: '198803152012011003',
     email: 'bambang.guru@gmail.com',
     phone: '0812-0000-0012',
-    roleBadge: 'Koordinator PPLG',
+    roleBadge: 'Koordinator RPL',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
     assignedCompaniesCount: 1,
     assignedStudentsCount: 2,
-    majors: ['PPLG']
+    majors: ['RPL']
   }
 ])
 
@@ -966,7 +981,7 @@ const companiesList = ref([
     name: 'PT Telkom Digital Solusi',
     icon: '💻',
     sector: 'Software & Cloud Platform',
-    major: 'PPLG',
+    major: 'RPL',
     address: 'Gedung Telkom Landmark Lt. 14, Jakarta Selatan',
     quota: 6,
     studentsCount: 2,
@@ -1016,7 +1031,7 @@ const mentorList = ref([
     phone: '0812-0000-0003',
     studentsCount: 2,
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
-    major: 'PPLG'
+    major: 'RPL'
   },
   {
     id: 10,
@@ -1049,8 +1064,8 @@ const studentList = ref([
     id: 4,
     name: 'Budi Santoso',
     nisn: '0061234567',
-    major: 'PPLG',
-    className: 'XII PPLG 1',
+    major: 'RPL',
+    className: 'XII RPL 1',
     workMode: 'WFO',
     email: 'siswa@gmail.com',
     phone: '0812-0000-0004',
@@ -1063,8 +1078,8 @@ const studentList = ref([
     id: 5,
     name: 'Siti Fauziah',
     nisn: '0061234568',
-    major: 'PPLG',
-    className: 'XII PPLG 2',
+    major: 'RPL',
+    className: 'XII RPL 2',
     workMode: 'WFH',
     email: 'siti@gmail.com',
     phone: '0812-0000-0005',
@@ -1201,13 +1216,13 @@ const visiblePipelineEdges = computed<PipelineEdge[]>(() => {
       toId: comp.id,
       d,
       color: comp.color,
-      markerId: comp.major === 'PPLG' ? 'arrow-pplg' : (comp.major === 'Animasi' ? 'arrow-animasi' : 'arrow-dkv'),
+      markerId: comp.major === 'RPL' ? 'arrow-rpl' : (comp.major === 'Animasi' ? 'arrow-animasi' : 'arrow-dkv'),
       isActive: isConnected
     })
   })
 
   // Edge from Guru 2 (Bambang Irawan) to PT Telkom
-  if (selectedMajorFilter.value === 'all' || selectedMajorFilter.value === 'PPLG') {
+  if (selectedMajorFilter.value === 'all' || selectedMajorFilter.value === 'RPL') {
     const y1 = guruYMap[12]
     const y2 = companyYMap[1]
     const x1 = col1OutX
@@ -1223,7 +1238,7 @@ const visiblePipelineEdges = computed<PipelineEdge[]>(() => {
       toId: 1,
       d,
       color: '#0071e3',
-      markerId: 'arrow-pplg',
+      markerId: 'arrow-rpl',
       isActive: isConnected
     })
   }
@@ -1251,7 +1266,7 @@ const visiblePipelineEdges = computed<PipelineEdge[]>(() => {
       toId: mentor.id,
       d,
       color,
-      markerId: mentor.major === 'PPLG' ? 'arrow-pplg' : (mentor.major === 'Animasi' ? 'arrow-animasi' : 'arrow-dkv'),
+      markerId: mentor.major === 'RPL' ? 'arrow-rpl' : (mentor.major === 'Animasi' ? 'arrow-animasi' : 'arrow-dkv'),
       isActive: isConnected
     })
   })
@@ -1268,7 +1283,7 @@ const visiblePipelineEdges = computed<PipelineEdge[]>(() => {
     const d = `M ${x1} ${y1} C ${x1 + dx * 0.5} ${y1}, ${x2 - dx * 0.5} ${y2}, ${x2} ${y2}`
 
     const isConnected = isEdgeHighlighted('mentor', siswa.mentorId, 'siswa', siswa.id)
-    const color = siswa.major === 'PPLG' ? '#0071e3' : (siswa.major === 'Animasi' ? '#a855f7' : '#f59e0b')
+    const color = siswa.major === 'RPL' ? '#0071e3' : (siswa.major === 'Animasi' ? '#a855f7' : '#f59e0b')
 
     edges.push({
       id: `edge-mentor-${siswa.mentorId}-siswa-${siswa.id}`,
@@ -1278,7 +1293,7 @@ const visiblePipelineEdges = computed<PipelineEdge[]>(() => {
       toId: siswa.id,
       d,
       color,
-      markerId: siswa.major === 'PPLG' ? 'arrow-pplg' : (siswa.major === 'Animasi' ? 'arrow-animasi' : 'arrow-dkv'),
+      markerId: siswa.major === 'RPL' ? 'arrow-rpl' : (siswa.major === 'Animasi' ? 'arrow-animasi' : 'arrow-dkv'),
       isActive: isConnected
     })
   })
@@ -1476,7 +1491,7 @@ const selectedNodeData = computed(() => {
         { label: 'Email Resmi', value: guru.email },
         { label: 'No. WhatsApp', value: guru.phone },
         { label: 'Jurusan Binaan', value: guru.majors.join(', ') },
-        { label: 'Mitra DUDI', value: `${guru.assignedCompaniesCount} Industri` },
+        { label: 'Mitra Industri', value: `${guru.assignedCompaniesCount} Industri` },
         { label: 'Siswa PKL', value: `${guru.assignedStudentsCount} Siswa Binaan` },
       ],
       relations: companiesList.value.filter(c => c.teacherId === guru.id || (guru.id === 12 && c.id === 1)).map(c => ({
@@ -1594,7 +1609,7 @@ const selectedNodeBadgeClass = computed(() => {
 })
 
 function getMajorBadgeClass(major: string): string {
-  if (major === 'PPLG') return 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+  if (major === 'RPL') return 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
   if (major === 'Animasi') return 'bg-purple-500/10 text-purple-600 dark:text-purple-400'
   if (major === 'DKV') return 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
   return 'bg-black/[0.05] text-[#1d1d1f]'
@@ -1618,6 +1633,22 @@ function handlePan(e: MouseEvent) {
   if (!isDragging.value) return
   panX.value = e.clientX - dragStart.value.x
   panY.value = e.clientY - dragStart.value.y
+}
+
+function startTouchPan(e: TouchEvent) {
+  if (e.touches.length === 1) {
+    const touch = e.touches[0]
+    if ((e.target as HTMLElement).closest('.node-card, button, select, input, a')) return
+    isDragging.value = true
+    dragStart.value = { x: touch.clientX - panX.value, y: touch.clientY - panY.value }
+  }
+}
+
+function handleTouchPan(e: TouchEvent) {
+  if (!isDragging.value || e.touches.length !== 1) return
+  const touch = e.touches[0]
+  panX.value = touch.clientX - dragStart.value.x
+  panY.value = touch.clientY - dragStart.value.y
 }
 
 function stopPan() {
@@ -1681,7 +1712,44 @@ watch(isSidebarCollapsed, () => {
 onMounted(() => {
   fitView()
   window.addEventListener('resize', fitView)
+  fetchPlottingData()
 })
+
+const fetchPlottingData = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/admin/plotting', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.students && Array.isArray(data.students)) {
+        data.students.forEach((s: any) => {
+          const found = studentList.value.find(st => st.id === s.id)
+          if (found) {
+            found.name = s.name
+            found.nisn = s.nisn_nip || found.nisn
+            found.major = s.major || found.major
+            found.className = s.class_name || found.className
+          }
+        })
+      }
+      if (data.companies && Array.isArray(data.companies)) {
+        data.companies.forEach((c: any) => {
+          const found = companiesList.value.find(comp => comp.id === c.id)
+          if (found) {
+            found.name = c.name
+            found.quota = c.quota || found.quota
+            found.address = c.address || found.address
+          }
+        })
+      }
+    }
+  } catch (e) {}
+}
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', fitView)

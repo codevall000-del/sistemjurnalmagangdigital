@@ -70,6 +70,45 @@
           </span>
         </button>
       </div>
+
+      <!-- Quick Filter Jurusan (RPL, Animasi, DKV) -->
+      <div class="flex items-center gap-2 pt-2 border-t border-black/[0.04]">
+        <span class="text-[11px] font-semibold text-[#86868b]">Jurusan:</span>
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button
+            type="button"
+            @click="selectedMajor = 'all'"
+            :class="selectedMajor === 'all' ? 'bg-[#0071e3] text-white font-semibold' : 'bg-black/[0.04] text-[#1d1d1f] hover:bg-black/[0.08]'"
+            class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer"
+          >
+            Semua
+          </button>
+          <button
+            type="button"
+            @click="selectedMajor = 'RPL'"
+            :class="selectedMajor === 'RPL' ? 'bg-[#0071e3] text-white font-semibold' : 'bg-blue-50 text-blue-700 hover:bg-blue-100'"
+            class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer"
+          >
+            RPL
+          </button>
+          <button
+            type="button"
+            @click="selectedMajor = 'Animasi'"
+            :class="selectedMajor === 'Animasi' ? 'bg-[#af52de] text-white font-semibold' : 'bg-purple-50 text-purple-700 hover:bg-purple-100'"
+            class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer"
+          >
+            Animasi
+          </button>
+          <button
+            type="button"
+            @click="selectedMajor = 'DKV'"
+            :class="selectedMajor === 'DKV' ? 'bg-[#ff9500] text-white font-semibold' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'"
+            class="px-2.5 py-1 rounded-lg text-[11px] transition cursor-pointer"
+          >
+            DKV
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- CHIPS DAFTAR SISWA (SESUAI PT TERPILIH) -->
@@ -106,9 +145,9 @@
             <h3 class="text-lg font-bold text-[#1d1d1f] tracking-tight">{{ selectedStudent.name }}</h3>
             <span
               class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider"
-              :class="(selectedStudent.major === 'RPL' || selectedStudent.major === 'PPLG') ? 'bg-[#0071e3]/10 text-[#0071e3]' : (selectedStudent.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
+              :class="selectedStudent.major === 'RPL' ? 'bg-[#0071e3]/10 text-[#0071e3]' : (selectedStudent.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
             >
-              {{ selectedStudent.major === 'PPLG' ? 'RPL' : selectedStudent.major }}
+              {{ selectedStudent.major }}
             </span>
             <span class="text-xs font-mono text-[#86868b] font-medium">{{ selectedStudent.className }}</span>
           </div>
@@ -232,16 +271,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useAppStore } from '~/composables/useAppStore'
+
+const { authToken, ensureAuthToken, showToast } = useAppStore()
 
 const searchQuery = ref('')
 const selectedCompanyId = ref<string | number>('all')
 
-const companyList = [
+const companyList = ref([
   { id: 1, name: 'PT Telkom Digital Solusi', icon: '💻' },
   { id: 2, name: 'Studio Animasi Kinetik Digital', icon: '🎬' },
   { id: 3, name: 'Pixel Kreatif Visual Agency', icon: '🎨' },
-]
+])
 
 // 6 Siswa Binaan lengkap dari 3 PT & 3 Jurusan
 const students = ref([
@@ -424,7 +466,98 @@ const students = ref([
   }
 ])
 
+const selectedMajor = ref('all')
 const selectedStudent = ref(students.value[0])
+
+const fetchStudents = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/guru/students', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.students && Array.isArray(data.students) && data.students.length > 0) {
+        students.value = data.students.map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          nisn: s.nisn_nip || '-',
+          className: s.class_name || 'XII',
+          major: s.major || 'RPL',
+          majorBadge: s.major === 'Animasi' ? 'bg-purple-50 text-purple-800 border border-purple-200' : (s.major === 'DKV' ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-blue-50 text-blue-800 border border-blue-200'),
+          companyId: s.company_id || 1,
+          company: s.company_name || 'Mitra Industri',
+          companyShort: s.company_name?.split(' ')[1] || s.company_name,
+          mentorDudi: s.mentor_name || 'Mentor Lapangan',
+          phoneClean: s.phone?.replace(/\D/g, '') || '',
+          status: 'Aktif',
+          todayAttendance: 'Hadir 07:45 WIB',
+          accJournals: 2,
+          avatar: s.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+          timeline: []
+        }))
+
+        // Extract unique companies
+        const compMap = new Map()
+        data.students.forEach((s: any) => {
+          if (s.company_id && !compMap.has(s.company_id)) {
+            compMap.set(s.company_id, {
+              id: s.company_id,
+              name: s.company_name,
+              icon: s.major === 'Animasi' ? '🎬' : (s.major === 'DKV' ? '🎨' : '💻')
+            })
+          }
+        })
+        if (compMap.size > 0) {
+          companyList.value = Array.from(compMap.values())
+        }
+
+        if (students.value.length > 0) {
+          selectStudent(students.value[0])
+        }
+      }
+    }
+  } catch (e) {}
+}
+
+const selectStudent = async (student: any) => {
+  selectedStudent.value = student
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch(`/jurnalmagangdigital/api/guru/students/${student.id}/monitor`, {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.logbooks && Array.isArray(data.logbooks) && data.logbooks.length > 0) {
+        selectedStudent.value.timeline = data.logbooks.map((l: any) => ({
+          id: l.id,
+          dateFormatted: new Date(l.date).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }),
+          title: l.title,
+          activity: l.activity_description,
+          photo: l.photo_url || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600',
+          status: l.status,
+          dudiNote: l.feedback_note
+        }))
+        selectedStudent.value.accJournals = data.logbooks.filter((l: any) => l.status === 'diacc').length
+      }
+      if (data.attendances && Array.isArray(data.attendances) && data.attendances.length > 0) {
+        const latestAtt = data.attendances[0]
+        selectedStudent.value.todayAttendance = `Hadir ${latestAtt.check_in?.substring(0, 5)} WIB (${latestAtt.work_mode?.toUpperCase()})`
+      }
+    }
+  } catch (e) {}
+}
+
+onMounted(() => {
+  fetchStudents()
+})
 
 const getStudentCountByCompany = (compId: number) => {
   return students.value.filter(s => s.companyId === compId).length
@@ -434,6 +567,9 @@ const filteredStudents = computed(() => {
   let list = students.value
   if (selectedCompanyId.value !== 'all') {
     list = list.filter(s => s.companyId === selectedCompanyId.value)
+  }
+  if (selectedMajor.value !== 'all') {
+    list = list.filter(s => s.major === selectedMajor.value)
   }
   if (!searchQuery.value) return list
   const q = searchQuery.value.toLowerCase()

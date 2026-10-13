@@ -94,6 +94,9 @@
   border-radius: 12px;
   background-color: rgba(118, 118, 128, 0.12);
   gap: 2px;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .apple-segmented-item {

@@ -8,7 +8,7 @@ export interface UserProfile {
   nisn_nip?: string
   phone?: string
   avatar?: string
-  major?: 'RPL' | 'PPLG' | 'DKV' | 'Animasi' | string
+  major?: 'RPL' | 'DKV' | 'Animasi' | string
   class_name?: string
   company_name?: string
   company_address?: string
@@ -195,8 +195,8 @@ const isSettingsModalOpen = ref<boolean>(false)
 export type SettingsTab = 'profile' | 'appearance' | 'security'
 const settingsActiveTab = ref<SettingsTab>('profile')
 
-// Canvas Workspace Mode (Zen / Fullscreen Sidebar Collapse)
-const isSidebarCollapsed = ref<boolean>(false)
+// Canvas Workspace Mode (Zen / Fullscreen Sidebar Collapse - Collapsed by default on mobile)
+const isSidebarCollapsed = ref<boolean>(typeof window !== 'undefined' ? window.innerWidth < 1024 : false)
 const toggleSidebarCollapse = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value
 }
@@ -278,7 +278,7 @@ export function useAppStore() {
   // Login function with direct online API call & fallback
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/login', {
+      const res = await fetch('/jurnalmagangdigital/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -326,34 +326,113 @@ export function useAppStore() {
     return false
   }
 
-  // Quick 1-click login for testing
-  const loginAs = (role: 'siswa' | 'mentor' | 'dudi' | 'guru' | 'admin') => {
+  // Quick 1-click login for testing with real Sanctum Token from MySQL
+  const loginAs = async (role: 'siswa' | 'mentor' | 'dudi' | 'guru' | 'admin') => {
     currentRole.value = role
-    currentUser.value = defaultProfiles[role]
-    authToken.value = 'token-' + role
+    try {
+      const res = await fetch('/jurnalmagangdigital/api/demo-switch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ role: role === 'dudi' ? 'mentor' : role })
+      })
+      if (res.ok) {
+        const data = await res.json()
+        authToken.value = data.token
+        currentUser.value = {
+          ...data.user,
+          role,
+          roleLabel: `${data.user.name} - ${role === 'mentor' || role === 'dudi' ? 'Pembimbing Lapangan' : role.toUpperCase()}`
+        }
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('eduaccess_auth_token', data.token)
+          localStorage.setItem('eduaccess_role', role)
+        }
+      } else {
+        currentUser.value = defaultProfiles[role]
+      }
+    } catch (e) {
+      currentUser.value = defaultProfiles[role]
+    }
     isLoggedIn.value = true
     setDefaultMenu(role)
-    showToast(`Masuk sebagai ${currentUser.value.name} (${role === 'mentor' || role === 'dudi' ? 'PEMBIMBING LAPANGAN' : role.toUpperCase()})`, 'success')
+    showToast(`Masuk sebagai ${currentUser.value.name} (${role === 'mentor' || role === 'dudi' ? 'PEMBIMBING LAPANGAN (MENTOR)' : role.toUpperCase()})`, 'success')
   }
 
   const logout = () => {
     isLoggedIn.value = false
     authToken.value = ''
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('eduaccess_auth_token')
+      localStorage.removeItem('eduaccess_role')
+    }
     showToast('Sesi telah diakhiri. Silakan login kembali.', 'info')
   }
 
   const setDefaultMenu = (role: 'siswa' | 'mentor' | 'dudi' | 'guru' | 'admin') => {
     if (role === 'siswa') activeMenu.value = 'dashboard'
-    else if (role === 'mentor' || role === 'dudi') activeMenu.value = 'dashboard_dudi'
+    else if (role === 'mentor' || role === 'dudi') activeMenu.value = 'dashboard_mentor'
     else if (role === 'guru') activeMenu.value = 'dashboard_guru'
     else if (role === 'admin') activeMenu.value = 'dashboard_admin'
   }
 
-  const switchRole = (role: 'siswa' | 'mentor' | 'dudi' | 'guru' | 'admin') => {
+  const switchRole = async (role: 'siswa' | 'mentor' | 'dudi' | 'guru' | 'admin') => {
     currentRole.value = role
-    currentUser.value = defaultProfiles[role]
+    try {
+      const res = await fetch('/jurnalmagangdigital/api/demo-switch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ role: role === 'dudi' ? 'mentor' : role })
+      })
+      if (res.ok) {
+        const data = await res.json()
+        authToken.value = data.token
+        currentUser.value = {
+          ...data.user,
+          role,
+          roleLabel: `${data.user.name} - ${role === 'mentor' || role === 'dudi' ? 'Pembimbing Lapangan' : role.toUpperCase()}`
+        }
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('eduaccess_auth_token', data.token)
+          localStorage.setItem('eduaccess_role', role)
+        }
+      } else {
+        currentUser.value = defaultProfiles[role]
+      }
+    } catch (e) {
+      currentUser.value = defaultProfiles[role]
+    }
     setDefaultMenu(role)
-    showToast(`Beralih ke peran: ${currentUser.value.roleLabel}`, 'success')
+    showToast(`Beralih ke peran: ${currentUser.value.name}`, 'success')
+  }
+
+  // Ensure an authenticated token exists on initial load
+  const ensureAuthToken = async () => {
+    if (!authToken.value) {
+      try {
+        const savedToken = typeof window !== 'undefined' ? localStorage.getItem('eduaccess_auth_token') : null
+        const savedRole = (typeof window !== 'undefined' ? localStorage.getItem('eduaccess_role') : null) as any
+        const roleToUse = savedRole || currentRole.value
+        if (savedToken) {
+          authToken.value = savedToken
+        } else {
+          const res = await fetch('/jurnalmagangdigital/api/demo-switch', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ role: roleToUse === 'dudi' ? 'mentor' : roleToUse })
+          })
+          if (res.ok) {
+            const data = await res.json()
+            authToken.value = data.token
+            currentUser.value = {
+              ...data.user,
+              role: roleToUse,
+              roleLabel: `${data.user.name} - ${roleToUse === 'mentor' || roleToUse === 'dudi' ? 'Pembimbing Lapangan' : roleToUse.toUpperCase()}`
+            }
+          }
+        }
+      } catch (e) {}
+    }
+    return authToken.value
   }
 
   // Siswa Attendance & Urgency Helper Actions
@@ -461,6 +540,7 @@ export function useAppStore() {
     loginAs,
     logout,
     switchRole,
+    ensureAuthToken,
     // Sidebar & Canvas Workspace Expansion
     isSidebarCollapsed,
     toggleSidebarCollapse,

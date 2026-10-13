@@ -1,6 +1,6 @@
 # Dokumentasi Komprehensif: Sistem Jurnal Magang Digital (EduAccess)
 
-Dokumen ini adalah referensi teknis lengkap bagi developer dan AI Assistant (Antigravity AI) untuk memahami seluruh arsitektur, basis data, endpoint API, dan roadmap proyek.
+Dokumen ini adalah referensi teknis lengkap bagi developer dan AI Assistant (Hermes Agent) untuk memahami seluruh arsitektur, basis data, endpoint API, dan roadmap proyek.
 
 ---
 
@@ -17,7 +17,7 @@ Dokumen ini adalah referensi teknis lengkap bagi developer dan AI Assistant (Ant
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │                 Laravel 11 REST API Backend (Port 8000)                │
-│   - Controllers: Siswa, Mentor (Dudi), Guru, Admin, Auth               │
+│   - Controllers: Siswa, Mentor, Guru, Admin, Auth                     │
 │   - Auth: Laravel Sanctum Bearer Token & Session Stateful              │
 │   - Business Rules: Haversine GPS Geofence (150m), Rubrik Penilaian    │
 └───────────────────────────────────┬────────────────────────────────────┘
@@ -35,11 +35,11 @@ Dokumen ini adalah referensi teknis lengkap bagi developer dan AI Assistant (Ant
 ## 🗄️ Skema Database & Relasi Model
 
 1. **`users`**:
-   - `id`, `name`, `email`, `password`, `role` (`siswa`, `dudi`, `guru`, `admin`), `nis`, `nip`, `phone`, `avatar`, `department` (`PPLG`, `Animasi`, `DKV`).
+   - `id`, `name`, `email`, `password`, `role` (`siswa`, `mentor`, `guru`, `admin`), `nis`, `nip`, `phone`, `avatar`, `department` (`RPL`, `Animasi`, `DKV`).
 2. **`companies`**:
    - `id`, `name`, `address`, `latitude`, `longitude`, `radius_meters` (default 150), `work_start_time` (contoh: 08:00), `work_end_time` (contoh: 17:00), `work_days` (contoh: "Senin - Jumat").
 3. **`placements`**:
-   - Menghubungkan `student_id` (User) dengan `company_id` (Company), `mentor_id` (User Dudi), dan `teacher_id` (User Guru).
+   - Menghubungkan `student_id` (User) dengan `company_id` (Company), `mentor_id` (User Mentor), dan `teacher_id` (User Guru).
    - Relasi:
      - `student()` -> `User`
      - `mentor()` -> `User`
@@ -74,7 +74,7 @@ Dokumen ini adalah referensi teknis lengkap bagi developer dan AI Assistant (Ant
 - `GET /api/siswa/penempatan` — Detail tempat magang, pembimbing lapangan, dan guru
 - `POST /api/siswa/work-mode-request` — Pengajuan izin mode kerja WFH/WFA
 
-### Modul Pembimbing Lapangan / DUDI (`/api/mentor/*` & `/api/dudi/*`):
+### Modul Pembimbing Lapangan (Mentor) (`/api/mentor/*`):
 - `GET /api/mentor/dashboard` — Daftar siswa magang aktif & counter jurnal menunggu validasi
 - `GET /api/mentor/logbooks` — Logbook siswa binaan untuk antarmuka validasi split-screen
 - `PUT /api/mentor/logbooks/{id}/status` — Setujui (ACC) atau tolak/minta revisi logbook + catatan umpan balik
@@ -112,10 +112,10 @@ Saat Anda memindahkan proyek ini ke laptop atau PC baru:
    cd sistemjurnalmagangdigital
    ```
 
-2. **Jalankan Antigravity AI:**
-   - Cukup ketik perintah ke Antigravity AI:
+2. **Jalankan Hermes Agent:**
+   - Cukup ketik perintah ke Hermes Agent:
      > *"Tolong analisis project ini dan beri tahu apa saja yang harus dilakukan"*
-   - Antigravity AI akan otomatis membaca `AGENTS.md` dan skill `.agent/skills/jurnal-magang-project/SKILL.md` untuk memverifikasi seluruh komponen dan memandu Anda langkah demi langkah.
+   - Hermes Agent akan otomatis membaca `AGENTS.md` dan skill `.agent/skills/jurnal-magang-project/SKILL.md` untuk memverifikasi seluruh komponen dan memandu Anda langkah demi langkah.
 
 3. **Inisialisasi Cepat (Manual):**
    ```powershell

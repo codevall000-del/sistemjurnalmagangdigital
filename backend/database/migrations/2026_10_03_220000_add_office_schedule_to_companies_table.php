@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (Schema::hasTable('companies') && !Schema::hasColumn('companies', 'office_schedule')) {
+        if (Schema::hasTable('companies') && ! Schema::hasColumn('companies', 'office_schedule')) {
             Schema::table('companies', function (Blueprint $table) {
                 $table->json('office_schedule')->nullable()->after('allowed_work_modes');
             });

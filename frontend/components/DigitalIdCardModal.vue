@@ -111,7 +111,7 @@
                     <div class="grid grid-cols-2 gap-2 text-[11px]">
                       <div class="p-2 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.04] dark:border-white/[0.06]">
                         <span class="text-[10px] text-[#86868b] dark:text-[#98989f] block font-medium">
-                          {{ currentRole === 'siswa' ? 'NISN Siswa' : (currentRole === 'dudi' || currentRole === 'mentor' ? 'ID Pembimbing Lapangan' : 'NIP Pendidik') }}
+                          {{ currentRole === 'siswa' ? 'NISN Siswa' : (currentRole === 'dudi' || currentRole === 'mentor' ? 'ID Mentor Lapangan' : 'NIP Pendidik') }}
                         </span>
                         <div class="flex items-center justify-between mt-0.5">
                           <span class="font-mono font-bold text-[#0071e3] text-[12px]">

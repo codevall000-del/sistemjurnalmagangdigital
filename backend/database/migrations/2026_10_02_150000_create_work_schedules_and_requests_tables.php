@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         // Add work_schedule to placements if not exists
-        if (Schema::hasTable('placements') && !Schema::hasColumn('placements', 'work_schedule')) {
+        if (Schema::hasTable('placements') && ! Schema::hasColumn('placements', 'work_schedule')) {
             Schema::table('placements', function (Blueprint $table) {
                 $table->json('work_schedule')->nullable()->after('default_work_mode');
             });
         }
 
         // Create work_mode_requests table
-        if (!Schema::hasTable('work_mode_requests')) {
+        if (! Schema::hasTable('work_mode_requests')) {
             Schema::create('work_mode_requests', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('student_id')->constrained('users')->onDelete('cascade');

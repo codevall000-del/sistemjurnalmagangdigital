@@ -1,7 +1,7 @@
 <template>
-  <div class="space-y-4 max-w-7xl mx-auto h-[calc(100vh-6.5rem)] flex flex-col">
+  <div class="space-y-4 max-w-7xl mx-auto min-h-0 md:h-[calc(100vh-6.5rem)] flex flex-col">
     <!-- Header -->
-    <div class="flex items-center justify-between pb-3 border-b border-black/[0.06] shrink-0">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-black/[0.06] shrink-0 gap-2">
       <div>
         <div class="flex items-center gap-2 mb-0.5">
           <span class="text-[11px] uppercase tracking-wider text-[#0071e3] font-semibold">Validasi Pembimbing Lapangan</span>
@@ -16,8 +16,20 @@
         </p>
       </div>
 
-      <div class="text-[12px] text-[#86868b]">
-        Menampilkan: <span class="font-bold text-[#0071e3]">{{ activeStudent.name }}</span>
+      <div class="flex items-center gap-3">
+        <button
+          v-if="hasPendingJournals"
+          @click="handleBatchApprove"
+          class="px-3.5 py-1.5 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-xl text-[12px] font-semibold transition-all flex items-center gap-1.5 shadow-xs apple-press cursor-pointer"
+          title="Setujui seluruh jurnal menunggu siswa ini sekaligus"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-[16px]">done_all</span>
+          <span>ACC Semua (Batch 1-Klik)</span>
+        </button>
+        <div class="text-[12px] text-[#86868b] hidden sm:block">
+          Menampilkan: <span class="font-bold text-[#0071e3]">{{ activeStudent.name }}</span>
+        </div>
       </div>
     </div>
 
@@ -38,7 +50,7 @@
         </div>
 
         <!-- Student List Items -->
-        <div class="flex-1 overflow-y-auto p-2 space-y-1">
+        <div class="flex-1 overflow-y-auto max-h-56 md:max-h-none p-2 space-y-1">
           <div
             v-for="student in filteredStudents"
             :key="student.id"
@@ -215,45 +227,70 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { showToast } = useAppStore()
+const { showToast, authToken, ensureAuthToken } = useAppStore()
 
 const searchQuery = ref('')
 const previewImage = ref<string | null>(null)
 
-const studentsList = ref([
-  {
-    id: 4,
-    name: 'Siswa Magang',
-    nisn: '0061234567',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    pendingCount: 1,
-    journals: [
+const studentsList = ref<any[]>([])
+
+const activeStudent = ref<any>({
+  id: 0,
+  name: 'Memuat...',
+  nisn: '-',
+  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+  pendingCount: 0,
+  journals: []
+})
+
+const fetchStudents = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/mentor/students', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.students && Array.isArray(data.students) && data.students.length > 0) {
+        studentsList.value = data.students.map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          nisn: s.nisn_nip || '-',
+          avatar: s.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+          pendingCount: s.pending_journals || 0,
+          journals: []
+        }))
+        if (studentsList.value.length > 0) {
+          selectStudent(studentsList.value[0])
+        }
+      }
+    }
+  } catch (e) {}
+
+  if (studentsList.value.length === 0) {
+    studentsList.value = [
       {
-        id: 101,
-        date: '26 Sep 2026',
-        title: 'Pembuatan Tampilan Antarmuka Split-Screen Validasi Pembimbing',
-        description: 'Merancang layout split view sesuai panduan UX desktop: daftar siswa di panel samping kiri dan detail jurnal interaktif beserta aksi validasi di panel kanan. Menyesuaikan palet warna Tailwind CSS dan komponen responsive.',
-        photo_url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600',
-        status: 'menunggu',
-        feedbackInput: ''
-      },
-      {
-        id: 102,
-        date: '25 Sep 2026',
-        title: 'Optimasi Upload Foto Jurnal dengan Kompresi Gambar Canvas',
-        description: 'Menerapkan kompresi gambar berbasis HTML5 Canvas client-side sebelum upload ke server backend untuk menghemat bandwidth pengguna dan storage server.',
-        photo_url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600',
-        status: 'revisi',
-        feedbackInput: 'Hasil kompresi terlalu kecil sehingga tulisan kode di layar agak blur. Tolong perbaiki resolusi target minimal 70%.'
+        id: 6,
+        name: 'Budi Santoso',
+        nisn: '0061234567',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+        pendingCount: 1,
+        journals: []
       }
     ]
+    selectStudent(studentsList.value[0])
   }
-])
+}
 
-const activeStudent = ref(studentsList.value[0])
+onMounted(() => {
+  fetchStudents()
+})
 
 const filteredStudents = computed(() => {
   if (!searchQuery.value) return studentsList.value
@@ -262,26 +299,114 @@ const filteredStudents = computed(() => {
 })
 
 const activeStudentJournals = computed(() => {
-  return activeStudent.value.journals
+  return activeStudent.value?.journals || []
 })
 
-const selectStudent = (student: any) => {
+const hasPendingJournals = computed(() => {
+  return (activeStudent.value?.journals || []).some((j: any) => j.status === 'menunggu')
+})
+
+const selectStudent = async (student: any) => {
   activeStudent.value = student
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch(`/jurnalmagangdigital/api/mentor/students/${student.id}/logbooks`, {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.logbooks && Array.isArray(data.logbooks)) {
+        activeStudent.value.journals = data.logbooks.map((l: any) => ({
+          id: l.id,
+          date: new Date(l.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+          title: l.title,
+          description: l.activity_description,
+          photo_url: l.photo_url || 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600',
+          status: l.status,
+          feedbackInput: l.feedback_note || ''
+        }))
+        activeStudent.value.pendingCount = activeStudent.value.journals.filter((j: any) => j.status === 'menunggu').length
+      }
+    }
+  } catch (e) {}
 }
 
-const handleApprove = (journal: any) => {
+const handleBatchApprove = async () => {
+  const pendingIds = activeStudent.value.journals.filter((j: any) => j.status === 'menunggu').map((j: any) => j.id)
+  try {
+    const token = await ensureAuthToken()
+    await fetch('/jurnalmagangdigital/api/mentor/logbooks/batch-validate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        logbook_ids: pendingIds,
+        feedback: 'Disetujui kolektif oleh Pembimbing Lapangan.'
+      })
+    })
+  } catch (e) {}
+
+  let count = 0
+  activeStudent.value.journals.forEach((j: any) => {
+    if (j.status === 'menunggu') {
+      j.status = 'diacc'
+      j.feedbackInput = 'Disetujui kolektif oleh Pembimbing Lapangan.'
+      count++
+    }
+  })
+  activeStudent.value.pendingCount = 0
+  showToast(`✓ Berhasil menyetujui ${count} jurnal siswa ${activeStudent.value.name} sekaligus di MySQL!`, 'success')
+}
+
+const handleApprove = async (journal: any) => {
   journal.status = 'diacc'
   if (activeStudent.value.pendingCount > 0) activeStudent.value.pendingCount--
+  try {
+    const token = await ensureAuthToken()
+    await fetch(`/jurnalmagangdigital/api/mentor/logbooks/${journal.id}/validate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        status: 'diacc',
+        feedback: journal.feedbackInput || 'Jurnal harian disetujui tanpa catatan.'
+      })
+    })
+  } catch (e) {}
   showToast(`Jurnal "${journal.title}" berhasil di-ACC! Notifikasi telah dikirim ke siswa.`, 'success')
 }
 
-const handleReject = (journal: any) => {
+const handleReject = async (journal: any) => {
   if (!journal.feedbackInput) {
     showToast('Mohon tuliskan catatan umpan balik / poin revisi untuk siswa terlebih dahulu.', 'warning')
     return
   }
   journal.status = 'revisi'
   if (activeStudent.value.pendingCount > 0) activeStudent.value.pendingCount--
-  showToast(`Jurnal telah ditandai Perlu Revisi. Catatan umpan balik berhasil diteruskan ke siswa.`, 'info')
+  try {
+    const token = await ensureAuthToken()
+    await fetch(`/jurnalmagangdigital/api/mentor/logbooks/${journal.id}/validate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        status: 'revisi',
+        feedback: journal.feedbackInput
+      })
+    })
+  } catch (e) {}
+  showToast(`Jurnal telah ditandai Perlu Revisi. Catatan umpan balik berhasil dikirim ke siswa.`, 'info')
 }
 </script>

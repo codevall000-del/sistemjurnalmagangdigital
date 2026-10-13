@@ -53,7 +53,7 @@ class Company extends Model
 
     public function getEffectiveSchedule(): array
     {
-        return !empty($this->office_schedule) ? array_merge(self::getDefaultOfficeSchedule(), $this->office_schedule) : self::getDefaultOfficeSchedule();
+        return ! empty($this->office_schedule) ? array_merge(self::getDefaultOfficeSchedule(), $this->office_schedule) : self::getDefaultOfficeSchedule();
     }
 
     public function placements()

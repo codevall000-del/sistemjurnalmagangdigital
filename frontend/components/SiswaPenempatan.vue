@@ -44,7 +44,7 @@
     <!-- Dual Supervisor Overview Strip (Apple HIG Design) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
       <!-- Industry Mentor Card -->
-      <div class="lg:col-span-6 bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-between apple-press">
+      <div class="lg:col-span-5 bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-between apple-press">
         <div class="flex items-start justify-between gap-3">
           <div class="flex gap-3.5">
             <div class="relative">
@@ -56,14 +56,14 @@
             <div class="flex flex-col min-w-0">
               <div class="inline-flex items-center gap-1 self-start px-2 py-0.5 rounded-full bg-[#f5f5f7] text-[#0071e3] text-[10px] mb-1 font-semibold">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#0071e3]"></span>
-                Mentor Industri
+                Pembimbing Lapangan
               </div>
-              <h2 class="text-[14px] text-[#1d1d1f] truncate font-bold">Dimas Ardiansyah, S.T.</h2>
-              <p class="text-[12px] text-[#86868b] truncate">Tech Lead • PT Solusi Digital Pratama</p>
+              <h2 class="text-[14px] text-[#1d1d1f] truncate font-bold">{{ mentorName }}</h2>
+              <p class="text-[12px] text-[#86868b] truncate">Mentor Lapangan • {{ mentorCompany }}</p>
             </div>
           </div>
           <button
-            @click="chatWithMentor('Dimas Ardiansyah')"
+            @click="chatWithMentor(mentorName)"
             class="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] text-[#86868b] hover:text-[#0071e3] transition-all flex items-center justify-center apple-press cursor-pointer"
             title="Kirim Pesan Chat"
             type="button"
@@ -72,13 +72,13 @@
           </button>
         </div>
         <div class="mt-4 pt-3 flex items-center justify-between text-[11px] text-[#86868b] border-t border-black/[0.05]">
-          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px] text-[#0071e3]">domain</span> Divisi Frontend Architecture</span>
-          <span class="text-[#0071e3] font-semibold">3 Sesi Selesai</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px] text-[#0071e3]">domain</span> {{ mentorDivision }}</span>
+          <span class="text-[#0071e3] font-semibold">Terhubung Aktif</span>
         </div>
       </div>
 
       <!-- Academic Advisor Card -->
-      <div class="lg:col-span-6 bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-between apple-press">
+      <div class="lg:col-span-5 bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-black/[0.05] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-between apple-press">
         <div class="flex items-start justify-between gap-3">
           <div class="flex gap-3.5">
             <div class="relative">
@@ -92,12 +92,12 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-[#5e5ce6]"></span>
                 Guru Pembimbing Sekolah
               </div>
-              <h2 class="text-[14px] text-[#1d1d1f] truncate font-bold">Guru Pembimbing, M.Pd</h2>
-              <p class="text-[12px] text-[#86868b] truncate">Guru Pamong PKL • SMKN 71 Jakarta</p>
+              <h2 class="text-[14px] text-[#1d1d1f] truncate font-bold">{{ teacherName }}</h2>
+              <p class="text-[12px] text-[#86868b] truncate">Guru Pembimbing PKL • SMKN 71 Jakarta</p>
             </div>
           </div>
           <button
-            @click="chatWithMentor('Guru Pembimbing')"
+            @click="chatWithMentor(teacherName)"
             class="text-outline-variant hover:text-primary transition-colors cursor-pointer p-1"
             title="Kirim Surel / Pesan"
             type="button"
@@ -106,8 +106,8 @@
           </button>
         </div>
         <div class="mt-space-md pt-space-sm flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant border-t border-outline-variant/60">
-          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">school</span> NIP: 198502142010011002</span>
-          <span class="text-primary font-semibold">2 Sesi Evaluasi</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">school</span> NIP: {{ teacherNip }}</span>
+          <span class="text-primary font-semibold">Terhubung Aktif</span>
         </div>
       </div>
 
@@ -572,12 +572,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { showToast } = useAppStore()
+const { showToast, authToken, ensureAuthToken, currentUser } = useAppStore()
 
 const isRequestModalOpen = ref(false)
+const placementData = ref<any>(null)
+
+const mentorName = computed(() => placementData.value?.dudi_mentor?.name || currentUser.value.mentor_name || 'Hendra Wijaya, S.Kom')
+const mentorCompany = computed(() => placementData.value?.company?.name || currentUser.value.company_name || 'PT Telkom Digital Solusi')
+const mentorDivision = computed(() => placementData.value?.company?.sector || 'Software House & Cloud Platform')
+const teacherName = computed(() => placementData.value?.teacher_mentor?.name || 'Dra. Nurul Hidayah, M.Pd')
+const teacherNip = computed(() => placementData.value?.teacher_mentor?.nisn_nip || '198502142010011002')
+
+const fetchPlacement = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/siswa/placement', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.placement) {
+        placementData.value = data.placement
+      }
+    }
+  } catch (e) {}
+}
+
+onMounted(() => {
+  fetchPlacement()
+})
 
 const requestForm = ref({
   mentor: 'mentor',

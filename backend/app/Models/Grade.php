@@ -17,6 +17,10 @@ class Grade extends Model
         'dudi_score_initiative',
         'dudi_score_average',
         'dudi_notes',
+        'school_score_report',
+        'school_score_presentation',
+        'school_score_competence',
+        'school_notes',
         'school_report_score',
         'final_score',
         'qr_code_hash',
@@ -26,6 +30,9 @@ class Grade extends Model
 
     protected $casts = [
         'dudi_score_average' => 'float',
+        'school_score_report' => 'float',
+        'school_score_presentation' => 'float',
+        'school_score_competence' => 'float',
         'school_report_score' => 'float',
         'final_score' => 'float',
         'is_finalized' => 'boolean',

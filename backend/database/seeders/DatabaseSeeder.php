@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use App\Models\Company;
-use App\Models\Placement;
 use App\Models\Attendance;
-use App\Models\Logbook;
+use App\Models\Company;
 use App\Models\Grade;
+use App\Models\Logbook;
 use App\Models\Notification;
+use App\Models\Placement;
+use App\Models\User;
 use App\Models\WorkModeRequest;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -231,7 +231,7 @@ class DatabaseSeeder extends Seeder
 
             // Schedule Mingguan berdasarkan Konsentrasi Keahlian & Perusahaan
             $scheduleConfig = match ($cfg['major']) {
-                'RPL', 'PPLG' => [
+                'RPL' => [
                     'monday' => 'wfo',
                     'tuesday' => 'wfo',
                     'wednesday' => 'wfo',
@@ -288,7 +288,9 @@ class DatabaseSeeder extends Seeder
             if ($cfg['inactive_days'] === 0) {
                 for ($i = 10; $i >= 1; $i--) {
                     $attDate = $today->copy()->subDays($i);
-                    if ($attDate->isWeekend()) continue;
+                    if ($attDate->isWeekend()) {
+                        continue;
+                    }
 
                     Attendance::create([
                         'student_id' => $student->id,
@@ -301,7 +303,7 @@ class DatabaseSeeder extends Seeder
                         'longitude' => $cfg['company']->longitude,
                         'distance_meters' => 25,
                         'is_within_radius' => true,
-                        'notes' => 'Presensi harian tercatat online di ' . $cfg['company']->name,
+                        'notes' => 'Presensi harian tercatat online di '.$cfg['company']->name,
                         'location_in' => "{$cfg['company']->latitude}, {$cfg['company']->longitude}",
                         'location_out' => "{$cfg['company']->latitude}, {$cfg['company']->longitude}",
                     ]);
@@ -328,7 +330,9 @@ class DatabaseSeeder extends Seeder
                 // Untuk siswa Rizky (tidak aktif 4 hari)
                 for ($i = 14; $i >= $cfg['inactive_days'] + 1; $i--) {
                     $attDate = $today->copy()->subDays($i);
-                    if ($attDate->isWeekend()) continue;
+                    if ($attDate->isWeekend()) {
+                        continue;
+                    }
 
                     Attendance::create([
                         'student_id' => $student->id,
@@ -351,7 +355,7 @@ class DatabaseSeeder extends Seeder
                 Logbook::create([
                     'student_id' => $student->id,
                     'date' => $today->copy()->subDays(2)->format('Y-m-d'),
-                    'title' => 'Pengerjaan Modul Teknis Magang ' . $cfg['major'],
+                    'title' => 'Pengerjaan Modul Teknis Magang '.$cfg['major'],
                     'activity_description' => 'Melaksanakan instruksi kerja harian bersama tim, melakukan peninjauan hasil kerja, dan melaporkan kemajuan proyek kepada Pembimbing Lapangan.',
                     'photo_url' => 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600',
                     'status' => 'diacc',
@@ -363,7 +367,7 @@ class DatabaseSeeder extends Seeder
                 Logbook::create([
                     'student_id' => $student->id,
                     'date' => $today->copy()->subDays(1)->format('Y-m-d'),
-                    'title' => 'Pengujian dan Quality Review ' . $cfg['major'],
+                    'title' => 'Pengujian dan Quality Review '.$cfg['major'],
                     'activity_description' => 'Menguji kesesuaian output terhadap standar mutu industri dan memperbaiki feedback catatan dari pembimbing.',
                     'photo_url' => 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600',
                     'status' => 'menunggu',
@@ -379,10 +383,10 @@ class DatabaseSeeder extends Seeder
                 'dudi_score_teamwork' => 88,
                 'dudi_score_initiative' => 91,
                 'dudi_score_average' => 90.25,
-                'dudi_notes' => 'Kemampuan kerja praktis sangat memuaskan sesuai kompetensi ' . $cfg['major'] . ' SMKN 71.',
+                'dudi_notes' => 'Kemampuan kerja praktis sangat memuaskan sesuai kompetensi '.$cfg['major'].' SMKN 71.',
                 'school_report_score' => 89.00,
                 'final_score' => 89.75,
-                'qr_code_hash' => 'SMKN71-PKL-' . $cfg['major'] . '-' . $student->id . '-VERIFIED',
+                'qr_code_hash' => 'SMKN71-PKL-'.$cfg['major'].'-'.$student->id.'-VERIFIED',
                 'is_finalized' => true,
                 'finalized_at' => $today->copy()->subDays(2),
             ]);

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Models\Attendance;
-use App\Models\Logbook;
-use App\Models\Placement;
-use App\Models\Notification;
-use App\Models\WorkModeRequest;
 use App\Models\Company;
+use App\Models\Logbook;
+use App\Models\Notification;
+use App\Models\Placement;
+use App\Models\WorkModeRequest;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
@@ -102,9 +102,9 @@ class SiswaController extends Controller
             'user' => $user,
             'today_attendance' => $todayAttendance,
             'today_logbook' => $todayLogbook,
-            'is_today_logged' => !is_null($todayLogbook),
-            'can_check_in' => !$todayAttendance,
-            'can_check_out' => $todayAttendance && !$todayAttendance->check_out,
+            'is_today_logged' => ! is_null($todayLogbook),
+            'can_check_in' => ! $todayAttendance,
+            'can_check_out' => $todayAttendance && ! $todayAttendance->check_out,
             'attendance_percentage' => $attendancePercentage,
             'total_present' => $presentDays,
             'total_recorded' => $totalDays,
@@ -132,17 +132,19 @@ class SiswaController extends Controller
     public function checkIn(Request $request)
     {
         $user = $request->user();
-        $today = Carbon::today()->format('Y-m-d');
+        $today = Carbon::today()->toDateString();
         $currentTime = Carbon::now()->format('H:i:s');
 
-        $existing = Attendance::where('student_id', $user->id)->where('date', $today)->first();
-        if ($existing) {
+        $existing = Attendance::where('student_id', $user->id)
+            ->whereDate('date', $today)
+            ->first();
+        if ($existing && ! $request->input('is_dispute', false)) {
             return response()->json(['success' => false, 'message' => 'Anda sudah melakukan check-in hari ini.'], 422);
         }
 
         $placement = Placement::with('company')->where('student_id', $user->id)->first();
         $resolved = $placement ? $placement->resolveWorkModeForDate($today) : ['mode' => 'wfo', 'source' => 'default', 'is_holiday' => false];
-        $isHoliday = !empty($resolved['is_holiday']);
+        $isHoliday = ! empty($resolved['is_holiday']);
         $effectiveMode = $isHoliday ? 'wfo' : $resolved['mode'];
 
         $dayNames = [
@@ -160,10 +162,10 @@ class SiswaController extends Controller
         $requestedWorkMode = $request->input('work_mode', $effectiveMode);
 
         // Security / Policy Validation: student cannot arbitrarily bypass assigned mode (unless holiday)
-        if (!$isHoliday && $requestedWorkMode !== $effectiveMode) {
+        if (! $isHoliday && $requestedWorkMode !== $effectiveMode) {
             return response()->json([
                 'success' => false,
-                'message' => "Jadwal resmi Anda hari ini ({$currentDayName}) adalah " . strtoupper($effectiveMode) . ". Untuk bekerja dengan mode " . strtoupper($requestedWorkMode) . ", silakan ajukan Permohonan Dispensasi terlebih dahulu kepada Pembimbing Lapangan.",
+                'message' => "Jadwal resmi Anda hari ini ({$currentDayName}) adalah ".strtoupper($effectiveMode).'. Untuk bekerja dengan mode '.strtoupper($requestedWorkMode).', silakan ajukan Permohonan Dispensasi terlebih dahulu kepada Pembimbing Lapangan.',
                 'effective_mode' => $effectiveMode,
             ], 422);
         }
@@ -196,13 +198,22 @@ class SiswaController extends Controller
 
             if ($workMode === 'wfo') {
                 $isWithinRadius = ($distanceMeters <= $radius);
-                if (!$isWithinRadius && $request->input('strict', false)) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Di luar radius kantor! Jarak Anda {$distanceMeters}m (maksimum {$radius}m dari {$placement->company->name}). Anda dijadwalkan WFO di kantor hari ini.",
-                        'distance_meters' => $distanceMeters,
-                        'allowed_radius' => $radius,
-                    ], 422);
+                $isDispute = (bool) $request->input('is_dispute', false);
+                $disputeReason = $request->input('dispute_reason');
+
+                if (! $isWithinRadius) {
+                    if ($isDispute || ! empty($disputeReason)) {
+                        $isDispute = true;
+                        $disputeReason = $disputeReason ?: 'Sinyal GPS lemah / berada di dalam gedung kantor.';
+                    } elseif ($request->input('strict', false)) {
+                        return response()->json([
+                            'success' => false,
+                            'can_dispute' => true,
+                            'message' => "Di luar radius kantor! Jarak Anda {$distanceMeters}m (maksimum {$radius}m dari {$placement->company->name}). Jika Anda sudah berada di lokasi namun GPS tidak akurat, Anda dapat mengajukan Sanggahan Lokasi GPS.",
+                            'distance_meters' => $distanceMeters,
+                            'allowed_radius' => $radius,
+                        ], 422);
+                    }
                 }
             } else {
                 // WFH and WFA waive geofence boundary restriction
@@ -210,9 +221,13 @@ class SiswaController extends Controller
             }
         }
 
+        $isDispute = ! empty($isDispute);
+        $disputeReason = $disputeReason ?? null;
+        $disputeStatus = $isDispute ? 'pending' : 'none';
+
         // Dynamic status check based on scheduled hours and late tolerance
         $status = 'hadir';
-        if (!$isHoliday) {
+        if (! $isHoliday) {
             $scheduledInStr = $resolved['check_in_time'] ?? '07:30';
             $tolerance = (int) ($resolved['late_tolerance_minutes'] ?? 15);
             $parsedTarget = Carbon::createFromFormat('H:i', substr($scheduledInStr, 0, 5))->addMinutes($tolerance);
@@ -223,32 +238,72 @@ class SiswaController extends Controller
         }
 
         $sourceNote = $isHoliday
-            ? " [Presensi Lembur / Sesi Mandiri di Hari Libur: " . ($resolved['holiday_name'] ?? 'Libur Kantor') . "]"
+            ? ' [Presensi Lembur / Sesi Mandiri di Hari Libur: '.($resolved['holiday_name'] ?? 'Libur Kantor').']'
             : ($resolved['source'] === 'approved_request'
-                ? " [Dispensasi Disetujui: " . ($resolved['reason'] ?? 'Izin Khusus') . "]"
+                ? ' [Dispensasi Disetujui: '.($resolved['reason'] ?? 'Izin Khusus').']'
                 : " [Jadwal Resmi {$currentDayName}]");
 
-        $notes = $request->input('notes', "Presensi " . strtoupper($workMode) . $sourceNote . " SMKN 71");
+        $notes = $request->input('notes', 'Presensi '.strtoupper($workMode).$sourceNote.' SMKN 71');
+        if ($isDispute) {
+            $notes .= " | [Sanggahan GPS: {$disputeReason}]";
+        }
 
-        $attendance = Attendance::create([
-            'student_id' => $user->id,
-            'date' => $today,
-            'check_in' => $currentTime,
-            'check_out' => null,
-            'status' => $status,
-            'work_mode' => $workMode,
-            'latitude' => $lat,
-            'longitude' => $lng,
-            'distance_meters' => $distanceMeters,
-            'is_within_radius' => $isWithinRadius,
-            'notes' => $notes,
-            'location_in' => $lat && $lng ? "{$lat}, {$lng}" : '-6.2301, 106.8228',
-        ]);
+        $attendance = Attendance::where('student_id', $user->id)
+            ->whereDate('date', $today)
+            ->first();
+
+        if ($attendance) {
+            $attendance->update([
+                'check_in' => $currentTime,
+                'status' => $status,
+                'work_mode' => $workMode,
+                'latitude' => $lat,
+                'longitude' => $lng,
+                'distance_meters' => $distanceMeters,
+                'is_within_radius' => $isWithinRadius,
+                'is_dispute' => $isDispute,
+                'dispute_reason' => $disputeReason,
+                'dispute_status' => $disputeStatus,
+                'notes' => $notes,
+                'location_in' => $lat && $lng ? "{$lat}, {$lng}" : '-6.2301, 106.8228',
+            ]);
+        } else {
+            $attendance = Attendance::create([
+                'student_id' => $user->id,
+                'date' => $today,
+                'check_in' => $currentTime,
+                'check_out' => null,
+                'status' => $status,
+                'work_mode' => $workMode,
+                'latitude' => $lat,
+                'longitude' => $lng,
+                'distance_meters' => $distanceMeters,
+                'is_within_radius' => $isWithinRadius,
+                'is_dispute' => $isDispute,
+                'dispute_reason' => $disputeReason,
+                'dispute_status' => $disputeStatus,
+                'notes' => $notes,
+                'location_in' => $lat && $lng ? "{$lat}, {$lng}" : '-6.2301, 106.8228',
+            ]);
+        }
+
+        if ($isDispute && $placement && $placement->dudi_mentor_id) {
+            Notification::create([
+                'user_id' => $placement->dudi_mentor_id,
+                'title' => 'Sanggahan Presensi GPS: '.$user->name,
+                'message' => "Siswa {$user->name} melakukan presensi dengan sanggahan GPS ({$distanceMeters}m). Alasan: {$disputeReason}",
+                'type' => 'warning',
+            ]);
+        }
 
         $modeLabel = strtoupper($workMode);
+        $message = $isDispute
+            ? "Check-In ({$modeLabel}) berhasil dicatat dengan Sanggahan Lokasi GPS (Menunggu verifikasi Pembimbing)."
+            : "Check-In ({$modeLabel}) berhasil dicatat pada pukul {$currentTime} WIB.";
+
         return response()->json([
             'success' => true,
-            'message' => "Check-In ({$modeLabel}) berhasil dicatat pada pukul {$currentTime} WIB.",
+            'message' => $message,
             'attendance' => $attendance,
             'work_mode' => $workMode,
             'work_mode_info' => $resolved,
@@ -262,7 +317,7 @@ class SiswaController extends Controller
         $currentTime = Carbon::now()->format('H:i:s');
 
         $attendance = Attendance::where('student_id', $user->id)->where('date', $today)->first();
-        if (!$attendance) {
+        if (! $attendance) {
             return response()->json(['success' => false, 'message' => 'Anda belum melakukan check-in hari ini.'], 422);
         }
 
@@ -282,7 +337,7 @@ class SiswaController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Check-Out kepulangan berhasil dicatat pada pukul ' . $currentTime . ' WIB.' . (!$isTodayLogged ? ' Mohon segera lengkapi jurnal harian Anda!' : ''),
+            'message' => 'Check-Out kepulangan berhasil dicatat pada pukul '.$currentTime.' WIB.'.(! $isTodayLogged ? ' Mohon segera lengkapi jurnal harian Anda!' : ''),
             'attendance' => $attendance,
             'is_today_logged' => $isTodayLogged,
         ]);
@@ -299,16 +354,16 @@ class SiswaController extends Controller
         $user = $request->user();
         $placement = Placement::with('company')->where('student_id', $user->id)->first();
 
-        if (!$placement) {
+        if (! $placement) {
             return response()->json(['success' => false, 'message' => 'Data penempatan magang tidak ditemukan.'], 422);
         }
 
         // Validate if company allows requested mode
         $allowedModes = explode(',', $placement->company->allowed_work_modes ?? 'wfo,wfh,wfa');
-        if (!in_array($request->requested_mode, $allowedModes)) {
+        if (! in_array($request->requested_mode, $allowedModes)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Perusahaan mitra (' . $placement->company->name . ') tidak mengizinkan mode ' . strtoupper($request->requested_mode) . '.',
+                'message' => 'Perusahaan mitra ('.$placement->company->name.') tidak mengizinkan mode '.strtoupper($request->requested_mode).'.',
             ], 422);
         }
 
@@ -328,7 +383,7 @@ class SiswaController extends Controller
         if ($existing && $existing->status === 'approved') {
             return response()->json([
                 'success' => false,
-                'message' => 'Permohonan Anda untuk tanggal tersebut sudah disetujui sebelumnya (' . strtoupper($existing->requested_mode) . ').',
+                'message' => 'Permohonan Anda untuk tanggal tersebut sudah disetujui sebelumnya ('.strtoupper($existing->requested_mode).').',
             ], 422);
         }
 
@@ -355,15 +410,15 @@ class SiswaController extends Controller
         if ($placement->dudi_mentor_id) {
             Notification::create([
                 'user_id' => $placement->dudi_mentor_id,
-                'title' => 'Permohonan Izin Mode Kerja: ' . $user->name,
-                'message' => "Siswa {$user->name} mengajukan dispensasi " . strtoupper($request->requested_mode) . " untuk tanggal " . Carbon::parse($request->date)->format('d/m/Y') . ". Alasan: {$request->reason}",
+                'title' => 'Permohonan Izin Mode Kerja: '.$user->name,
+                'message' => "Siswa {$user->name} mengajukan dispensasi ".strtoupper($request->requested_mode).' untuk tanggal '.Carbon::parse($request->date)->format('d/m/Y').". Alasan: {$request->reason}",
                 'type' => 'info',
             ]);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Permohonan beralih ke ' . strtoupper($request->requested_mode) . ' berhasil diajukan dan sedang menunggu persetujuan Pembimbing Lapangan.',
+            'message' => 'Permohonan beralih ke '.strtoupper($request->requested_mode).' berhasil diajukan dan sedang menunggu persetujuan Pembimbing Lapangan.',
             'request' => $reqRecord,
         ]);
     }
@@ -398,6 +453,18 @@ class SiswaController extends Controller
     public function getLogbooks(Request $request)
     {
         $user = $request->user();
+
+        // SLA Auto-Approve check (7 days)
+        Logbook::where('student_id', $user->id)
+            ->where('status', 'menunggu')
+            ->where('date', '<=', Carbon::today()->subDays(7)->format('Y-m-d'))
+            ->update([
+                'status' => 'diacc',
+                'is_auto_approved' => true,
+                'feedback_note' => 'Disetujui Otomatis Sistem (SLA Batas Waktu 7 Hari)',
+                'validated_at' => Carbon::now(),
+            ]);
+
         $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
         $endOfWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
 
@@ -429,12 +496,40 @@ class SiswaController extends Controller
 
         $user = $request->user();
 
+        $photoUrl = $request->photo_url;
+
+        // If file uploaded as multipart/form-data
+        if ($request->hasFile('photo')) {
+            $request->validate([
+                'photo' => 'file|mimes:jpeg,png,jpg,webp|max:3072',
+            ]);
+            $path = $request->file('photo')->store('logbooks', 'public');
+            $photoUrl = '/storage/'.$path;
+        } elseif (is_string($photoUrl) && str_starts_with($photoUrl, 'data:image/')) {
+            // Convert base64 canvas string to stored file to prevent SQLite row bloating
+            if (preg_match('/^data:image\/(\w+);base64,/', $photoUrl, $type)) {
+                $data = substr($photoUrl, strpos($photoUrl, ',') + 1);
+                $ext = strtolower($type[1]);
+                if ($ext === 'jpeg') {
+                    $ext = 'jpg';
+                }
+                if (in_array($ext, ['jpg', 'png', 'webp'])) {
+                    $decoded = base64_decode($data);
+                    if ($decoded !== false) {
+                        $filename = 'logbooks/logbook_'.uniqid().'.'.$ext;
+                        \Illuminate\Support\Facades\Storage::disk('public')->put($filename, $decoded);
+                        $photoUrl = '/storage/'.$filename;
+                    }
+                }
+            }
+        }
+
         $logbook = Logbook::create([
             'student_id' => $user->id,
             'date' => $request->date,
             'title' => $request->title,
             'activity_description' => $request->activity_description,
-            'photo_url' => $request->photo_url,
+            'photo_url' => $photoUrl,
             'status' => 'menunggu',
         ]);
 
@@ -443,8 +538,8 @@ class SiswaController extends Controller
         if ($placement && $placement->dudi_mentor_id) {
             Notification::create([
                 'user_id' => $placement->dudi_mentor_id,
-                'title' => 'Jurnal Baru dari ' . $user->name,
-                'message' => 'Siswa ' . $user->name . ' telah mengirimkan jurnal magang untuk tanggal ' . $request->date,
+                'title' => 'Jurnal Baru dari '.$user->name,
+                'message' => 'Siswa '.$user->name.' telah mengirimkan jurnal magang untuk tanggal '.$request->date,
                 'type' => 'info',
             ]);
         }
@@ -462,11 +557,21 @@ class SiswaController extends Controller
 
         $placement = Placement::with(['company', 'dudiMentor', 'teacherMentor'])
             ->where('student_id', $user->id)
+            ->where('status', 'active')
+            ->first() ?: Placement::with(['company', 'dudiMentor', 'teacherMentor'])
+            ->where('student_id', $user->id)
+            ->latest()
             ->first();
+
+        $history = Placement::with(['company', 'dudiMentor', 'teacherMentor'])
+            ->where('student_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->json([
             'success' => true,
             'placement' => $placement,
+            'placement_history' => $history,
         ]);
     }
 }

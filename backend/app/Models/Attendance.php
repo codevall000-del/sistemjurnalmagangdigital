@@ -23,14 +23,27 @@ class Attendance extends Model
         'notes',
         'location_in',
         'location_out',
+        'is_dispute',
+        'dispute_reason',
+        'dispute_status',
+        'dispute_resolved_by',
+        'dispute_resolved_at',
     ];
 
     protected $casts = [
         'date' => 'date',
+        'is_dispute' => 'boolean',
+        'is_within_radius' => 'boolean',
+        'dispute_resolved_at' => 'datetime',
     ];
 
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id');
+    }
+
+    public function disputeResolver()
+    {
+        return $this->belongsTo(User::class, 'dispute_resolved_by');
     }
 }

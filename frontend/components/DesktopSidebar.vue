@@ -1,32 +1,54 @@
 <template>
-  <aside
-    :class="isSidebarCollapsed ? '-translate-x-full' : 'translate-x-0'"
-    class="fixed left-0 top-0 h-full w-[260px] bg-[#fbfbfd]/90 dark:bg-[#18181b]/95 backdrop-blur-2xl border-r border-black/[0.07] dark:border-white/[0.08] z-50 flex flex-col justify-between select-none shadow-[1px_0_12px_rgba(0,0,0,0.02)] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
-  >
-    <!-- Top Section: macOS Window Controls & Header -->
-    <div class="flex flex-col">
-      <!-- Brand Header -->
-      <div class="py-3.5 px-4 border-b border-black/[0.05] dark:border-white/[0.08]">
-        <!-- App Brand -->
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-white dark:bg-[#242427] shadow-[0_2px_8px_rgba(0,0,0,0.06)] border border-black/[0.06] dark:border-white/[0.1] flex items-center justify-center p-1 shrink-0">
-            <img
-              src="/images/logo-smkn71.png"
-              alt="Logo SMKN 71"
-              class="w-7 h-7 object-contain"
-            />
-          </div>
-          <div class="flex flex-col min-w-0">
-            <span class="text-[14px] font-bold text-[#1d1d1f] dark:text-[#f5f5f7] tracking-tight truncate font-headline">
-              EduAccess
-            </span>
-            <div class="flex items-center gap-1.5 mt-0.5">
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#0071e3]/10 dark:bg-[#0071e3]/20 text-[#0071e3] dark:text-[#388bfd] font-semibold inline-block truncate">
-                Jurnal Magang • SMKN 71
-              </span>
+  <div>
+    <!-- Mobile Backdrop Scrim -->
+    <Transition name="fade">
+      <div
+        v-if="!isSidebarCollapsed"
+        @click="isSidebarCollapsed = true"
+        class="fixed inset-0 bg-black/50 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300"
+      ></div>
+    </Transition>
+
+    <aside
+      :class="isSidebarCollapsed ? '-translate-x-full' : 'translate-x-0'"
+      class="fixed left-0 top-0 h-full w-[280px] sm:w-[260px] max-w-[85vw] bg-[#fbfbfd]/95 dark:bg-[#18181b]/95 backdrop-blur-2xl border-r border-black/[0.07] dark:border-white/[0.08] z-50 flex flex-col justify-between select-none shadow-[4px_0_24px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+    >
+      <!-- Top Section: macOS Window Controls & Header -->
+      <div class="flex flex-col">
+        <!-- Brand Header -->
+        <div class="py-3.5 px-4 border-b border-black/[0.05] dark:border-white/[0.08]">
+          <!-- App Brand -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-white dark:bg-[#242427] shadow-[0_2px_8px_rgba(0,0,0,0.06)] border border-black/[0.06] dark:border-white/[0.1] flex items-center justify-center p-1 shrink-0">
+                <img
+                  src="/images/logo-smkn71.png"
+                  alt="Logo SMKN 71"
+                  class="w-7 h-7 object-contain"
+                />
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="text-[14px] font-bold text-[#1d1d1f] dark:text-[#f5f5f7] tracking-tight truncate font-headline">
+                  EduAccess
+                </span>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#0071e3]/10 dark:bg-[#0071e3]/20 text-[#0071e3] dark:text-[#388bfd] font-semibold inline-block truncate">
+                    Jurnal Magang • SMKN 71
+                  </span>
+                </div>
+              </div>
             </div>
+
+            <!-- Mobile Close Button -->
+            <button
+              @click="isSidebarCollapsed = true"
+              type="button"
+              class="lg:hidden p-1.5 -mr-1 rounded-xl text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.05] dark:hover:bg-white/[0.08] apple-press cursor-pointer shrink-0"
+              title="Tutup Menu"
+            >
+              <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
           </div>
-        </div>
 
         <!-- Quick Access Role Switcher -->
         <div class="mt-3 pt-2.5 border-t border-black/[0.06] dark:border-white/[0.08]">
@@ -41,7 +63,7 @@
           </div>
           <div class="grid grid-cols-4 gap-1 p-0.5 bg-black/[0.03] dark:bg-white/[0.06] rounded-xl border border-black/[0.05] dark:border-white/[0.08] text-[10px] font-semibold text-center">
             <button
-              @click="switchRole('siswa')"
+              @click="handleSwitchRole('siswa')"
               :class="currentRole === 'siswa' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#48484a] dark:text-[#98989f] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'"
               class="py-1 px-1 rounded-lg transition-all apple-press cursor-pointer"
               title="Akses Cepat: Siswa (Budi Santoso)"
@@ -49,7 +71,7 @@
               Siswa
             </button>
             <button
-              @click="switchRole('mentor')"
+              @click="handleSwitchRole('mentor')"
               :class="(currentRole === 'dudi' || currentRole === 'mentor') ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#48484a] dark:text-[#98989f] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'"
               class="py-1 px-1 rounded-lg transition-all apple-press cursor-pointer"
               title="Akses Cepat: Pembimbing Lapangan (Hendra Wijaya)"
@@ -57,7 +79,7 @@
               Mentor
             </button>
             <button
-              @click="switchRole('guru')"
+              @click="handleSwitchRole('guru')"
               :class="currentRole === 'guru' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#48484a] dark:text-[#98989f] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'"
               class="py-1 px-1 rounded-lg transition-all apple-press cursor-pointer"
               title="Akses Cepat: Guru (Dra. Nurul Hidayah)"
@@ -65,7 +87,7 @@
               Guru
             </button>
             <button
-              @click="switchRole('admin')"
+              @click="handleSwitchRole('admin')"
               :class="currentRole === 'admin' ? 'bg-[#0071e3] text-white shadow-xs font-bold' : 'text-[#48484a] dark:text-[#98989f] hover:text-[#1d1d1f] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'"
               class="py-1 px-1 rounded-lg transition-all apple-press cursor-pointer"
               title="Akses Cepat: Admin (Ir. Bambang Hermanto)"
@@ -86,7 +108,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'dashboard'"
+            @click.prevent="selectMenu('dashboard')"
             :class="activeMenu === 'dashboard' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -96,7 +118,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'logbook'"
+            @click.prevent="selectMenu('logbook')"
             :class="activeMenu === 'logbook' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -124,7 +146,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'presensi'"
+            @click.prevent="selectMenu('presensi')"
             :class="activeMenu === 'presensi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -134,7 +156,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'penempatan'"
+            @click.prevent="selectMenu('penempatan')"
             :class="activeMenu === 'penempatan' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -151,17 +173,17 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'dashboard_dudi'"
-            :class="(activeMenu === 'dashboard_dudi' || activeMenu === 'dashboard_mentor') ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
+            @click.prevent="selectMenu('dashboard_mentor')"
+            :class="(activeMenu === 'dashboard_mentor' || activeMenu === 'dashboard_dudi') ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
             <span class="material-symbols-outlined text-[19px]">storefront</span>
-            <span class="truncate">Dashboard Pembimbing</span>
+            <span class="truncate">Dashboard Pembimbing (Mentor)</span>
           </a>
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'validasi_jurnal'"
+            @click.prevent="selectMenu('validasi_jurnal')"
             :class="activeMenu === 'validasi_jurnal' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -174,7 +196,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'presensi_siswa'"
+            @click.prevent="selectMenu('presensi_siswa')"
             :class="activeMenu === 'presensi_siswa' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -184,7 +206,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'evaluasi'"
+            @click.prevent="selectMenu('evaluasi')"
             :class="activeMenu === 'evaluasi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -201,7 +223,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'dashboard_guru'"
+            @click.prevent="selectMenu('dashboard_guru')"
             :class="activeMenu === 'dashboard_guru' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -211,7 +233,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'monitoring'"
+            @click.prevent="selectMenu('monitoring')"
             :class="activeMenu === 'monitoring' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -221,7 +243,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'manajemen_nilai'"
+            @click.prevent="selectMenu('manajemen_nilai')"
             :class="activeMenu === 'manajemen_nilai' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -238,7 +260,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'dashboard_admin'"
+            @click.prevent="selectMenu('dashboard_admin')"
             :class="activeMenu === 'dashboard_admin' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -248,7 +270,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'data_master_siswa'"
+            @click.prevent="selectMenu('data_master_siswa')"
             :class="['data_master_siswa', 'data_master_dudi', 'data_master_guru'].includes(activeMenu) ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -258,7 +280,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'plotting'"
+            @click.prevent="selectMenu('plotting')"
             :class="activeMenu === 'plotting' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -268,7 +290,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'diagram_relasi'"
+            @click.prevent="selectMenu('diagram_relasi')"
             :class="activeMenu === 'diagram_relasi' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -278,7 +300,7 @@
 
           <a
             href="#"
-            @click.prevent="activeMenu = 'laporan'"
+            @click.prevent="selectMenu('laporan')"
             :class="activeMenu === 'laporan' ? 'bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.32)] font-medium' : 'text-[#48484a] dark:text-[#a1a1a6] hover:bg-black/[0.04] dark:hover:bg-white/[0.08] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'"
             class="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all duration-150 text-[13px] apple-press"
           >
@@ -432,6 +454,7 @@
       </Transition>
     </Teleport>
   </aside>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -452,6 +475,20 @@ const {
   journalUrgency,
   isSidebarCollapsed
 } = useAppStore()
+
+const selectMenu = (menu: string) => {
+  activeMenu.value = menu
+  if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+    isSidebarCollapsed.value = true
+  }
+}
+
+const handleSwitchRole = (role: 'siswa' | 'mentor' | 'dudi' | 'guru' | 'admin') => {
+  switchRole(role)
+  if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+    isSidebarCollapsed.value = true
+  }
+}
 
 const showLogoutConfirm = ref(false)
 

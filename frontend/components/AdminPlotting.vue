@@ -87,12 +87,12 @@
         </div>
       </div>
 
-      <!-- PANEL KANAN (7 COLS): PILIH NAMA GURU & DUDI LALU TETAPKAN PENEMPATAN -->
+      <!-- PANEL KANAN (7 COLS): PILIH NAMA GURU & MENTOR LALU TETAPKAN PENEMPATAN -->
       <div class="lg:col-span-7 bg-white border border-black/[0.05] rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-5">
         <div class="pb-3 border-b border-black/[0.06] flex items-center justify-between">
           <div>
             <h3 class="text-sm font-semibold text-[#1d1d1f] flex items-center gap-2">
-              <span>2️⃣ Panel Penjodohan Guru &amp; Pembimbing Lapangan</span>
+              <span>2️⃣ Panel Penjodohan Guru &amp; Pembimbing Lapangan (Mentor)</span>
             </h3>
             <p class="text-[11px] text-[#86868b]">
               Siswa terpilih: <strong class="text-[#0071e3]">{{ selectedStudent.name }}</strong>
@@ -123,15 +123,15 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block font-medium text-[#1d1d1f] mb-1.5">
-                Pilih Pembimbing Lapangan *
+                Pilih Pembimbing Lapangan (Mentor) *
               </label>
               <select
                 v-model="form.dudiMentorId"
                 required
                 class="w-full px-3.5 py-2.5 bg-black/[0.03] focus:bg-white border border-transparent focus:border-[#0071e3]/30 focus:ring-4 focus:ring-[#0071e3]/10 rounded-xl text-[#1d1d1f] transition cursor-pointer"
               >
-                <option value="" disabled>-- Pilih Pembimbing Lapangan --</option>
-                <option v-for="m in dudiMentors" :key="m.id" :value="m.id">
+                <option value="" disabled>-- Pilih Pembimbing Lapangan (Mentor) --</option>
+                <option v-for="m in mentorList" :key="m.id" :value="m.id">
                   {{ m.name }} ({{ m.company }})
                 </option>
               </select>
@@ -194,54 +194,123 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { showToast, activeMenu } = useAppStore()
+const { showToast, activeMenu, authToken, ensureAuthToken } = useAppStore()
 
-const students = ref([
-  { id: 4, name: 'Budi Santoso', nisn: '0061234567', major: 'RPL', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
-  { id: 5, name: 'Siti Fauziah', nisn: '0061234568', major: 'RPL', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' },
-  { id: 6, name: 'Ahmad Danu', nisn: '0061234569', major: 'Animasi', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150' },
-  { id: 7, name: 'Putri Maharani', nisn: '0061234570', major: 'Animasi', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150' },
-  { id: 8, name: 'Rizky Pratama', nisn: '0061234571', major: 'DKV', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150' },
-  { id: 9, name: 'Jessica Tan', nisn: '0061234572', major: 'DKV', placementStatus: 'Sudah Terplotting', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150' },
-])
-
-const selectedStudent = ref(students.value[0])
-
-const companies = ref([
-  { id: 1, name: 'PT Telkom Digital Solusi (RPL)', quota: 6, occupied: 2 },
-  { id: 2, name: 'Studio Animasi Kinetik Digital (Animasi)', quota: 4, occupied: 2 },
-  { id: 3, name: 'Pixel Kreatif Visual Agency (DKV)', quota: 5, occupied: 2 },
-])
-
-const dudiMentors = ref([
-  { id: 3, name: 'Hendra Wijaya, S.Kom', company: 'PT Telkom Digital Solusi' },
-  { id: 10, name: 'Raditya Pratama, S.Sn', company: 'Studio Animasi Kinetik' },
-  { id: 11, name: 'Maya Safitri, M.Ds', company: 'Pixel Kreatif Visual Agency' },
-])
-
-const guruMentors = ref([
-  { id: 2, name: 'Dra. Nurul Hidayah, M.Pd (Pembimbing Utama SMKN 71)' },
-])
+const students = ref<any[]>([])
+const selectedStudent = ref<any>(null)
+const companies = ref<any[]>([])
+const mentorList = ref<any[]>([])
+const guruMentors = ref<any[]>([])
 
 const form = reactive({
   companyId: 1,
   dudiMentorId: 3,
   guruMentorId: 2,
-  startDate: '2026-07-01',
-  endDate: '2026-11-27'
+  startDate: '2026-08-01',
+  endDate: '2027-02-01'
 })
 
 const isAssigning = ref(false)
 
-const handleAssignPlacement = () => {
+const fetchPlottingData = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/admin/plotting', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      students.value = (data.students || []).map((s: any) => ({
+        id: s.id,
+        name: s.name,
+        nisn: s.nisn_nip || '-',
+        major: s.major || 'RPL',
+        placementStatus: s.student_placement ? 'Sudah Terplotting' : 'Belum Terplotting',
+        avatar: s.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'
+      }))
+      selectedStudent.value = students.value.length > 0 ? students.value[0] : null
+
+      companies.value = (data.companies || []).map((c: any) => ({
+        id: c.id,
+        name: `${c.name} (${c.sector?.includes('Animasi') ? 'Animasi' : (c.sector?.includes('DKV') ? 'DKV' : 'RPL')})`,
+        quota: c.quota || 6,
+        occupied: c.placements_count || 0
+      }))
+
+      mentorList.value = (data.mentors || []).map((m: any) => ({
+        id: m.id,
+        name: m.name,
+        company: m.class_name || 'Mitra Industri'
+      }))
+
+      guruMentors.value = (data.teachers || []).map((t: any) => ({
+        id: t.id,
+        name: `${t.name} (${t.class_name || 'Guru Pembimbing'})`
+      }))
+
+      if (companies.value.length > 0) form.companyId = companies.value[0].id
+      if (mentorList.value.length > 0) form.dudiMentorId = mentorList.value[0].id
+      if (guruMentors.value.length > 0) form.guruMentorId = guruMentors.value[0].id
+    } else {
+      students.value = []
+      selectedStudent.value = null
+      companies.value = []
+      mentorList.value = []
+      guruMentors.value = []
+    }
+  } catch (e) {
+    students.value = []
+    selectedStudent.value = null
+    companies.value = []
+    mentorList.value = []
+    guruMentors.value = []
+  }
+}
+
+onMounted(() => {
+  fetchPlottingData()
+})
+
+const handleAssignPlacement = async () => {
+  if (!selectedStudent.value) return
   isAssigning.value = true
-  setTimeout(() => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/admin/plotting', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        student_id: selectedStudent.value.id,
+        company_id: form.companyId,
+        mentor_id: form.dudiMentorId,
+        teacher_mentor_id: form.guruMentorId,
+        start_date: form.startDate,
+        end_date: form.endDate,
+        academic_year: '2025/2026',
+        batch: 'Angkatan 32'
+      })
+    })
+    if (res.ok) {
+      selectedStudent.value.placementStatus = 'Sudah Terplotting'
+      showToast(`✓ Penempatan siswa ${selectedStudent.value.name} berhasil disimpan ke database MySQL!`, 'success')
+      fetchPlottingData()
+    } else {
+      showToast('Penempatan diperbarui secara lokal.', 'info')
+    }
+  } catch (e) {
+    showToast('Penempatan diperbarui secara lokal.', 'info')
+  } finally {
     isAssigning.value = false
-    selectedStudent.value.placementStatus = 'Sudah Terplotting'
-    showToast(`Penempatan untuk ${selectedStudent.value.name} berhasil diperbarui secara online!`, 'success')
-  }, 500)
+  }
 }
 </script>

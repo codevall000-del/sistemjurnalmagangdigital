@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\SiswaController;
-use App\Http\Controllers\Api\MentorController;
-use App\Http\Controllers\Api\GuruController;
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\GuruController;
+use App\Http\Controllers\Api\MentorController;
+use App\Http\Controllers\Api\SiswaController;
+use Illuminate\Support\Facades\Route;
 
-// Public routes
-Route::post('/login', [AuthController::class, 'login']);
+// Public routes (Rate-limited to prevent brute-force attacks)
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 Route::post('/demo-switch', [AuthController::class, 'demoSwitch']);
 
 // Authenticated routes
@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // 1. Modul Siswa
-    Route::prefix('siswa')->group(function () {
+    Route::prefix('siswa')->middleware('role:siswa')->group(function () {
         Route::get('/dashboard', [SiswaController::class, 'dashboard']);
         Route::post('/check-in', [SiswaController::class, 'checkIn']);
         Route::post('/check-out', [SiswaController::class, 'checkOut']);
@@ -32,12 +32,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // 2. Modul Pembimbing Lapangan (Instansi / Perusahaan)
-    Route::prefix('mentor')->group(function () {
+    Route::prefix('mentor')->middleware('role:mentor,dudi,admin')->group(function () {
         Route::get('/dashboard', [MentorController::class, 'dashboard']);
         Route::get('/students', [MentorController::class, 'getStudents']);
         Route::get('/students/{id}/logbooks', [MentorController::class, 'getStudentLogbooks']);
         Route::post('/logbooks/{id}/validate', [MentorController::class, 'validateLogbook']);
+        Route::post('/logbooks/batch-validate', [MentorController::class, 'batchValidateLogbooks']);
         Route::get('/attendance-recap', [MentorController::class, 'getAttendanceRecap']);
+        Route::post('/attendances/{id}/review-dispute', [MentorController::class, 'reviewAttendanceDispute']);
         Route::get('/work-mode-requests', [MentorController::class, 'getWorkModeRequests']);
         Route::post('/work-mode-requests/{id}/review', [MentorController::class, 'reviewWorkModeRequest']);
         Route::get('/students-schedules', [MentorController::class, 'getStudentsWithSchedules']);
@@ -49,12 +51,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Alias prefix dudi untuk kompatibilitas frontend lama
-    Route::prefix('dudi')->group(function () {
+    Route::prefix('dudi')->middleware('role:mentor,dudi,admin')->group(function () {
         Route::get('/dashboard', [MentorController::class, 'dashboard']);
         Route::get('/students', [MentorController::class, 'getStudents']);
         Route::get('/students/{id}/logbooks', [MentorController::class, 'getStudentLogbooks']);
         Route::post('/logbooks/{id}/validate', [MentorController::class, 'validateLogbook']);
+        Route::post('/logbooks/batch-validate', [MentorController::class, 'batchValidateLogbooks']);
         Route::get('/attendance-recap', [MentorController::class, 'getAttendanceRecap']);
+        Route::post('/attendances/{id}/review-dispute', [MentorController::class, 'reviewAttendanceDispute']);
         Route::get('/work-mode-requests', [MentorController::class, 'getWorkModeRequests']);
         Route::post('/work-mode-requests/{id}/review', [MentorController::class, 'reviewWorkModeRequest']);
         Route::get('/students-schedules', [MentorController::class, 'getStudentsWithSchedules']);
@@ -66,16 +70,18 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // 3. Modul Guru Pembimbing
-    Route::prefix('guru')->group(function () {
+    Route::prefix('guru')->middleware('role:guru,admin')->group(function () {
         Route::get('/dashboard', [GuruController::class, 'dashboard']);
         Route::get('/students', [GuruController::class, 'getStudents']);
         Route::get('/students/{id}/monitor', [GuruController::class, 'monitorStudentLogbooks']);
+        Route::post('/students/{id}/advisory-note', [GuruController::class, 'storeAdvisoryNote']);
+        Route::post('/attendances/{id}/review-dispute', [GuruController::class, 'reviewAttendanceDispute']);
         Route::get('/grades', [GuruController::class, 'getGradesCompilation']);
         Route::post('/grades/{id}/school-report', [GuruController::class, 'updateSchoolReportScore']);
     });
 
     // 4. Modul Admin / Kaprog
-    Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->middleware('role:admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard']);
         Route::get('/master-data', [AdminController::class, 'getMasterData']);
         Route::post('/master-data', [AdminController::class, 'storeMasterData']);
@@ -84,6 +90,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/master-data/import', [AdminController::class, 'importMasterData']);
         Route::get('/plotting', [AdminController::class, 'getPlottingData']);
         Route::post('/plotting', [AdminController::class, 'assignPlacement']);
+        Route::post('/placements/{id}/relocate', [AdminController::class, 'relocatePlacement']);
         Route::get('/reports', [AdminController::class, 'getReports']);
     });
 });

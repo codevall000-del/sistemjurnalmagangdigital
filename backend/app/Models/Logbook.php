@@ -17,12 +17,17 @@ class Logbook extends Model
         'photo_url',
         'status', // menunggu, diacc, revisi
         'feedback_note',
+        'is_auto_approved',
+        'teacher_note',
+        'teacher_noted_at',
         'validated_by',
         'validated_at',
     ];
 
     protected $casts = [
         'date' => 'date',
+        'is_auto_approved' => 'boolean',
+        'teacher_noted_at' => 'datetime',
         'validated_at' => 'datetime',
     ];
 

@@ -10,20 +10,31 @@
 
       <!-- 2. VIEW (AREA KONTEN KANAN) - DENGAN macOS FROSTED TOP BAR -->
       <div
-        :class="isSidebarCollapsed ? 'pl-0' : 'pl-[260px]'"
+        :class="[isSidebarCollapsed ? 'lg:pl-0' : 'lg:pl-[260px]', 'pl-0']"
         class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f5f5f7] dark:bg-[#121214] relative transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
       >
         <!-- Apple macOS Desktop Top Bar (Disembunyikan pada Kanvas Penuh Diagram Relasi) -->
         <header
           v-if="activeMenu !== 'diagram_relasi'"
-          class="h-14 bg-white/80 dark:bg-[#18181b]/85 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] z-40 px-6 flex items-center justify-between shrink-0 no-print"
+          class="h-14 bg-white/80 dark:bg-[#18181b]/85 backdrop-blur-2xl border-b border-black/[0.06] dark:border-white/[0.08] z-40 px-3 sm:px-6 flex items-center justify-between shrink-0 no-print"
         >
-          <!-- Left: Breadcrumb Navigation & Progress Pill -->
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-1.5 text-[#86868b] dark:text-[#98989f] text-[13px] font-medium">
-              <span class="text-[#86868b] dark:text-[#98989f]">EduAccess</span>
-              <span class="material-symbols-outlined text-[15px] text-[#86868b]/70 dark:text-[#98989f]/70">chevron_right</span>
-              <span class="text-[#1d1d1f] dark:text-[#f5f5f7] font-semibold">{{ activeMenuTitle }}</span>
+          <!-- Left: Mobile Menu Button & Breadcrumb Navigation -->
+          <div class="flex items-center gap-2 sm:gap-4 min-w-0">
+            <!-- Mobile Hamburger Toggle -->
+            <button
+              @click="toggleSidebarCollapse"
+              type="button"
+              class="lg:hidden p-1.5 -ml-1 rounded-xl text-[#1d1d1f] dark:text-[#f5f5f7] hover:bg-black/[0.05] dark:hover:bg-white/[0.08] apple-press flex items-center justify-center cursor-pointer shrink-0"
+              aria-label="Buka Menu"
+              title="Buka Menu Navigasi"
+            >
+              <span class="material-symbols-outlined text-[22px]">menu</span>
+            </button>
+
+            <div class="flex items-center gap-1.5 text-[#86868b] dark:text-[#98989f] text-[13px] font-medium min-w-0 truncate">
+              <span class="text-[#86868b] dark:text-[#98989f] hidden xs:inline">EduAccess</span>
+              <span class="material-symbols-outlined text-[15px] text-[#86868b]/70 dark:text-[#98989f]/70 hidden xs:inline">chevron_right</span>
+              <span class="text-[#1d1d1f] dark:text-[#f5f5f7] font-semibold truncate">{{ activeMenuTitle }}</span>
             </div>
 
             <!-- Apple Style Week Tracker Capsule -->
@@ -110,7 +121,7 @@
 
         <!-- View Area Content Scrollable -->
         <main
-          :class="activeMenu === 'diagram_relasi' ? 'p-0 overflow-hidden' : 'px-7 py-6 overflow-y-auto'"
+          :class="activeMenu === 'diagram_relasi' ? 'p-0 overflow-hidden' : 'p-3.5 sm:px-7 sm:py-6 overflow-y-auto'"
           class="flex-1 bg-[#f5f5f7] dark:bg-[#121214] text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
         >
           <!-- 1. MODUL SISWA VIEWS -->
@@ -121,12 +132,12 @@
             <SiswaPenempatan v-else-if="activeMenu === 'penempatan'" />
           </template>
 
-          <!-- 2. MODUL PEMBIMBING LAPANGAN (INSTANSI / PERUSAHAAN) VIEWS -->
+          <!-- 2. MODUL PEMBIMBING LAPANGAN (MENTOR INDUSTRI) VIEWS -->
           <template v-else-if="currentRole === 'mentor' || currentRole === 'dudi'">
-            <DudiDashboard v-if="activeMenu === 'dashboard_mentor' || activeMenu === 'dashboard_dudi'" />
-            <DudiValidasi v-else-if="activeMenu === 'validasi_jurnal'" />
-            <DudiPresensi v-else-if="activeMenu === 'presensi_siswa'" />
-            <DudiEvaluasi v-else-if="activeMenu === 'evaluasi'" />
+            <MentorDashboard v-if="activeMenu === 'dashboard_mentor' || activeMenu === 'dashboard_dudi'" />
+            <MentorValidasi v-else-if="activeMenu === 'validasi_jurnal'" />
+            <MentorPresensi v-else-if="activeMenu === 'presensi_siswa'" />
+            <MentorEvaluasi v-else-if="activeMenu === 'evaluasi'" />
           </template>
 
           <!-- 3. MODUL GURU PEMBIMBING VIEWS -->
@@ -198,7 +209,9 @@ const {
   showToast,
   journalUrgency,
   effectiveMinutesSinceTapOut,
-  isSidebarCollapsed
+  isSidebarCollapsed,
+  toggleSidebarCollapse,
+  ensureAuthToken
 } = useAppStore()
 
 const currentDate = ref('')
@@ -207,7 +220,11 @@ const hasActiveNotification = computed(() => {
   return currentRole.value === 'siswa' && journalUrgency.value !== 'none'
 })
 
-onMounted(() => {
+onMounted(async () => {
+  await ensureAuthToken()
+  if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+    isSidebarCollapsed.value = true
+  }
   const now = new Date()
   const options: Intl.DateTimeFormatOptions = {
     weekday: 'long',

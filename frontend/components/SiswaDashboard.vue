@@ -11,7 +11,7 @@
           Selamat Pagi, {{ currentUser.name }}! 👋
         </h1>
         <p class="text-[13px] text-[#86868b] leading-relaxed">
-          Berikut adalah ikhtisar kegiatan magang Anda per <span class="font-semibold text-[#1d1d1f]">{{ todayFormatted }}</span> di <span class="font-semibold text-[#0071e3]">PT Solusi Digital Pratama</span>.
+          Berikut adalah ikhtisar kegiatan magang Anda per <span class="font-semibold text-[#1d1d1f]">{{ todayFormatted }}</span> di <span class="font-semibold text-[#0071e3]">{{ companyInfo.name }}</span>.
         </p>
       </div>
 
@@ -1317,7 +1317,7 @@ const submitWorkModeRequest = async () => {
 
   isSubmittingRequest.value = true
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/siswa/request-work-mode', {
+    const res = await fetch('/jurnalmagangdigital/api/siswa/request-work-mode', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1437,7 +1437,7 @@ const handleTapIn = async () => {
   ].join(':')
 
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/siswa/check-in', {
+    const res = await fetch('/jurnalmagangdigital/api/siswa/check-in', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1481,7 +1481,7 @@ const handleTapOut = async () => {
   ].join(':')
 
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/siswa/check-out', {
+    const res = await fetch('/jurnalmagangdigital/api/siswa/check-out', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1513,7 +1513,7 @@ const handleTapOut = async () => {
 // Fetch Today's Attendance from Online API on mount
 const fetchTodayData = async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/siswa/dashboard', {
+    const res = await fetch('/jurnalmagangdigital/api/siswa/dashboard', {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${authToken.value}`

@@ -596,8 +596,8 @@ const copyIdToClipboard = async () => {
 const currentRoleLabel = computed(() => {
   const map: Record<string, string> = {
     siswa: 'Siswa Praktik (PKL)',
-    mentor: 'Pembimbing Lapangan (Instansi / Perusahaan)',
-    dudi: 'Pembimbing Lapangan (Instansi / Perusahaan)',
+    mentor: 'Pembimbing Lapangan (Mentor)',
+    dudi: 'Pembimbing Lapangan (Mentor)',
     guru: 'Guru Pembimbing Sekolah',
     admin: 'Administrator / Kaprog'
   }

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('role')->default('siswa'); // siswa, mentor, guru, admin
             $table->string('nisn_nip')->nullable();
             $table->string('phone')->nullable();
-            $table->string('major')->nullable(); // PPLG, DKV, Animasi
-            $table->string('class_name')->nullable(); // e.g. XII PPLG 1
+            $table->string('major')->nullable(); // RPL, DKV, Animasi
+            $table->string('class_name')->nullable(); // e.g. XII RPL 1
             $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

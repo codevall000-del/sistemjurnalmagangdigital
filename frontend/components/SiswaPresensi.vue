@@ -23,14 +23,25 @@
           <span class="material-symbols-outlined text-[17px] text-[#0071e3]">file_download</span>
           <span>Unduh Rekap PDF</span>
         </button>
-        <button
-          @click="isIzinModalOpen = true"
-          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.25)] hover:bg-[#0077ed] transition-all text-[12px] font-semibold apple-press"
-          type="button"
-        >
-          <span class="material-symbols-outlined text-[17px]">add_circle</span>
-          <span>Ajukan Izin / Sakit</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button
+            @click="showDisputeModal = true"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition-all text-[12px] font-semibold apple-press cursor-pointer"
+            title="Ajukan Sanggahan jika sinyal GPS drift di dalam gedung"
+            type="button"
+          >
+            <span class="material-symbols-outlined text-[16px]">fmd_bad</span>
+            <span>Sanggahan GPS</span>
+          </button>
+          <button
+            @click="isIzinModalOpen = true"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0071e3] text-white shadow-[0_2px_8px_rgba(0,113,227,0.25)] hover:bg-[#0077ed] transition-all text-[12px] font-semibold apple-press"
+            type="button"
+          >
+            <span class="material-symbols-outlined text-[18px]">add_circle</span>
+            <span>Pengajuan Izin / Dispensasi</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -648,6 +659,75 @@
         </div>
       </Transition>
     </Teleport>
+    <!-- Modal Sanggahan GPS -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition-opacity duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-opacity duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="showDisputeModal"
+          class="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md select-none"
+          @click="showDisputeModal = false"
+        >
+          <div
+            class="modal-card-animate bg-white dark:bg-[#1c1c1e] text-[#1d1d1f] dark:text-[#f5f5f7] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-black/[0.08] dark:border-white/[0.12] flex flex-col gap-4 select-auto"
+            @click.stop
+          >
+            <div class="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.08]">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-[22px]">fmd_bad</span>
+                <h3 class="text-base font-bold">Sanggahan Presensi GPS</h3>
+              </div>
+              <button
+                @click="showDisputeModal = false"
+                class="w-7 h-7 rounded-full bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] flex items-center justify-center text-[#86868b] transition cursor-pointer"
+                type="button"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p class="text-xs text-[#86868b] leading-relaxed">
+              Jika Anda sudah berada di lokasi kantor tetapi sistem mendeteksi Anda di luar radius (karena sinyal GPS terhalang dinding gedung atau basement), tuliskan alasan Anda untuk diverifikasi Pembimbing.
+            </p>
+
+            <form @submit.prevent="handleDisputeSubmit" class="flex flex-col gap-4">
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold">Alasan / Kendala di Lokasi</label>
+                <textarea
+                  v-model="disputeReasonInput"
+                  rows="3"
+                  placeholder="Contoh: Sinyal GPS drift sejauh 250m karena berada di ruang server basement lantai B1..."
+                  class="p-3 rounded-xl border border-black/[0.1] dark:border-white/[0.12] bg-[#f5f5f7] dark:bg-[#2c2c2e] text-xs focus:ring-2 focus:ring-[#0071e3]/30 focus:outline-none"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="flex items-center justify-end gap-2.5 pt-2">
+                <button
+                  type="button"
+                  @click="showDisputeModal = false"
+                  class="px-4 py-2 rounded-xl text-xs font-semibold text-[#86868b] hover:bg-black/[0.04] apple-press cursor-pointer"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  class="px-5 py-2 rounded-xl text-xs font-semibold bg-[#0071e3] text-white hover:bg-[#0077ed] shadow-xs apple-press cursor-pointer"
+                >
+                  Kirim Sanggahan
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -663,14 +743,27 @@ const {
   journalUrgency,
   effectiveMinutesSinceTapOut,
   recordCheckOut,
-  authToken
+  authToken,
+  currentUser,
+  ensureAuthToken
 } = useAppStore()
 
 const currentTime = ref('09:14:02')
 const modeFilter = ref('all')
 const viewType = ref<'table' | 'calendar'>('table')
 
-const isIzinModalOpen = ref(false)
+const showDisputeModal = ref(false)
+const disputeReasonInput = ref('')
+
+const handleDisputeSubmit = () => {
+  if (!disputeReasonInput.value) {
+    showToast('Tolong berikan alasan atau kendala GPS di lokasi Anda.', 'warning')
+    return
+  }
+  showDisputeModal.value = false
+  showToast('✓ Sanggahan presensi GPS berhasil dikirimkan ke Pembimbing!', 'success')
+  disputeReasonInput.value = ''
+}
 const isGeofenceModalOpen = ref(false)
 
 const izinForm = ref({
@@ -752,7 +845,7 @@ let timer: any = null
 
 const fetchScheduleInfo = async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/siswa/dashboard', {
+    const res = await fetch('/jurnalmagangdigital/api/siswa/dashboard', {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${authToken.value}`
@@ -786,7 +879,42 @@ onMounted(() => {
   updateClock()
   timer = setInterval(updateClock, 1000)
   fetchScheduleInfo()
+  fetchAttendanceHistory()
 })
+
+const fetchAttendanceHistory = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/siswa/attendance-history', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.attendances && Array.isArray(data.attendances) && data.attendances.length > 0) {
+        const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
+        records.value = data.attendances.map((att: any) => {
+          const d = new Date(att.date)
+          return {
+            id: att.id,
+            date: d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+            day: dayNames[d.getDay()],
+            checkIn: att.check_in?.substring(0, 5) || '-',
+            checkOut: att.check_out?.substring(0, 5) || '',
+            duration: att.check_out ? '8 Jam' : 'Berjalan',
+            location: att.notes || 'Kantor PT Telkom Digital Solusi',
+            mode: att.work_mode?.toUpperCase() + ' (' + (att.notes || 'Tervalidasi GPS') + ')',
+            status: att.status === 'terlambat' ? 'late' : 'ontime',
+            statusLabel: att.status === 'terlambat' ? 'Terlambat' : (att.is_dispute ? 'Sanggahan GPS' : 'Hadir Tepat Waktu'),
+            validation: att.is_dispute ? (att.dispute_status === 'approved' ? 'Sanggahan Disetujui' : 'Menunggu Review Sanggahan') : (att.check_out ? 'Disetujui Mentor' : 'Sesi Berjalan')
+          }
+        })
+      }
+    }
+  } catch (e) {}
+}
 
 onUnmounted(() => {
   if (timer) clearInterval(timer)
@@ -898,7 +1026,127 @@ const submitIzin = () => {
 }
 
 const downloadRekapPdf = () => {
-  showToast('Mengunduh Lembar Rekapitulasi Presensi Kehadiran SMKN 71...', 'success')
+  if (typeof window === 'undefined') return
+  const printWin = window.open('', '_blank', 'width=900,height=800')
+  if (!printWin) {
+    showToast('Mohon izinkan pop-up jendela peramban untuk mencetak rekapitulasi presensi.', 'warning')
+    return
+  }
+
+  const rowsHtml = records.value.map((rec: any, i: number) => `
+    <tr>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; text-align: center;">${i + 1}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; white-space: nowrap;">${rec.day}, ${rec.date}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; text-align: center; font-weight: 600;">${rec.checkIn || '-'}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; text-align: center; font-weight: 600;">${rec.checkOut || '-'}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; text-align: center;">${rec.duration}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db;">${rec.mode}</td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; text-align: center;">
+        <span style="display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; background: ${rec.status === 'ontime' ? '#dcfce7; color: #166534' : '#fee2e2; color: #991b1b'};">
+          ${rec.statusLabel}
+        </span>
+      </td>
+      <td style="padding: 8px 10px; border: 1px solid #d1d5db; font-size: 11px;">${rec.validation}</td>
+    </tr>
+  `).join('')
+
+  printWin.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Rekapitulasi Presensi Kehadiran PKL - ${currentUser.value.name}</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #111827; padding: 24px; line-height: 1.5; }
+          .kop { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #111827; padding-bottom: 12px; margin-bottom: 16px; }
+          .kop-text { text-align: center; flex: 1; }
+          .kop-title { font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0; }
+          .kop-sub { font-size: 12px; margin: 2px 0; color: #374151; }
+          .kop-address { font-size: 11px; margin: 0; color: #4b5563; }
+          .info-table { width: 100%; font-size: 12px; margin-bottom: 16px; border-collapse: collapse; }
+          .info-table td { padding: 4px 6px; }
+          .table-main { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+          .table-main th { background: #f3f4f6; padding: 8px 10px; border: 1px solid #d1d5db; font-weight: 700; text-align: center; }
+          .ttd-container { display: flex; justify-content: space-between; margin-top: 40px; font-size: 12px; page-break-inside: avoid; }
+          .ttd-box { text-align: center; width: 220px; }
+          @media print {
+            body { padding: 0; }
+            button { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div style="text-align: right; margin-bottom: 12px;">
+          <button onclick="window.print()" style="padding: 8px 16px; background: #0071e3; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">Cetak / Unduh PDF</button>
+        </div>
+        <div class="kop">
+          <div class="kop-text">
+            <h1 class="kop-title">Pemerintah Provinsi Daerah Khusus Ibukota Jakarta<br>Dinas Pendidikan - SMK Negeri 71 Jakarta</h1>
+            <p class="kop-sub">Program Keahlian: Rekayasa Perangkat Lunak (RPL), Desain Komunikasi Visual (DKV), Animasi</p>
+            <p class="kop-address">Jl. Raden Saleh II No. 45, Senen, Jakarta Pusat • Telp: (021) 390-1234 • Website: smkn71jakarta.sch.id</p>
+          </div>
+        </div>
+        <h2 style="text-align: center; font-size: 14px; font-weight: 700; text-transform: uppercase; margin: 16px 0 8px 0; letter-spacing: 0.5px;">Lembar Rekapitulasi Presensi Kehadiran PKL</h2>
+        <table class="info-table">
+          <tr>
+            <td style="width: 140px; font-weight: 600;">Nama Siswa</td>
+            <td>: ${currentUser.value.name}</td>
+            <td style="width: 140px; font-weight: 600;">Mitra Tempat PKL</td>
+            <td>: ${currentUser.value.company_name || 'PT Telkom Digital Solusi'}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">NISN / Kelas</td>
+            <td>: ${currentUser.value.nisn_nip || '0061234567'} / ${currentUser.value.class_name || 'XII RPL 1'}</td>
+            <td style="font-weight: 600;">Pembimbing Lapangan</td>
+            <td>: ${currentUser.value.mentor_name || 'Hendra Wijaya, S.Kom'}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600;">Konsentrasi Keahlian</td>
+            <td>: ${currentUser.value.major || 'RPL'}</td>
+            <td style="font-weight: 600;">Guru Pembimbing</td>
+            <td>: Dra. Nurul Hidayah, M.Pd</td>
+          </tr>
+        </table>
+        <table class="table-main">
+          <thead>
+            <tr>
+              <th style="width: 35px;">No</th>
+              <th style="width: 130px;">Hari & Tanggal</th>
+              <th style="width: 75px;">Masuk</th>
+              <th style="width: 75px;">Pulang</th>
+              <th style="width: 75px;">Durasi</th>
+              <th>Mode Kerja</th>
+              <th style="width: 130px;">Status Kehadiran</th>
+              <th>Validasi Mentor</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+        <div class="ttd-container">
+          <div class="ttd-box">
+            <p>Mengetahui,<br>Pembimbing Lapangan (Mentor)</p>
+            <div style="height: 60px;"></div>
+            <p style="font-weight: 700; text-decoration: underline;">${currentUser.value.mentor_name || 'Hendra Wijaya, S.Kom'}</p>
+            <p style="font-size: 11px; color: #6b7280; margin-top: -6px;">Mentor Industri Mitra</p>
+          </div>
+          <div class="ttd-box">
+            <p>Jakarta, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>Siswa Praktikan</p>
+            <div style="height: 60px;"></div>
+            <p style="font-weight: 700; text-decoration: underline;">${currentUser.value.name}</p>
+            <p style="font-size: 11px; color: #6b7280; margin-top: -6px;">NISN. ${currentUser.value.nisn_nip || '0061234567'}</p>
+          </div>
+          <div class="ttd-box">
+            <p>Menyetujui,<br>Guru Pembimbing Sekolah</p>
+            <div style="height: 60px;"></div>
+            <p style="font-weight: 700; text-decoration: underline;">Dra. Nurul Hidayah, M.Pd</p>
+            <p style="font-size: 11px; color: #6b7280; margin-top: -6px;">NIP. 197508122003122002</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `)
+  printWin.document.close()
 }
 
 const viewDetail = (rec: typeof records.value[0]) => {

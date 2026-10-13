@@ -33,8 +33,8 @@
           <span class="text-xs font-semibold text-[#86868b] uppercase tracking-wider">Total Siswa Binaan</span>
           <span class="text-base">👨‍🎓</span>
         </div>
-        <div class="text-3xl font-bold text-[#1d1d1f] tracking-tight mt-2">6 <span class="text-sm font-normal text-[#86868b]">Siswa</span></div>
-        <span class="text-[11px] text-[#34c759] font-medium block mt-1">Tersebar di 3 Mitra PT</span>
+        <div class="text-3xl font-bold text-[#1d1d1f] tracking-tight mt-2">{{ stats.total_students }} <span class="text-sm font-normal text-[#86868b]">Siswa</span></div>
+        <span class="text-[11px] text-[#34c759] font-medium block mt-1">Tersebar di {{ stats.total_companies }} Mitra PT</span>
       </div>
 
       <div class="bg-white border border-black/[0.05] rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] apple-press transition-all">
@@ -42,7 +42,7 @@
           <span class="text-xs font-semibold text-[#86868b] uppercase tracking-wider">Mitra Industri (PT)</span>
           <span class="text-base">🏢</span>
         </div>
-        <div class="text-3xl font-bold text-[#0071e3] tracking-tight mt-2">3 <span class="text-sm font-normal text-[#86868b]">Perusahaan</span></div>
+        <div class="text-3xl font-bold text-[#0071e3] tracking-tight mt-2">{{ stats.total_companies }} <span class="text-sm font-normal text-[#86868b]">Perusahaan</span></div>
         <span class="text-[11px] text-[#86868b] font-medium block mt-1">RPL, Animasi, DKV</span>
       </div>
 
@@ -51,8 +51,8 @@
           <span class="text-xs font-semibold text-[#86868b] uppercase tracking-wider">Rata-Rata Kehadiran</span>
           <span class="text-base">⏱️</span>
         </div>
-        <div class="text-3xl font-bold text-[#34c759] tracking-tight mt-2">96.8%</div>
-        <span class="text-[11px] text-[#34c759] font-medium block mt-1">5 Siswa Hadir Hari Ini</span>
+        <div class="text-3xl font-bold text-[#34c759] tracking-tight mt-2">{{ stats.attendance_rate }}%</div>
+        <span class="text-[11px] text-[#34c759] font-medium block mt-1">Presensi Terhubung Real-Time</span>
       </div>
 
       <div class="bg-white border border-black/[0.05] rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] apple-press transition-all">
@@ -60,8 +60,8 @@
           <span class="text-xs font-semibold text-[#86868b] uppercase tracking-wider">Peringatan Kritis</span>
           <span class="text-base">⚠️</span>
         </div>
-        <div class="text-3xl font-bold text-[#ff3b30] tracking-tight mt-2">1 <span class="text-sm font-normal text-[#86868b]">Siswa</span></div>
-        <span class="text-[11px] text-[#ff3b30] font-medium block mt-1">Tidak aktif &gt; 3 hari</span>
+        <div class="text-3xl font-bold text-[#ff3b30] tracking-tight mt-2">{{ stats.critical_count }} <span class="text-sm font-normal text-[#86868b]">Siswa</span></div>
+        <span class="text-[11px] text-[#ff3b30] font-medium block mt-1">Perlu Perhatian Khusus</span>
       </div>
     </div>
 
@@ -164,9 +164,9 @@
                   <h4 class="text-base font-bold text-[#1d1d1f]">{{ company.name }}</h4>
                   <span
                     class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider"
-                    :class="(company.major === 'RPL' || company.major === 'PPLG / RPL') ? 'bg-[#0071e3]/10 text-[#0071e3]' : (company.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
+                    :class="company.major === 'RPL' ? 'bg-[#0071e3]/10 text-[#0071e3]' : (company.major === 'Animasi' ? 'bg-[#af52de]/10 text-[#af52de]' : 'bg-[#ff9500]/10 text-[#ff9500]')"
                   >
-                    {{ company.major === 'PPLG / RPL' ? 'RPL' : company.major }}
+                    {{ company.major }}
                   </span>
                   <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/[0.04] text-[#86868b]">
                     Mode: {{ company.workModes }}
@@ -317,7 +317,15 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { activeMenu, authToken, showToast } = useAppStore()
+const { activeMenu, authToken, showToast, ensureAuthToken } = useAppStore()
+
+const stats = ref({
+  total_students: 6,
+  total_companies: 3,
+  attendance_rate: 96.8,
+  critical_count: 1,
+  total_acc: 5
+})
 
 const selectedCompanyFilter = ref<string | number>('all')
 
@@ -484,14 +492,59 @@ const viewStudentTimeline = (student: any) => {
 
 const fetchGuruDashboard = async () => {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/guru/dashboard', {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/guru/dashboard', {
       headers: {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${authToken.value}`
+        'Authorization': `Bearer ${token}`
       }
     })
     if (res.ok) {
       const data = await res.json()
+      if (data.total_students !== undefined) stats.value.total_students = data.total_students
+      if (data.total_companies !== undefined) stats.value.total_companies = data.total_companies
+      if (data.total_journals_acc !== undefined) stats.value.total_acc = data.total_journals_acc
+      if (data.system_alerts && Array.isArray(data.system_alerts)) {
+        stats.value.critical_count = data.system_alerts.length
+      }
+      if (data.companies_grouped && Array.isArray(data.companies_grouped) && data.companies_grouped.length > 0) {
+        companies.value = data.companies_grouped.map((cg: any) => ({
+          id: cg.id,
+          name: cg.name,
+          shortName: cg.name,
+          icon: cg.sector?.includes('Animasi') ? '🎬' : (cg.sector?.includes('DKV') ? '🎨' : '💻'),
+          major: cg.sector?.includes('Animasi') ? 'Animasi' : (cg.sector?.includes('DKV') ? 'DKV' : 'RPL'),
+          badgeClass: cg.sector?.includes('Animasi') ? 'bg-purple-50 text-purple-800 border border-purple-200' : (cg.sector?.includes('DKV') ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-blue-50 text-blue-800 border border-blue-200'),
+          sector: cg.sector,
+          address: cg.address,
+          workModes: (cg.allowed_work_modes || 'WFO, WFH').toUpperCase(),
+          mentor: {
+            name: cg.mentor?.name || 'Mentor Lapangan',
+            phoneClean: cg.mentor?.phone?.replace(/\D/g, '') || '6281200000003'
+          },
+          students: (cg.students || []).map((s: any) => ({
+            id: s.id,
+            name: s.name,
+            nisn: s.nisn_nip || '-',
+            className: s.class_name || 'XII',
+            avatar: s.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+            phoneClean: s.phone?.replace(/\D/g, '') || '',
+            status: s.status_label || 'Aktif',
+            todayAttendanceIcon: s.today_attendance ? (s.today_attendance.work_mode === 'wfh' ? '🏠' : (s.today_attendance.work_mode === 'wfa' ? '🌐' : '🟢')) : '⚪',
+            todayAttendanceText: s.today_attendance ? `Hadir ${s.today_attendance.check_in?.substring(0, 5)} WIB (${s.today_attendance.work_mode?.toUpperCase()})` : 'Belum Check-In Hari Ini',
+            journalsAcc: s.journals_acc || 0,
+            journalsPending: s.journals_pending || 0,
+            lastActiveText: s.today_attendance ? `Hari ini ${s.today_attendance.check_in?.substring(0, 5)} WIB` : 'Kemarin'
+          }))
+        }))
+      }
+      if (data.chart_data && data.chart_data.labels) {
+        weekChart.value = data.chart_data.labels.map((day: string, idx: number) => ({
+          day,
+          att: data.chart_data.attendance_series[idx] || 95,
+          log: data.chart_data.journal_series[idx] || 90
+        }))
+      }
     }
   } catch (err) {
     // fallback

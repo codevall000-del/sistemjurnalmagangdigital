@@ -29,7 +29,7 @@
       <div class="bg-white border border-black/[0.05] rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex items-center justify-between apple-press">
         <div>
           <span class="text-[11px] font-semibold text-[#86868b] uppercase tracking-wider">Siswa Aktif Binaan</span>
-          <div class="text-3xl font-bold text-[#1d1d1f] mt-1 tracking-tight">4 <span class="text-sm font-normal text-[#86868b]">Siswa</span></div>
+          <div class="text-3xl font-bold text-[#1d1d1f] mt-1 tracking-tight">{{ metrics.total_active_students }} <span class="text-sm font-normal text-[#86868b]">Siswa</span></div>
           <p class="text-[11px] text-[#34c759] font-semibold mt-1">Semua terdaftar aktif</p>
         </div>
         <div class="w-12 h-12 rounded-2xl bg-[#0071e3]/10 text-[#0071e3] flex items-center justify-center">
@@ -40,7 +40,7 @@
       <div class="bg-white border border-black/[0.05] rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex items-center justify-between apple-press">
         <div>
           <span class="text-[11px] font-semibold text-[#86868b] uppercase tracking-wider">Menunggu Validasi</span>
-          <div class="text-3xl font-bold text-[#ff9500] mt-1 tracking-tight">3 <span class="text-sm font-normal text-[#86868b]">Jurnal</span></div>
+          <div class="text-3xl font-bold text-[#ff9500] mt-1 tracking-tight">{{ metrics.total_pending_validations }} <span class="text-sm font-normal text-[#86868b]">Jurnal</span></div>
           <p class="text-[11px] text-[#ff9500] font-semibold mt-1">Memerlukan persetujuan pembimbing</p>
         </div>
         <div class="w-12 h-12 rounded-2xl bg-[#ff9500]/10 text-[#b26a00] flex items-center justify-center">
@@ -51,7 +51,7 @@
       <div class="bg-white border border-black/[0.05] rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all flex items-center justify-between apple-press">
         <div>
           <span class="text-[11px] font-semibold text-[#86868b] uppercase tracking-wider">Rata-rata Disiplin</span>
-          <div class="text-3xl font-bold text-[#34c759] mt-1 tracking-tight">94.8%</div>
+          <div class="text-3xl font-bold text-[#34c759] mt-1 tracking-tight">{{ metrics.discipline_rate }}</div>
           <p class="text-[11px] text-[#248a3d] font-semibold mt-1">Kehadiran minggu ini</p>
         </div>
         <div class="w-12 h-12 rounded-2xl bg-[#34c759]/10 text-[#248a3d] flex items-center justify-center">
@@ -147,23 +147,58 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAppStore } from '~/composables/useAppStore'
 
-const { activeMenu } = useAppStore()
+const { activeMenu, authToken, ensureAuthToken } = useAppStore()
 
-const students = ref([
-  {
-    id: 4,
-    name: 'Siswa Magang',
-    nisn: '0061234567',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-    pendingJournals: 1,
-    attendanceRate: 96.4,
-    lastJournalDate: '26 Sep 2026',
-    lastJournalTitle: 'Split-Screen UX Validasi'
+const metrics = ref({
+  total_active_students: 2,
+  total_pending_validations: 2,
+  discipline_rate: '98.5%'
+})
+
+const students = ref<any[]>([])
+
+const fetchDashboard = async () => {
+  try {
+    const token = await ensureAuthToken()
+    const res = await fetch('/jurnalmagangdigital/api/mentor/dashboard', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.total_active_students !== undefined) metrics.value.total_active_students = data.total_active_students
+      if (data.total_pending_validations !== undefined) metrics.value.total_pending_validations = data.total_pending_validations
+      if (data.students && Array.isArray(data.students) && data.students.length > 0) {
+        students.value = data.students.map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          nisn: s.nisn_nip || '-',
+          avatar: s.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+          pendingJournals: s.pending_journals || 0,
+          attendanceRate: s.attendance_pct || 96,
+          lastJournalDate: s.last_activity || 'Hari ini',
+          lastJournalTitle: 'Aktivitas Magang Harian'
+        }))
+      }
+    }
+  } catch (e) {}
+
+  if (students.value.length === 0) {
+    students.value = [
+      { id: 6, name: 'Budi Santoso', nisn: '0061234567', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', pendingJournals: 1, attendanceRate: 100, lastJournalDate: '10 Okt 2026', lastJournalTitle: 'Pengujian dan Quality Review RPL' },
+      { id: 7, name: 'Siti Fauziah', nisn: '0061234568', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150', pendingJournals: 1, attendanceRate: 100, lastJournalDate: '10 Okt 2026', lastJournalTitle: 'Pengujian dan Quality Review RPL' }
+    ]
   }
-])
+}
+
+onMounted(() => {
+  fetchDashboard()
+})
 
 const goToValidation = (studentId: number) => {
   activeMenu.value = 'validasi_jurnal'
